@@ -1,16 +1,19 @@
 # KkapsCa Skills Repository
 
-> "Antes de ejecutar, hay que planear. Antes de planear el código, hay que entender el problema."
+> Skills públicas para pasar de una idea a un producto y de un producto a una implementación técnica con criterio.
 
-Este repositorio ya no es solo un **project kickstart**.
-Ahora es una base de **skills personales** para dos momentos del desarrollo:
+Este repositorio reúne skills pensadas desde la experiencia personal de **KkapsCa**, pero redactadas para que **cualquier persona pueda reutilizarlas** en sus propios proyectos.
 
-1. **Descubrir y aterrizar ideas** antes de programar.
-2. **Desarrollar software** con criterios técnicos claros.
+La filosofía es simple:
+
+- no correr al código sin entender el problema,
+- no elegir tecnologías por moda,
+- no meter complejidad antes de tiempo,
+- construir con fundamentos, no con ocurrencias.
 
 ---
 
-## Estructura del repositorio
+## Qué contiene este repositorio
 
 ```text
 KkapsCa-project-kickstart/
@@ -26,106 +29,107 @@ KkapsCa-project-kickstart/
         └── SKILL.md
 ```
 
+Se divide en dos grupos:
+
+### 1. Skills de inicio de proyecto
+Sirven para aterrizar una idea antes de construir.
+
+- **01-brainstorm** → convierte una idea vaga en un Product Brief.
+- **02-product-discovery** → valida mercado, usuario, competencia y negocio.
+- **03-tech-feasibility** → evalúa stack, riesgos, arquitectura y esfuerzo.
+
+### 2. Skills de desarrollo
+Sirven cuando el proyecto ya tiene claridad suficiente y toca implementar.
+
+- **dev-skills/flutter** → guía para desarrollo Flutter y Dart con buenas prácticas.
+
 ---
 
-## 1) Skills de inicio de proyecto
+## Pipeline recomendado
 
-Estas skills existen para evitar el error clásico de brincar directo al código.
-
-### `01-brainstorm`
-Sirve para bajar una idea vaga a algo entendible:
-
-- problema,
-- usuario,
-- propuesta de valor,
-- MVP,
-- diferenciador.
-
-### `02-product-discovery`
-Sirve para validar si la idea vale la pena:
-
-- mercado,
-- personas,
-- competencia,
-- negocio,
-- validación.
-
-### `03-tech-feasibility`
-Sirve para aterrizar la ejecución técnica:
-
-- stack,
-- riesgos,
-- esfuerzo,
-- arquitectura,
-- dependencias.
-
-### Flujo recomendado
+El flujo ideal para un proyecto nuevo es este:
 
 ```text
 Idea → Brainstorm → Product Discovery → Tech Feasibility → Desarrollo
 ```
 
----
+Pero este repositorio **no es dogmático**.
 
-## 2) Skills de desarrollo
+Si ya tienes trabajo previo real, puedes entrar más adelante en el pipeline.
 
-Estas skills sirven cuando la idea ya pasó el filtro inicial y toca construir.
+### Ejemplos
 
-### `dev-skills/flutter`
-Skill personal para desarrollo Flutter y Dart.
+- Si solo tienes una idea vaga → empieza en **brainstorm**.
+- Si ya tienes claro problema, usuario y MVP → puedes entrar en **product-discovery**.
+- Si ya validaste el mercado y solo necesitas aterrizar la ejecución técnica → entra en **tech-feasibility**.
+- Si ya tienes claridad funcional y técnica → usa una **dev-skill**.
 
-Está alineada a prácticas recomendadas por la documentación oficial de Flutter:
-
-- separación de responsabilidades,
-- state management según el alcance del estado,
-- performance con `const`, widgets pequeños y lazy lists,
-- manejo asíncrono claro,
-- testing desde temprano,
-- evitar meter dependencias o arquitecturas por moda.
-
-**Importante:**
-Esta skill **no impone GetX** como default.
-Primero se elige la herramienta correcta para el problema.
+La regla no es “seguir pasos porque sí”.
+La regla es **no saltarte el pensamiento que todavía no has hecho**.
 
 ---
 
-## Cómo usar este repositorio
+## Para quién sirve
 
-### Si empiezas con una idea
+Este repo puede servirle a:
 
-Usa este orden:
+- developers que arrancan proyectos desde cero,
+- founders técnicos,
+- builders indie,
+- estudiantes que quieren aprender a pensar antes de programar,
+- equipos pequeños que necesitan estructura sin caer en burocracia absurda.
 
-1. `01-brainstorm`
-2. `02-product-discovery`
-3. `03-tech-feasibility`
+---
 
-Cuando termines, ya deberías tener contexto suficiente para desarrollar con criterio.
+## Cómo usarlo
 
-### Si ya vas a construir
+### Si comienzas con una idea
 
-Usa la skill adecuada dentro de `dev-skills/`.
+1. Usa `01-brainstorm`
+2. Continúa con `02-product-discovery`
+3. Sigue con `03-tech-feasibility`
+4. Pasa a la skill de desarrollo adecuada
 
-Hoy existe:
+### Si ya estás en etapa de implementación
 
-- `flutter`
-
-Después se pueden agregar más:
-
-- backend,
-- arquitectura,
-- testing,
-- bases de datos,
-- automatización.
+Ve directo a `dev-skills/` y usa la skill que corresponda al stack.
 
 ---
 
 ## Filosofía del repositorio
 
-- No elegir stack por hype.
-- No programar sin entender el problema.
-- No meter complejidad antes de tiempo.
-- Aprender fundamentos primero.
-- Usar IA como herramienta, no como piloto automático.
+- **Problema primero, tecnología después**
+- **La arquitectura debe ser proporcional al proyecto**
+- **La validación barata vale más que el código caro**
+- **Aprender fundamentos siempre gana a memorizar frameworks**
+- **La IA ayuda, pero no reemplaza criterio técnico**
+
+---
+
+## Estado actual
+
+Skills disponibles hoy:
+
+- `brainstorm`
+- `product-discovery`
+- `tech-feasibility`
+- `flutter`
+
+Skills futuras posibles:
+
+- backend
+- arquitectura
+- testing
+- bases de datos
+- automatización
+
+---
+
+## Agradecimientos
+
+Gracias a [Gentleman-Programming/gentle-ai](https://github.com/Gentleman-Programming/gentle-ai).
+
+Usando esa herramienta fue posible revisar, corregir y refinar este repositorio mientras también se fortalecía el proceso de aprendizaje técnico y programación con mejores fundamentos.
 
 ---
 

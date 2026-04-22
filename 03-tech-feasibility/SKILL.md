@@ -1,335 +1,331 @@
 ---
 name: tech-feasibility
 description: >
-  PASO 3 DE 3 del Project Kickstart Pipeline. Evalúa la factibilidad técnica de un producto
-  validado, define el tech stack con justificación, identifica riesgos técnicos, estima el
-  esfuerzo de desarrollo y propone la arquitectura base del MVP. Produce un Tech Spec listo
-  para empezar a desarrollar.
+  PASO 3 de un pipeline de definición de producto. Evalúa factibilidad técnica,
+  aterriza requisitos, identifica riesgos, propone una arquitectura proporcional
+  al alcance y ayuda a elegir stack con un framework de decisión, no con recetas.
 
-  SIEMPRE activa esta skill cuando el usuario tenga un producto validado y quiera saber:
-  qué tecnologías usar, cuánto tarda en construirse, qué tan difícil es técnicamente,
-  qué puede salir mal a nivel técnico, o cómo estructurar la arquitectura del proyecto.
-  También activa cuando el usuario diga "¿qué stack uso?", "¿cuánto tiempo tarda?",
-  "¿es difícil construir esto?", "¿por dónde empiezo técnicamente?", o tenga un
-  Discovery Report listo.
+  Usa esta skill cuando ya exista claridad suficiente del problema, usuario y MVP,
+  y haga falta decidir cómo construirlo, cuánto esfuerzo implica y qué riesgos técnicos
+  existen antes de arrancar el desarrollo.
 
 license: Apache-2.0
 metadata:
   author: KkapsCa
-  version: "1.0"
+  version: "2.0"
   pipeline: "project-kickstart/03"
   prev: "product-discovery"
 ---
 
-# Tech Feasibility — Paso 3 de 3
+# Tech Feasibility — Step 3
 
-> **Pipeline:** `brainstorm` → `product-discovery` → `tech-feasibility`  
-> **Input:** Discovery Report (output de product-discovery)  
-> **Output:** Tech Spec (listo para empezar a desarrollar)
+> **Pipeline recomendado:** `brainstorm` → `product-discovery` → `tech-feasibility`
+> **Input ideal:** Discovery Report, Product Brief o contexto suficientemente claro
+> **Output:** Tech Spec listo para iniciar implementación
 
 ---
 
+## When to Use
+
+Usa esta skill cuando el usuario quiera responder preguntas como:
+
+- ¿qué tan difícil es construir esto?,
+- ¿qué stack tiene más sentido?,
+- ¿qué riesgos técnicos trae el MVP?,
+- ¿cuánto esfuerzo puede costar?,
+- ¿qué arquitectura mínima conviene?
+
 ## When NOT to Use
 
-- No hay Discovery Report o Product Brief previo → regresa a los pasos anteriores
-- El usuario solo quiere saber qué tecnología "está de moda" → eso no es evaluación técnica
-- El producto no tiene modelo de negocio definido → el stack sin contexto es una decisión ciega
+- La idea todavía está borrosa y no hay problema/usuario definidos.
+- El usuario solo quiere saber qué stack está “de moda”.
+- No existe suficiente claridad funcional para distinguir qué sí entra al MVP.
 
 ---
 
 ## Filosofía
 
-La tecnología sirve al producto. El producto sirve al usuario. El usuario sirve al negocio.
-Nunca elijas un stack porque lo viste en un tutorial o porque "está trending".
+La factibilidad técnica NO es escoger frameworks favoritos.
+Es reducir incertidumbre técnica antes de gastar semanas construyendo.
 
-**Regla de oro:**
-> "El mejor tech stack es el que tu equipo puede mantener, que resuelve
-> los problemas técnicos reales del producto, y que permite iterar rápido."
+### Regla de oro
+
+> El mejor stack no es el más popular.
+> Es el que el equipo puede mantener, que resuelve los requisitos reales del producto
+> y que permite iterar con el menor costo de complejidad posible.
+
+### Principios
+
+1. **Problema antes que tecnología**
+2. **Riesgo antes que hype**
+3. **Arquitectura proporcional al alcance**
+4. **Decisiones justificadas, no heredadas de un tutorial**
 
 ---
 
-## Fase 1 — Inventario de Requisitos Técnicos
+## Paso 0 — Clasifica el proyecto
 
-Antes de elegir tecnologías, mapea qué necesita el producto técnicamente.
+Antes de hablar de stack, define qué tipo de proyecto es:
 
-### 1.1 Matriz de Requisitos por Feature (Must Haves del MVP)
+- **Proyecto de aprendizaje** → prioridad: entender, iterar, terminar.
+- **Side project / microproducto** → prioridad: velocidad y costo bajo.
+- **Producto serio / negocio** → prioridad: mantenibilidad, validación y operación.
+- **Herramienta interna** → prioridad: utilidad y bajo costo de mantenimiento.
 
-Para cada feature del MVP, identifica:
+Esta clasificación cambia el nivel de complejidad aceptable.
 
-```
+---
+
+## Fase 1 — Inventario técnico del MVP
+
+Para cada feature del MVP, responde:
+
+```text
 Feature: [nombre]
-─────────────────────────────────────────────────────
-¿Requiere autenticación?          [ ] Sí  [ ] No
-¿Requiere base de datos?          [ ] Sí  [ ] No
-¿Requiere tiempo real?            [ ] Sí  [ ] No
-¿Requiere almacenamiento files?   [ ] Sí  [ ] No
-¿Requiere notificaciones push?    [ ] Sí  [ ] No
-¿Requiere geolocalización?        [ ] Sí  [ ] No
-¿Requiere pagos?                  [ ] Sí  [ ] No
-¿Requiere cámara/hardware?        [ ] Sí  [ ] No
-¿Requiere offline?                [ ] Sí  [ ] No
-¿Requiere integración con API 3P? [ ] Sí  [ ] No → ¿Cuál?
+────────────────────────────────────────
+¿Necesita autenticación?         [ ] Sí  [ ] No
+¿Necesita persistencia?          [ ] Sí  [ ] No
+¿Necesita tiempo real?           [ ] Sí  [ ] No
+¿Necesita archivos/media?        [ ] Sí  [ ] No
+¿Necesita notificaciones?        [ ] Sí  [ ] No
+¿Necesita pagos?                 [ ] Sí  [ ] No
+¿Necesita geolocalización?       [ ] Sí  [ ] No
+¿Necesita hardware nativo?       [ ] Sí  [ ] No
+¿Necesita modo offline?          [ ] Sí  [ ] No
+¿Depende de APIs de terceros?    [ ] Sí  [ ] No
 ```
 
-### 1.2 Requisitos No Funcionales
+### Requisitos no funcionales mínimos
 
-| Requisito | Nivel para MVP | Notas |
-|---|---|---|
-| **Usuarios simultáneos** | [N] | Impacta infraestructura |
-| **Latencia aceptable** | [ms] | Impacta arquitectura |
-| **Disponibilidad** | [%] | 99% vs 99.9% es enorme diferencia de costo |
-| **Regiones** | [lista] | GDPR, LATAM, global |
-| **Privacidad de datos** | [nivel] | ¿Datos sensibles? ¿Financieros? ¿Salud? |
-| **Cumplimiento regulatorio** | [normativas] | PCI-DSS, HIPAA, GDPR |
+- usuarios esperados al inicio,
+- latencia tolerable,
+- sensibilidad de datos,
+- regiones o idiomas,
+- restricciones regulatorias si existen,
+- presupuesto y tiempo disponibles.
+
+Sin este inventario, elegir stack es disparar a ciegas.
 
 ---
 
-## Fase 2 — Decisión de Tech Stack
+## Fase 2 — Framework de decisión de stack
 
-### 2.1 Framework de Decisión
+No propongas tecnología todavía. Primero responde estas preguntas:
 
-Responde estas preguntas ANTES de proponer tecnologías:
+### Cliente / frontend
 
-1. **¿iOS + Android + Web?** → Cross-platform. ¿Solo mobile? → Nativo o cross.
-2. **¿El equipo tiene base en JS?** → React Native es válido. ¿Base en Dart/mobile? → Flutter.
-3. **¿Necesita hardware intensivo?** (cámara AR, BLE, sensores) → Flutter > React Native.
-4. **¿El backend necesita tiempo real?** → Supabase, Firebase, o WebSockets propios.
-5. **¿Cuánto presupuesto de infraestructura?** → Serverless para MVPs, containers para escala.
-6. **¿Cuándo necesita estar en producción?** → BaaS para rápido, custom para control.
+1. ¿La app será mobile, web, desktop o varias?
+2. ¿Qué sabe ya el equipo?
+3. ¿El producto depende mucho de hardware o integraciones nativas?
+4. ¿La prioridad es velocidad de salida o control fino de plataforma?
 
-### 2.2 Opciones de Stack por Contexto
+### Backend
 
-#### Mobile (iOS + Android)
+1. ¿Necesita tiempo real o solo CRUD estándar?
+2. ¿La lógica de negocio es simple o compleja?
+3. ¿El equipo puede operar infraestructura propia?
+4. ¿El producto necesita salir rápido con bajo costo operativo?
 
-| Stack | Cuándo usarlo | Ventaja | Riesgo |
+### Datos e infraestructura
+
+1. ¿Los datos son relacionales o muy variables?
+2. ¿Hace falta almacenamiento local/offline?
+3. ¿Hace falta escalar desde el día 1 o solo validar?
+4. ¿Qué dependencia externa sería riesgosa?
+
+---
+
+## Fase 3 — Opciones, no recetas
+
+Presenta alternativas con contexto y tradeoffs.
+
+### Frontend mobile
+
+| Opción | Cuándo considerar | Ventaja principal | Tradeoff principal |
 |---|---|---|---|
-| **Flutter** | Equipo nuevo en mobile, apps complejas, dashboards, Flutter Web | Rendimiento nativo, tipado fuerte, 1 codebase | Ecosistema más pequeño que RN |
-| **React Native** | Equipo con base React/JS, prototipo rápido | Ecosistema JS, muchos devs disponibles | Bridge JS↔Native, performance en listas largas |
-| **Swift + Kotlin** | App con hardware intensivo, experiencia nativa crítica | Máximo rendimiento, acceso completo al SO | Dos codebases, equipo más grande |
+| **Flutter** | Quieres una codebase fuerte para varias plataformas y buena consistencia UI | Productividad alta, tipado fuerte, UI controlada | Requiere aprender Dart/ecosistema Flutter |
+| **React Native** | El equipo domina React/JS y prioriza reaprovechar ese conocimiento | Menor fricción para equipos web | Integración nativa y performance dependen más del caso |
+| **Nativo** | El producto depende fuerte de plataforma, rendimiento extremo o integraciones profundas | Máximo control | Más costo de desarrollo y mantenimiento |
 
-#### Backend / API
+### Backend
 
-| Stack | Cuándo usarlo | Ventaja | Riesgo |
+| Opción | Cuándo considerar | Ventaja principal | Tradeoff principal |
 |---|---|---|---|
-| **Firebase** | MVP rápido, tiempo real, equipo pequeño | Sin servidor que mantener, auth incluida | Vendor lock-in, costoso al escalar |
-| **Supabase** | Firebase pero open source, SQL real | PostgreSQL, más control, autohospedable | Menos features que Firebase |
-| **Node.js + Express** | Equipo con JS, API custom | Flexibilidad total, ecosistema enorme | Más configuración inicial |
-| **NestJS** | Backend serio en TypeScript, equipo mediano+ | Arquitectura estructurada, escalable | Curva de aprendizaje mayor |
-| **Go / Rust** | Alta concurrencia, performance crítica | Muy eficiente | Equipo especializado requerido |
+| **Firebase** | MVP rápido, poco equipo, auth/real-time listos | Velocidad de salida | Vendor lock-in y costos variables |
+| **Supabase** | Quieres velocidad con SQL real y más control | PostgreSQL, simple para MVP y productos chicos-medianos | Menos ecosistema cerrado que Firebase |
+| **Node/Nest** | Requieres backend custom o lógica más seria | Flexibilidad y control | Más código y operación |
+| **Otro backend propio** | Hay requisitos específicos fuertes o experiencia previa sólida | Diseño a medida | Más complejidad inicial |
 
-#### Base de Datos
+### Base de datos
 
-| Base | Cuándo usarlo |
+| Opción | Cuándo considerar |
 |---|---|
-| **PostgreSQL** | Default para casi todo — relacional, robusto, gratis |
-| **MongoDB** | Datos muy variables, sin esquema fijo, documentos |
-| **Redis** | Caché, sesiones, colas — siempre como complemento |
-| **SQLite** | Offline-first en mobile, datos locales |
+| **PostgreSQL** | Default fuerte para la mayoría de productos con datos estructurados |
+| **SQLite** | Estado/datos locales o modo offline en cliente |
+| **MongoDB** | Documentos y estructura cambiante, si el caso realmente lo pide |
+| **Redis** | Caché, colas o sesiones; no reemplaza tu base principal en la mayoría de casos |
 
-#### Infraestructura
+### Regla
 
-| Opción | MVP | Escala | Costo |
-|---|---|---|---|
-| **Firebase / Supabase** | ✅ Ideal | ⚠️ Costoso | Pago por uso |
-| **Vercel + PlanetScale** | ✅ Frontend + DB | ✅ Escala bien | Pago por uso |
-| **Railway / Render** | ✅ Backend simple | ✅ Moderado | ~$5-20/mes |
-| **AWS / GCP / Azure** | ⚠️ Complejo | ✅ Máxima escala | Variable |
+No digas “usa X”.
+Di: **“Dado A, B y C, X parece mejor que Y por estas razones.”**
 
 ---
 
-## Fase 3 — Factibilidad Técnica por Feature
+## Fase 4 — Complejidad y riesgos por feature
 
-Para cada Must Have del MVP, evalúa:
+Para cada Must Have, documenta:
 
-```
+```text
 Feature: [nombre]
-──────────────────────────────────────────────────────────────
-Complejidad técnica:   [ ] Baja  [ ] Media  [ ] Alta  [ ] Incierta
-Existe solución out-of-the-box:  [ ] Sí → [librería/servicio]
-                                 [ ] No → hay que construirla
-Dependencia de API externa:      [ ] Sí → [nombre + confiabilidad]
-                                 [ ] No
-Riesgo técnico principal:        [describir]
-Alternativa si falla:            [plan B]
+Complejidad: [Baja / Media / Alta / Incierta]
+Riesgo principal: [descripción]
+Dependencia externa: [sí/no + cuál]
+Qué la vuelve difícil: [razón concreta]
+Plan B: [alternativa realista]
 ```
+
+### Tipos de riesgo a buscar
+
+- riesgo de integración,
+- riesgo de escala,
+- riesgo regulatorio,
+- riesgo de dependencia de terceros,
+- riesgo de deuda técnica,
+- riesgo de incertidumbre no investigada.
+
+### Regla crítica
+
+Si algo es técnicamente incierto, no lo estimes como si fuera simple.
+Primero hay que investigarlo o prototiparlo.
 
 ---
 
-## Fase 4 — Riesgos Técnicos
+## Fase 5 — Estimación de esfuerzo
 
-### Tipos de riesgo a identificar:
+No prometas fechas exactas en esta fase.
+Usa rangos y deja explícita la incertidumbre.
 
-**Riesgo de integración** — APIs de terceros que pueden fallar, cambiar precios o deprecarse.
-**Riesgo de escala** — Lo que funciona para 100 usuarios puede romperse con 10,000.
-**Riesgo de regulación** — Datos financieros, de salud o de menores tienen requerimientos legales.
-**Riesgo de plataforma** — Cambios en App Store / Play Store policies.
-**Riesgo de deuda técnica** — Decisiones rápidas que harán el mantenimiento caro después.
-**Riesgo de dependencia** — Un solo servicio que si cae, cae todo el producto.
+### T-Shirt sizing sugerido
 
-### Matriz de riesgos:
+| Talla | Rango orientativo |
+|---|---|
+| **XS** | 1–3 días |
+| **S** | 3–7 días |
+| **M** | 1–3 semanas |
+| **L** | 3–6 semanas |
+| **XL** | 6+ semanas |
 
-```
-Riesgo: [descripción]
-Probabilidad: [Alta / Media / Baja]
-Impacto:      [Alto / Medio / Bajo]
-Mitigación:   [qué hacer para reducirlo]
-Plan B:       [qué hacer si ocurre]
-```
+### Regla práctica
 
----
+- optimista,
+- realista,
+- pesimista.
 
-## Fase 5 — Estimación de Esfuerzo (T-Shirt Sizing)
-
-No prometas fechas exactas sin código escrito. Usa rangos.
-
-### Tabla de sizing:
-
-| Talla | Tiempo | Ejemplo de feature |
-|---|---|---|
-| **XS** | 1-3 días | Pantalla estática, CRUD simple |
-| **S** | 3-7 días | Auth completa, listado con filtros |
-| **M** | 1-3 semanas | Carrito de compras, chat básico |
-| **L** | 3-6 semanas | Sistema de pagos, mapas con lógica |
-| **XL** | 6+ semanas | Motor de recomendaciones, IA, social graph |
-
-### Estimación total del MVP:
-
-```
-Feature 1: [nombre] → [talla] → [rango en días]
-Feature 2: [nombre] → [talla] → [rango en días]
-Feature 3: [nombre] → [talla] → [rango en días]
-─────────────────────────────────────────────
-Total optimista:    [N] días / [N] semanas
-Total realista:     [N × 1.5] días (agrega 50% siempre)
-Total pesimista:    [N × 2] días (imprevistos, bugs, scope creep)
-```
-
-**Regla del 50%:** Siempre multiplica tu estimación inicial por 1.5.
-No es pesimismo — es experiencia acumulada de todos los proyectos de software de la historia.
+Y si el proyecto tiene incertidumbre real, añade colchón. Punto.
 
 ---
 
-## Fase 6 — Arquitectura Base del MVP
+## Fase 6 — Arquitectura mínima adecuada
 
-Propón la arquitectura mínima que soporte el MVP y permita escalar después.
+La arquitectura propuesta debe ser proporcional al tipo de proyecto.
 
-### Plantilla de arquitectura:
+### Para aprendizaje o MVP pequeño
 
-```
-[CLIENTE]
-├── Mobile App (iOS + Android)
-│   └── [framework elegido]
-└── Web App (si aplica)
-    └── [framework elegido]
-         │
-         ▼ HTTPS / REST / GraphQL / WebSocket
-[BACKEND]
-├── API Layer
-│   └── [tecnología]
-├── Auth
-│   └── [solución: Firebase Auth / Supabase Auth / custom JWT]
-├── Business Logic
-│   └── [descripción de capas]
-└── Storage
-    ├── Base de datos: [tecnología]
-    ├── Files/Media: [tecnología]
-    └── Caché: [tecnología, si aplica]
-         │
-         ▼
-[INFRAESTRUCTURA]
-└── [proveedor + tier]
-```
+- estructura simple por features,
+- separación básica entre UI, estado y acceso a datos,
+- pocas dependencias,
+- despliegue sencillo.
 
-### Principios de arquitectura para MVP:
+### Para producto serio o crecimiento probable
 
-- **YAGNI** (You Aren't Gonna Need It) — no sobre-ingenierices para escala que no tienes
-- **Separación de capas** — presentation / business logic / data desde el inicio
-- **Feature flags** — mecanismo para activar/desactivar features sin deployar
-- **Observabilidad mínima** — logging y monitoreo desde el día 1, no después
+- separación más clara de capas,
+- estrategia de testing desde temprano,
+- observabilidad básica,
+- manejo explícito de errores,
+- decisiones documentadas.
+
+### Principios
+
+- **YAGNI** → no diseñes para una escala imaginaria.
+- **Separación de responsabilidades** → evita mezclar todo en un solo archivo/capa.
+- **Evolución progresiva** → la arquitectura debe poder crecer sin rehacer todo.
 
 ---
 
-## Reglas de Conducción
+## Reglas de conducción
 
-- Si un requisito técnico es "incierto", investígalo antes de estimar — la incertidumbre técnica es el mayor riesgo
-- Si el costo de infraestructura supera el modelo de negocio proyectado, el producto tiene un problema económico, no técnico
-- Un MVP técnicamente perfecto que nadie usa es un fracaso — prioriza velocidad de validación sobre calidad de código en la primera versión
-- Documenta las decisiones técnicas y sus razones — tu yo del futuro lo agradecerá
+- No confundas preferencia personal con criterio técnico.
+- Siempre presenta al menos una alternativa y su tradeoff.
+- Si el modelo de negocio o el usuario no están claros, dilo: el problema ya no es técnico.
+- Si una dependencia externa puede romper el producto, documenta esa fragilidad.
 
 ---
 
 ## Output Final — Tech Spec
 
-Genera este documento al terminar. Es el punto de partida del desarrollo.
-
 ```markdown
 # [Nombre del Producto] — Tech Spec
-**Generado por:** KkapsCa / tech-feasibility skill v1.0
+**Generado por:** tech-feasibility skill v2.0
 **Fecha:** [fecha]
 
-## Resumen Técnico
-[3-4 oraciones: qué se construye, con qué tecnologías, en cuánto tiempo]
+## 1. Contexto
+- Tipo de proyecto: [aprendizaje / side project / producto / herramienta interna]
+- Objetivo del MVP: [resumen]
+- Restricciones: [tiempo, presupuesto, equipo, plataforma]
 
-## Tech Stack Decisión
+## 2. Requisitos técnicos clave
+- [requisito 1]
+- [requisito 2]
+- [requisito 3]
 
-### Frontend / Mobile
-**Tecnología:** [nombre]
-**Justificación:** [por qué esta y no otra]
+## 3. Decisión de stack
+### Frontend
+- Opción elegida: [tecnología]
+- Justificación: [por qué]
+- Alternativa descartada: [cuál y por qué]
 
 ### Backend
-**Tecnología:** [nombre]
-**Justificación:** [por qué esta y no otra]
+- Opción elegida: [tecnología]
+- Justificación: [por qué]
+- Alternativa descartada: [cuál y por qué]
 
-### Base de Datos
-**Tecnología:** [nombre]
-**Justificación:** [por qué esta y no otra]
+### Datos / infraestructura
+- Base principal: [tecnología]
+- Hosting / BaaS / despliegue: [tecnología]
+- Motivo: [por qué]
 
-### Infraestructura
-**Proveedor:** [nombre + tier]
-**Costo estimado/mes:** $[X]
-
-## Factibilidad por Feature
-
-| Feature | Complejidad | Talla | Días estimados | Riesgo |
-|---|---|---|---|---|
-| [Feature 1] | Media | M | 10-15 | Bajo |
-
-## Estimación Total
-**Optimista:** [N] semanas
-**Realista:** [N × 1.5] semanas
-**Pesimista:** [N × 2] semanas
-
-## Riesgos Técnicos
-
+## 4. Riesgos técnicos
 | Riesgo | Probabilidad | Impacto | Mitigación |
 |---|---|---|---|
-| [Riesgo 1] | Alta | Alto | [mitigación] |
+| [riesgo] | | | |
 
-## Arquitectura Base
-[Diagrama ASCII o descripción de capas]
+## 5. Estimación inicial
+| Feature | Talla | Rango |
+|---|---|---|
+| [feature] | [S/M/L] | [tiempo] |
 
-## Decisiones Técnicas Clave
-[Lista de decisiones importantes con su justificación]
+## 6. Arquitectura propuesta
+[descripción simple del sistema y sus piezas]
 
-## Deuda Técnica Aceptada en MVP
-[Qué se hace "rápido ahora" y se refactoriza después, y cuándo]
+## 7. Decisiones abiertas
+- [pregunta pendiente]
+- [riesgo por investigar]
 
-## Próximos Pasos
-1. [ ] Setup del repositorio y estructura base
-2. [ ] Configurar CI/CD mínimo
-3. [ ] Implementar autenticación
-4. [ ] [Feature crítica 1]
-5. [ ] [Feature crítica 2]
-
----
-**Pipeline completado.** Tienes Product Brief + Discovery Report + Tech Spec.
-Estás listo para desarrollar con claridad.
+## 8. Siguiente paso
+- Crear backlog técnico inicial
+- Definir estructura del repo
+- Empezar implementación
 ```
 
 ---
 
-> 🎉 **¡Pipeline completo!**
-> Con los tres documentos (Product Brief + Discovery Report + Tech Spec)
-> tienes todo lo necesario para empezar a desarrollar con claridad,
-> contratar talento, presentar a inversores, o simplemente no perderte
-> cuando empieces a escribir código.
+## Criterio de salida
+
+Esta fase está completa cuando ya existe:
+
+- una propuesta de stack justificada,
+- un mapa claro de riesgos,
+- una estimación razonable por rangos,
+- una arquitectura proporcional al tamaño del proyecto,
+- claridad suficiente para comenzar a desarrollar sin improvisar todo.

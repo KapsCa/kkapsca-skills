@@ -1,203 +1,229 @@
 ---
 name: brainstorm
 description: >
-  PASO 1 DE 3 del Project Kickstart Pipeline. Convierte una idea vaga en un Product Brief
-  estructurado y accionable. Guía al usuario a través de definición de problema, usuario
-  objetivo, features del MVP y diferenciadores.
+  PASO 1 de un pipeline de definición de producto. Convierte una idea vaga en un
+  Product Brief útil, enfocándose en problema, usuario, propuesta de valor, MVP y
+  diferenciadores. Sirve como punto de entrada cuando todavía no existe suficiente
+  claridad para pasar directo a discovery o a decisiones técnicas.
 
-  SIEMPRE activa esta skill cuando el usuario diga: "tengo una idea", "quiero hacer una app",
-  "quiero construir algo", "no sé por dónde empezar", "ayúdame a definir mi idea", "quiero
-  validar mi idea", "brainstorm", o cualquier variación de querer explorar o definir un
-  concepto de producto — aunque no use la palabra "brainstorm" explícitamente. Carga esta
-  skill ANTES de cualquier sesión de ideación.
+  Usa esta skill cuando alguien tenga una idea inicial, quiera aterrizarla, no sepa
+  por dónde empezar o necesite transformar intuición en una hipótesis de producto más clara.
 
 license: Apache-2.0
 metadata:
   author: KkapsCa
-  version: "2.0"
+  version: "3.0"
   pipeline: "project-kickstart/01"
   next: "product-discovery"
 ---
 
-# Brainstorm — Paso 1 de 3
+# Brainstorm — Step 1
 
-> **Pipeline:** `brainstorm` → `product-discovery` → `tech-feasibility`  
-> **Input:** Idea vaga  
-> **Output:** Product Brief (feed para product-discovery)
+> **Pipeline recomendado:** `brainstorm` → `product-discovery` → `tech-feasibility`
+> **Input:** idea vaga, intuición o problema mal definido
+> **Output:** Product Brief
 
 ---
 
+## When to Use
+
+Usa esta skill cuando el usuario diga cosas como:
+
+- “tengo una idea”,
+- “quiero hacer una app”,
+- “no sé por dónde empezar”,
+- “ayúdame a aterrizar esto”,
+- “quiero definir mejor mi producto”.
+
 ## When NOT to Use
 
-- La idea ya está definida con problema y usuario claros → empieza en `product-discovery`
-- El usuario pide mejoras a un proyecto existente → eso es refinamiento, no brainstorm
-- El usuario quiere explorar tecnologías sin un producto en mente → eso es research técnico
+- Ya existe claridad suficiente de problema, usuario y MVP.
+- El usuario ya trae un Product Brief razonable.
+- El objetivo real es comparar tecnologías o planear implementación.
 
 ---
 
 ## Filosofía
 
-Una buena sesión de brainstorm NO es tirar ideas al aire.
-Es una **entrevista estructurada** que termina con un documento de producto claro.
+Brainstorm no es lanzar ideas al aire.
+Es convertir intuición en una hipótesis de producto que se pueda analizar después.
 
-El orden importa — nunca lo rompas:
-1. **Problema primero** — si no hay problema real, no hay producto
-2. **Usuario segundo** — sin saber quién lo usa, no puedes priorizar nada
-3. **Features tercero** — solo después de entender 1 y 2
-4. **Tech stack al final** — la tecnología sirve al producto, no al revés
+### Orden correcto
 
----
+1. **Problema**
+2. **Usuario**
+3. **Propuesta de valor**
+4. **MVP**
+5. **Diferenciadores**
+6. **Preguntas abiertas**
 
-## Fase 1 — Captura la Idea Cruda
-
-Pídele al usuario que describa su idea en 2-3 oraciones, sin filtros.
-No corrijas todavía. Escucha y observa:
-
-- ¿Menciona un problema concreto o solo una solución?
-- ¿Hay un usuario específico o es "para todos"?
-- ¿Tiene referentes? ("como Uber pero para X")
-
-**Pregunta de arranque:**
-> "Descríbeme tu idea como si me la contaras a un amigo en 30 segundos."
+La tecnología va al final, no al principio.
 
 ---
 
-## Fase 2 — Definición del Problema
+## Fase 1 — Idea cruda
 
-El paso más importante. Muchas apps fallan porque resuelven el problema equivocado.
+Pide una explicación corta y sin filtros.
 
-Haz estas preguntas **una a la vez**, nunca todas juntas:
+### Pregunta de arranque
 
-**1. ¿Qué problema concreto resuelve?**
-- Fuerza al usuario a articular el dolor, no la solución
-- Si dice "quiero una app de recetas" → pregunta: "¿qué problema tiene la gente con las recetas hoy?"
+> “Explícame tu idea como si me la contaras en 30 segundos.”
 
-**2. ¿Cómo se resuelve ese problema HOY sin tu app?**
-- WhatsApp grupos, Excel, papel, otra app — siempre hay un workaround
-- Si no hay workaround, probablemente no es un problema real
+### Qué observar
 
-**3. ¿Por qué la solución actual no es suficiente?**
-- Acá está el espacio para el producto
+- ¿habla de un problema o solo de una solución?,
+- ¿hay un usuario concreto o “todo el mundo”?,
+- ¿menciona referentes?,
+- ¿suena a dolor real o a ocurrencia simpática?
 
-**Output de esta fase:**
+---
+
+## Fase 2 — Problema real
+
+Aquí se gana o se pierde la idea.
+
+Haz una pregunta a la vez:
+
+1. **¿Qué problema concreto resuelve?**
+2. **¿Cómo se resuelve hoy sin tu producto?**
+3. **¿Qué tiene de insuficiente la solución actual?**
+
+### Salida de esta fase
+
+```text
+Problema: [dolor concreto]
+Solución actual: [cómo lo resuelven hoy]
+Gap: [qué queda mal resuelto]
 ```
-Problema:         [Descripción concreta del dolor]
-Solución actual:  [Cómo lo resuelven hoy]
-Gap:              [Por qué eso no es suficiente]
+
+---
+
+## Fase 3 — Usuario principal
+
+“Para todos” no sirve.
+
+Define un usuario primario con estas preguntas:
+
+- ¿quién sufre más este problema?,
+- ¿con qué frecuencia le pasa?,
+- ¿qué ganaría usando esta solución?,
+- ¿qué lo haría no usarla?
+
+### Pregunta clave
+
+> “¿Quién es la persona que más necesita esto y que más se beneficiaría si existiera mañana?”
+
+---
+
+## Fase 4 — Propuesta de valor
+
+Condensa la idea en una frase:
+
+```text
+Ayudamos a [usuario] a [resolver problema] mediante [solución],
+para que pueda [resultado valioso].
 ```
 
----
-
-## Fase 3 — Usuario Objetivo
-
-"Para todos" es la trampa más común. Un producto para todos no sirve a nadie bien.
-
-| Campo | Pregunta |
-|---|---|
-| **Perfil** | ¿Quién es? (edad, ocupación, contexto de vida) |
-| **Frecuencia** | ¿Cada cuánto usaría la app? |
-| **Motivación** | ¿Qué gana concretamente usando tu app? |
-| **Fricción** | ¿Qué lo haría NO usarla o desinstalarla? |
-
-**Técnica — El Usuario Más Exigente:**
-> "¿Quién es la persona que MÁS necesita esto y que pagaría por ello mañana mismo?"
-
-Ese es tu usuario primario. Diseña el MVP para él primero.
+Si esta frase sale borrosa, todavía no hay suficiente claridad.
 
 ---
 
-## Fase 4 — Features: Core vs Nice-to-Have
+## Fase 5 — MVP
 
-Técnica **MoSCoW** adaptada a MVP:
+Separa lo esencial de lo decorativo.
 
-| Categoría | Criterio | Ejemplo |
-|---|---|---|
-| **Must Have** | Sin esto la app no existe | Login, funcionalidad principal |
-| **Should Have** | Importante pero no bloqueante | Notificaciones, filtros |
-| **Could Have** | Deseable pero postergable | Dark mode, gamificación |
-| **Won't Have (MVP)** | Explícitamente fuera del MVP | IA avanzada, social features |
+### Clasificación sugerida
 
-**Regla del MVP:**
-> El MVP es la versión más pequeña del producto que le resuelve el problema
-> al usuario más exigente. Si puedes resolver el problema sin una feature,
-> esa feature NO es Must Have.
+- **Must Have** → sin esto, el producto no resuelve el problema.
+- **Should Have** → importante, pero puede esperar.
+- **Could Have** → nice to have.
+- **Not in MVP** → explícitamente fuera de la primera versión.
 
-Cuando el usuario quiera agregar features, pregunta:
-> "¿El usuario primario no puede vivir sin esto en la primera versión?"
+### Regla del MVP
+
+> El MVP es la versión más pequeña que resuelve el problema principal del usuario principal.
 
 ---
 
-## Fase 5 — Diferenciadores
+## Fase 6 — Diferenciadores
 
-¿Por qué alguien usaría ESTA app sobre lo que ya existe?
-Elige **máximo 2** de la siguiente lista:
+Elige máximo 2.
 
-- **Velocidad** — lo hace más rápido que la competencia
-- **Simplicidad** — menos pasos para llegar al resultado
-- **Nicho** — sirve a un segmento que otros ignoran
-- **Integración** — conecta cosas que hoy están separadas
-- **Precio** — modelo de negocio distinto (freemium, suscripción, pago único)
-- **Offline-first** — funciona sin internet cuando otros no
+- velocidad,
+- simplicidad,
+- especialización en un nicho,
+- integración,
+- precio/modelo,
+- experiencia offline,
+- mejor UX,
+- automatización.
 
-Si el usuario no puede elegir 2 claros diferenciadores, el producto no está listo
-para pasar a la siguiente fase.
+Si no hay diferenciador claro, todavía falta trabajo de pensamiento.
 
 ---
 
-## Reglas de Conducción
+## Reglas de conducción
 
-- Haz **UNA pregunta a la vez** — bombardear al usuario lo paraliza
-- **No sugieras features** en las primeras 3 fases — escucha primero
-- **Desafía el "para todos"** — siempre redirige a un usuario específico
-- **Termina con un próximo paso accionable** — sin siguiente paso, el brainstorm fue inútil
+- Una pregunta a la vez.
+- No sugerir features demasiado pronto.
+- Desafiar ideas difusas con respeto pero con firmeza.
+- No hablar de stack si el problema aún no está bien definido.
+- Terminar siempre con un output útil, no con conversación suelta.
 
 ---
 
 ## Output Final — Product Brief
 
-Genera este documento al terminar. Es el input para `product-discovery`.
-
 ```markdown
 # [Nombre Tentativo] — Product Brief
-**Generado por:** KkapsCa / brainstorm skill v2.0
+**Generado por:** brainstorm skill v3.0
 **Fecha:** [fecha]
 
-## Problema
-[1-2 oraciones del dolor real y concreto]
+## 1. Problema
+[descripción concreta del dolor]
 
-## Solución Actual y su Gap
-[Cómo lo resuelven hoy y por qué no es suficiente]
+## 2. Solución actual
+[cómo se resuelve hoy]
 
-## Propuesta de Valor
-[Cómo tu app resuelve el problema — 1 oración]
+## 3. Gap detectado
+[qué sigue mal resuelto]
 
-## Usuario Primario
-**Perfil:** [descripción concreta, no genérica]
-**Frecuencia de uso:** [diario / semanal / mensual]
-**Motivación principal:** [qué gana]
-**Mayor fricción:** [qué lo haría no usarla]
+## 4. Usuario principal
+- Perfil: [descripción]
+- Frecuencia del problema: [alta/media/baja]
+- Motivación: [qué gana]
+- Fricción principal: [qué podría frenarlo]
 
-## MVP — Must Haves
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
+## 5. Propuesta de valor
+[frase clara]
 
-## Fuera del MVP
-- Feature X → v2
-- Feature Y → v3
+## 6. MVP
+### Must Have
+- [feature]
 
-## Diferenciadores Clave (máx. 2)
-1. [Diferenciador 1]
-2. [Diferenciador 2]
+### Fuera del MVP
+- [feature]
 
-## Notas para Product Discovery
-[Preguntas abiertas, supuestos a validar, áreas de incertidumbre]
+## 7. Diferenciadores
+- [diferenciador 1]
+- [diferenciador 2]
 
----
-**Siguiente paso:** Ejecuta `product-discovery` con este brief como input.
+## 8. Dudas abiertas
+- [pregunta]
+- [supuesto por validar]
+
+## 9. Siguiente paso
+- Pasar a product-discovery
 ```
 
 ---
 
-> ℹ️ **¿Ya tienes este output?**  
-> Pasa directamente a la skill `product-discovery` con el Product Brief como contexto.
+## Criterio de salida
+
+Esta fase está suficientemente completa cuando ya existe:
+
+- un problema claro,
+- un usuario principal identificable,
+- una propuesta de valor entendible,
+- un MVP recortado,
+- y suficientes insumos para pasar a discovery sin improvisar todo.

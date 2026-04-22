@@ -1,286 +1,318 @@
 ---
 name: product-discovery
 description: >
-  PASO 2 DE 3 del Project Kickstart Pipeline. Valida un Product Brief con análisis de
-  mercado, competidores, público objetivo detallado (proto-personas + Jobs To Be Done),
-  modelo de negocio y factibilidad económica. Produce un Discovery Report listo para
-  la evaluación técnica.
+  PASO 2 de un pipeline de definición de producto. Sirve para validar una idea o
+  Product Brief con análisis de usuario, problema, competencia, mercado, propuesta
+  de valor, monetización y métodos de validación. Incluye una ruta completa y una
+  ruta ligera para side projects, aprendizaje o microproductos.
 
-  SIEMPRE activa esta skill cuando el usuario tenga un Product Brief y quiera validar
-  su idea de negocio, analizar el mercado, definir su modelo de monetización, conocer
-  a su competencia, construir proto-personas, o evaluar si la idea es económicamente
-  viable. También activa cuando el usuario diga "¿hay mercado para esto?", "¿cómo
-  ganaría dinero?", "¿quién más hace esto?", o "quiero validar antes de construir".
+  Usa esta skill cuando ya exista una idea más aterrizada y haga falta responder si
+  realmente vale la pena construirla, para quién, contra qué compite y cómo validarla
+  antes de gastar tiempo fuerte en desarrollo.
 
 license: Apache-2.0
 metadata:
   author: KkapsCa
-  version: "1.0"
+  version: "2.0"
   pipeline: "project-kickstart/02"
   prev: "brainstorm"
   next: "tech-feasibility"
 ---
 
-# Product Discovery — Paso 2 de 3
+# Product Discovery — Step 2
 
-> **Pipeline:** `brainstorm` → `product-discovery` → `tech-feasibility`  
-> **Input:** Product Brief (output de brainstorm)  
-> **Output:** Discovery Report (feed para tech-feasibility)
+> **Pipeline recomendado:** `brainstorm` → `product-discovery` → `tech-feasibility`
+> **Input ideal:** Product Brief o idea ya suficientemente definida
+> **Output:** Discovery Report
 
 ---
 
+## When to Use
+
+Usa esta skill cuando el usuario quiera responder cosas como:
+
+- ¿hay una necesidad real aquí?,
+- ¿quién usaría esto de verdad?,
+- ¿qué alternativas ya existen?,
+- ¿cómo podría validarse sin construir de más?,
+- ¿esto tiene sentido como negocio, side project o herramienta?
+
 ## When NOT to Use
 
-- No hay un Product Brief previo → regresa a `brainstorm` primero
-- El usuario solo quiere definir la idea, sin validarla → usa `brainstorm`
-- El usuario ya tiene validación de mercado y quiere ir al stack técnico → usa `tech-feasibility`
+- La idea sigue siendo demasiado vaga y todavía no hay claridad mínima del problema.
+- El usuario ya validó mercado y solo quiere aterrizar stack y arquitectura.
+- El objetivo es solo comparar tecnologías sin pensar en el producto.
 
 ---
 
 ## Filosofía
 
-Construir sin validar es apostar con tiempo y dinero.
-El discovery no es burocracia — es el seguro de vida de tu proyecto.
+Discovery no es burocracia.
+Es el filtro que evita construir algo que nadie necesita.
 
-Preguntas que esta skill responde:
-- ¿Existe mercado real para esto?
-- ¿Quién es exactamente el usuario y qué trabajo quiere hacer?
-- ¿Quién más lo está haciendo y cómo me diferencio?
-- ¿Cómo generará dinero este producto?
-- ¿Es económicamente viable construirlo?
-- ¿Cómo valido la idea antes de invertir meses de desarrollo?
+### Regla de oro
+
+> Antes de invertir semanas en desarrollo, confirma que existe una necesidad,
+> un usuario concreto y una razón real para que alguien use —o incluso pague— por lo que estás imaginando.
 
 ---
 
-## Fase 1 — Análisis de Mercado
+## Paso 0 — Identifica el tipo de proyecto
 
-### 1.1 Tamaño de Mercado (TAM / SAM / SOM)
+No todos los proyectos requieren el mismo nivel de discovery.
 
-No necesitas consultores. Necesitas orden mental.
+Clasifica primero:
 
-| Sigla | Qué es | Cómo estimarlo |
+- **Aprendizaje** → prioridad: entender problema, usuario y utilidad.
+- **Side project / microproducto** → prioridad: validar interés rápido.
+- **Producto serio / negocio** → prioridad: mercado, monetización y viabilidad.
+- **Herramienta interna** → prioridad: utilidad clara y ahorro de tiempo/costo.
+
+---
+
+## Dos modos de trabajo
+
+### Modo A — Discovery completo
+
+Úsalo si:
+
+- quieres lanzar un producto serio,
+- planeas monetizar,
+- hay inversión de tiempo o dinero importante,
+- necesitas justificar la idea ante otras personas.
+
+### Modo B — Discovery ligero
+
+Úsalo si:
+
+- es un side project,
+- es una herramienta personal o interna,
+- estás aprendiendo,
+- quieres validar interés rápido antes de profundizar.
+
+---
+
+## Discovery ligero (ruta rápida)
+
+Si el proyecto no requiere análisis pesado, responde estas 5 cosas:
+
+1. **Problema**
+   - ¿Qué frustración o tarea concreta existe?
+
+2. **Usuario**
+   - ¿Quién lo necesita más?
+
+3. **Alternativa actual**
+   - ¿Cómo lo resuelve hoy sin tu producto?
+
+4. **Señal de valor**
+   - ¿Qué tendría que pasar para decir “sí vale la pena seguir”? 
+   - Ejemplo: 10 personas interesadas, 3 usuarios activos, 1 cliente que pague, etc.
+
+5. **Validación mínima**
+   - ¿Cuál es la forma más barata de comprobar interés?
+   - entrevista, landing, mockup, demo manual, pre-venta.
+
+### Salida del modo ligero
+
+Si estas 5 respuestas están claras, puedes pasar a `tech-feasibility` sin hacer discovery completo.
+
+---
+
+## Discovery completo
+
+### Fase 1 — Mercado y contexto
+
+No necesitas sonar a consultor. Necesitas orden.
+
+#### Tamaño de oportunidad (si aplica)
+
+Usa TAM / SAM / SOM solo cuando el proyecto realmente lo amerite.
+
+- **TAM** → tamaño total del mercado
+- **SAM** → segmento al que realmente puedes llegar
+- **SOM** → porción realista que podrías capturar
+
+Si el proyecto es pequeño o interno, puedes sustituir esto por:
+
+- tamaño del nicho,
+- número estimado de usuarios potenciales,
+- intensidad del problema.
+
+#### Preguntas clave
+
+- ¿Este problema ocurre con suficiente frecuencia?
+- ¿A cuántas personas afecta en el nicho relevante?
+- ¿Es un dolor real o solo una idea curiosa?
+
+---
+
+### Fase 2 — Competencia y alternativas
+
+No busques solo competidores directos.
+Busca también sustitutos.
+
+```text
+Competidor o alternativa: [nombre]
+Qué resuelve: [descripción]
+Fortaleza: [qué hace bien]
+Debilidad: [qué deja mal resuelto]
+Oportunidad: [qué podrías hacer mejor o distinto]
+```
+
+### Tipos de competencia
+
+- **Directa** → hace algo muy parecido
+- **Indirecta** → resuelve el mismo problema de otra forma
+- **Sustituto actual** → Excel, WhatsApp, Notion, papel, procesos manuales
+
+---
+
+### Fase 3 — Usuario y Jobs To Be Done
+
+La skill debe aterrizar máximo 1 o 2 perfiles centrales.
+
+```text
+Persona: [nombre ficticio]
+Perfil: [ocupación, contexto, comportamiento]
+Problema principal: [dolor real]
+Motivación: [qué espera ganar]
+Fricciones: [qué lo haría no usar tu producto]
+
+Job to be done:
+"Cuando [situación], quiero [motivación], para [resultado esperado]"
+```
+
+### Regla
+
+Si el usuario responde “esto es para todos”, hay que empujarlo a elegir un usuario primario.
+
+---
+
+### Fase 4 — Propuesta de valor
+
+Obliga a resumir la propuesta así:
+
+```text
+Ayudamos a [usuario] a [resolver problema] mediante [solución],
+para que pueda [resultado valioso].
+```
+
+Si esto no se puede escribir con claridad, el producto sigue borroso.
+
+---
+
+### Fase 5 — Modelo de valor y monetización
+
+No todos los proyectos necesitan modelo de negocio fuerte desde el día 1.
+
+Primero define cuál de estos aplica:
+
+- **Negocio** → sí necesita monetización clara.
+- **Side project** → puede empezar sin monetizar, pero debe tener una hipótesis.
+- **Aprendizaje** → monetización opcional.
+- **Herramienta interna** → el valor puede ser ahorro de tiempo o costo, no ventas.
+
+### Si sí aplica monetización
+
+Explora opciones como:
+
+- freemium,
+- suscripción,
+- pago único,
+- comisión,
+- B2B,
+- consultoría/servicio asociado.
+
+### Pregunta correcta
+
+No preguntes solo “¿cómo ganará dinero?”
+Pregunta también:
+
+> “¿Qué tipo de valor genera este producto y cómo se podría capturar?”
+
+---
+
+### Fase 6 — Estrategia de validación
+
+Siempre busca primero la validación más barata posible.
+
+| Método | Qué valida | Costo relativo |
 |---|---|---|
-| **TAM** | Mercado total disponible | ¿Cuántas personas en el mundo tienen este problema? |
-| **SAM** | Mercado al que puedes llegar | ¿Cuántos están en tu región/idioma/canal de distribución? |
-| **SOM** | Mercado que puedes capturar | ¿Cuántos capturarías realista en 2-3 años? |
+| Entrevistas | problema y lenguaje del usuario | bajo |
+| Landing page | interés inicial | bajo |
+| Mockup / prototipo | flujo y comprensión | bajo |
+| Demo manual | utilidad real | bajo-medio |
+| Pre-venta | intención de compra | medio |
+| MVP técnico | experiencia real completa | alto |
 
-**Fuentes para investigar (pídele al usuario que confirme el contexto):**
-- Statista, Google Trends, reportes de industria
-- Subreddits, grupos de Facebook, comunidades del nicho
-- Reviews de apps competidoras en App Store / Play Store
+### Regla
 
-**Pregunta clave:**
-> "¿Es el mercado suficientemente grande para justificar el esfuerzo,
-> pero suficientemente específico para que puedas servir bien a tus usuarios?"
+No construyas un MVP técnico si todavía puedes aprender lo mismo con algo más barato.
 
 ---
 
-### 1.2 Análisis de Competidores
+## Reglas de conducción
 
-Para cada competidor directo (máximo 5), documenta:
-
-```
-Competidor: [Nombre]
-Propuesta de valor: [Qué prometen]
-Precio: [Modelo de monetización]
-Fortaleza principal: [Por qué la usan]
-Debilidad principal: [Por qué la dejan / se quejan]
-Gap que no cubre: [Oportunidad para ti]
-```
-
-**Fuentes para investigar competidores:**
-- Reseñas en App Store / Play Store (las negativas son oro)
-- ProductHunt, G2, Capterra
-- Subreddits relacionados: busca quejas sobre apps existentes
-
-**Tipos de competencia a identificar:**
-- **Directa** — hacen exactamente lo mismo
-- **Indirecta** — resuelven el mismo problema de otra forma
-- **Sustitutos** — lo que el usuario usa hoy (Excel, WhatsApp, papel)
-
----
-
-## Fase 2 — Público Objetivo Detallado
-
-### 2.1 Proto-Personas (1-2 máximo)
-
-Una persona es una representación ficticia basada en patrones reales, no en suposiciones.
-
-```
-## Persona: [Nombre ficticio]
-
-**Perfil demográfico**
-- Edad: [rango]
-- Ocupación: [trabajo o rol]
-- Contexto: [dónde vive, cómo es su día típico]
-
-**Comportamiento digital**
-- Apps que usa diario: [lista]
-- ¿Cómo descubre apps nuevas?: [amigos / redes / búsqueda]
-- Disposición a pagar: [gratis solamente / freemium / paga si vale]
-
-**Jobs To Be Done**
-- Trabajo funcional: "Cuando [situación], quiero [motivación], para [resultado esperado]"
-- Trabajo emocional: ¿Cómo quiere sentirse después de usar el producto?
-- Trabajo social: ¿Cómo quiere que otros lo perciban al usarlo?
-
-**Frustraciones actuales**
-- [Pain 1]
-- [Pain 2]
-
-**Lo que le haría abandonar tu app**
-- [Fricción 1]
-- [Fricción 2]
-```
-
-**Jobs To Be Done — ejemplo práctico:**
-> "Cuando tengo que dividir gastos con amigos después de un viaje,
-> quiero saber exactamente cuánto me deben sin hacer cuentas manuales,
-> para no tener conversaciones incómodas de dinero."
-
----
-
-## Fase 3 — Modelo de Negocio
-
-### 3.1 ¿Cómo genera dinero?
-
-Elige el modelo principal y justifícalo:
-
-| Modelo | Descripción | Mejor para |
-|---|---|---|
-| **Freemium** | Gratis con features premium de pago | Apps con alto volumen de usuarios |
-| **Suscripción** | Pago mensual/anual por acceso | Apps de uso frecuente, valor continuo |
-| **Pago único** | Se compra una vez | Herramientas, utilidades |
-| **Marketplace** | Comisión por transacción | Apps que conectan dos partes |
-| **B2B SaaS** | Venta a empresas, por asiento o uso | Apps de productividad empresarial |
-| **Publicidad** | Ingresos por anuncios | Solo viable con millones de usuarios |
-| **Datos / Leads** | Monetización de datos agregados | Solo con regulación legal clara |
-
-**Preguntas para definir el modelo:**
-1. ¿El valor del producto aumenta con el tiempo de uso? → Suscripción
-2. ¿El usuario necesita la app para una tarea puntual? → Pago único
-3. ¿Hay dos partes que se benefician de conectarse? → Marketplace
-4. ¿Las empresas pagarían más que los individuos? → B2B
-
----
-
-### 3.2 Factibilidad Económica
-
-Estimación de orden de magnitud — no necesitas un MBA, necesitas honestidad.
-
-**Costos a estimar:**
-
-| Rubro | Estimación | Notas |
-|---|---|---|
-| Desarrollo MVP | $X | Freelancer / agencia / tú mismo |
-| Infraestructura/mes | $X | Firebase, AWS, Supabase |
-| Marketing inicial | $X | Ads, contenido, comunidad |
-| Legal/constitución | $X | Opcional en fase early |
-| **Total burn rate/mes** | $X | |
-
-**Ingresos potenciales (escenario conservador):**
-
-```
-Usuarios activos año 1:     [N] usuarios
-Tasa de conversión a pago:  [X]%
-Precio promedio/mes:        $[P]
-MRR estimado año 1:         N × X% × P = $[resultado]
-```
-
-**Pregunta de sostenibilidad:**
-> "¿Con cuántos usuarios de pago cubres los costos operativos mensuales?"
-> Si ese número es alcanzable en 12-18 meses, el modelo es viable.
-
----
-
-## Fase 4 — Estrategia de Validación
-
-**Construir para validar es caro. Validar para construir es inteligente.**
-
-### Métodos de validación por costo/velocidad:
-
-| Método | Costo | Tiempo | Qué valida |
-|---|---|---|---|
-| **Entrevistas** (5-10 usuarios) | $0 | 1 semana | Problema real, Jobs To Be Done |
-| **Landing page + waitlist** | $50-200 | 2 semanas | Demanda, mensaje, canal |
-| **Prototipo Figma** | $0 | 1-2 semanas | UX, flujo principal |
-| **MVP manual** (Wizard of Oz) | $0 | Variable | Disposición a pagar |
-| **Pre-venta** | $0 | 2-4 semanas | Disposición a pagar real |
-| **MVP técnico mínimo** | Alto | 1-3 meses | Todo, pero es el más caro |
-
-**Regla:** Valida con el método más barato que te dé información útil.
-No construyas código hasta haber validado con al menos 2 métodos más baratos.
-
-### Métricas de validación (define UNA por método):
-- Entrevistas: ¿Al menos 7 de 10 personas reconocen el problema?
-- Landing: ¿Al menos 5% se registra al ver la propuesta de valor?
-- Pre-venta: ¿Al menos 10 personas pagan antes de que exista?
-
----
-
-## Reglas de Conducción
-
-- Si el usuario no puede identificar competidores, probablemente el mercado no existe o no lo conoce bien — investiga junto con él
-- Si el modelo de negocio no es claro después de esta fase, **no avances** a tech-feasibility
-- Las personas deben basarse en patrones reales, no en "yo creo que el usuario es..."
-- Desafía los números optimistas — pide siempre el escenario conservador
+- Una pregunta a la vez.
+- Desafía suposiciones no comprobadas.
+- Si el usuario no conoce el mercado, ayúdalo a investigarlo; no inventes.
+- Si el proyecto es pequeño, usa la ruta ligera y no lo asfixies con formalismo.
+- Si el proyecto busca negocio serio, sí mete más rigor.
 
 ---
 
 ## Output Final — Discovery Report
 
-Genera este documento al terminar. Es el input para `tech-feasibility`.
-
 ```markdown
 # [Nombre del Producto] — Discovery Report
-**Generado por:** KkapsCa / product-discovery skill v1.0
+**Generado por:** product-discovery skill v2.0
 **Fecha:** [fecha]
 
-## Resumen Ejecutivo
-[3-4 oraciones: qué es, para quién, por qué ahora, cómo gana dinero]
+## 1. Tipo de proyecto
+[aprendizaje / side project / producto / herramienta interna]
 
-## Mercado
-**TAM:** [estimación]
-**SAM:** [estimación]
-**SOM (año 1-2):** [estimación]
-**Tendencia:** [creciente / estable / decreciente + fuente]
+## 2. Problema validado
+[qué problema existe y por qué importa]
 
-## Análisis Competitivo
-| Competidor | Fortaleza | Debilidad | Nuestro gap |
-|---|---|---|---|
-| [nombre] | | | |
+## 3. Usuario principal
+[perfil concreto]
 
-## Persona Principal
-[Bloque completo de persona con Jobs To Be Done]
+## 4. Alternativas actuales
+- [alternativa 1]
+- [alternativa 2]
 
-## Modelo de Negocio
-**Modelo:** [tipo]
-**Precio:** [estructura de precios]
-**Break-even estimado:** [N usuarios de pago]
+## 5. Propuesta de valor
+[frase clara de valor]
 
-## Factibilidad Económica
-**Costo estimado MVP:** $[X]
-**Burn rate mensual:** $[X]
-**MRR conservador año 1:** $[X]
-**Veredicto:** [viable / riesgoso / inviable + razón]
+## 6. Competencia / contexto
+[competidores, sustitutos, oportunidad]
 
-## Estrategia de Validación
-**Método 1:** [qué hacer antes de construir]
-**Métrica de éxito:** [número concreto]
-**Método 2:** [siguiente nivel de validación]
-**Métrica de éxito:** [número concreto]
+## 7. Hipótesis de valor o negocio
+[cómo genera valor y, si aplica, cómo podría monetizar]
 
-## Supuestos Críticos
-[Lista de lo que asumes que es verdad y aún no has probado]
+## 8. Estrategia de validación
+- método 1
+- método 2
+- señal esperada de validación
 
-## Riesgos de Negocio
-[Top 3 riesgos con probabilidad e impacto]
+## 9. Riesgos o dudas abiertas
+- [duda 1]
+- [duda 2]
 
----
-**Siguiente paso:** Ejecuta `tech-feasibility` con este Discovery Report como input.
+## 10. Siguiente paso
+- pasar a tech-feasibility
 ```
 
 ---
 
-> ℹ️ **¿Ya tienes este output?**  
-> Pasa directamente a la skill `tech-feasibility` con el Discovery Report como contexto.
+## Criterio de salida
+
+Esta fase está suficientemente bien resuelta cuando ya existe:
+
+- un usuario principal claro,
+- una necesidad entendible,
+- una alternativa actual identificada,
+- una propuesta de valor concreta,
+- un método realista de validación,
+- y contexto suficiente para tomar decisiones técnicas con sentido.
