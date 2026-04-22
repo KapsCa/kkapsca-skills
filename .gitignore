@@ -1,0 +1,30 @@
+# Windows
+Thumbs.db
+Thumbs.db:Zone.Identifier
+*.zone_identifier
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+flutter_*.png
+*.lock
+pubspec.lock
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+.DS_Store:Zone.Identifier
