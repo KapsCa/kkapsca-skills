@@ -1,409 +1,431 @@
 ---
 name: flutter
 description: >
-  Flutter & Dart development with GetX state management, Feature-First Screaming Architecture,
-  and code generation (freezed, json_serializable, build_runner).
+  Flutter y Dart para proyectos personales con prácticas alineadas a la documentación oficial:
+  arquitectura mantenible, state management según el alcance del estado, performance en widgets,
+  manejo asíncrono claro, testing y código simple antes de sobre-arquitectura.
 
-  ALWAYS use this skill when the user is working on ANY Flutter or Dart task: creating features,
-  widgets, models, routing, services, controllers, bindings, or any .dart file. Trigger immediately
-  when the user mentions Flutter, Dart, GetX, mobile app, widget, screen, route, freezed, or
-  any mobile development context — even if they don't say "Flutter" explicitly. Never write
-  Flutter code without consulting this skill first.
+  Usa esta skill cuando el usuario trabaje en Flutter, Dart, widgets, pantallas, navegación,
+  consumo de APIs, modelos, testing, performance o arquitectura móvil. Para proyectos nuevos,
+  prioriza simplicidad, separación de responsabilidades y decisiones justificadas; no impongas
+  GetX ni ningún framework si no aporta valor real.
 
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
-  version: "2.0"
+  author: KkapsCa
+  version: "3.0"
 ---
 
-# Flutter — GetX + Screaming Architecture
+# Flutter — Personal Development Skill
+
+## Propósito
+
+Esta skill sirve para proyectos personales y de aprendizaje.
+La meta no es casarse con una librería, sino aprender Flutter BIEN:
+
+- entender el ciclo de vida de widgets,
+- elegir state management por necesidad real,
+- mantener código fácil de leer y probar,
+- evitar complejidad prematura.
+
+---
+
+## When to Use
+
+Usa esta skill cuando:
+
+- el proyecto use Flutter o Dart,
+- se vaya a crear una feature móvil,
+- haya que decidir estructura, state management o navegación,
+- se necesite mejorar performance de UI,
+- se trabajen widgets, formularios, listas, APIs, testing o arquitectura.
 
 ## When NOT to Use
 
-- Backend/server-side Dart (use a Dart-specific skill instead)
-- Pure Dart CLI tools with no Flutter dependency
-- Web-only projects using a non-Flutter stack
-
-## ⚠️ La Neta Técnica: El Elefante en la Habitación (GetX)
-
-GetX es un "God Object" gigantesco. Te resuelve estado, inyección de dependencias (Bindings) y ruteo en un solo paquete. Es un atajo enorme que tiende a acoplar tu capa de presentación de una manera brutal. Si no tienes disciplina militar, tus `GetxController` se van a volver monolitos que rompen toda la arquitectura limpia que con tanto esfuerzo construiste en tus capas de Domain y Data.
-
-**La Regla Técnica INQUEBRANTABLE:** 
-Tus `GetxController` SOLAMENTE pueden comunicarse con tus Casos de Uso. Por ningún motivo pueden conocer la existencia de un Repositorio o un Modelo de Data, o tu Screaming Architecture se va a la basura. 
-
-Si por requerimientos del proyecto mantenemos GetX, úsalo como un simple puente, no como la base de tu lógica de negocio.
+- Backend/server-side Dart
+- Scripts CLI sin Flutter
+- Proyectos web que no usan Flutter
 
 ---
 
-## Architecture: Feature-First (Screaming Architecture)
+## Principios No Negociables
 
-The folder structure SCREAMS what the app does, not how it's built.
-Each feature is a self-contained vertical slice.
+1. **Primero simple, luego escalable**
+   - No metas Clean Architecture completa si el proyecto es pequeño.
+   - Empieza con la estructura mínima que resuelva el problema.
 
-```
+2. **Separa responsabilidades**
+   - UI renderiza.
+   - Estado coordina.
+   - Servicios/repositorios obtienen datos.
+   - Modelos representan información.
+
+3. **Elige state management por alcance del estado**
+   - Estado local → `StatefulWidget` + `setState()`.
+   - Estado compartido sencillo → `ChangeNotifier` + `Provider`.
+   - Estado compartido escalable o más predecible → `Riverpod` o `Bloc`.
+   - `GetX` solo si el proyecto YA lo usa o hay una razón técnica clara. No es default.
+
+4. **Performance desde el diseño**
+   - Usa `const` donde puedas.
+   - Evita trabajo costoso dentro de `build()`.
+   - Divide widgets grandes en widgets pequeños.
+
+5. **No elijas librerías por moda**
+   - Cada dependencia debe resolver un problema real.
+
+---
+
+## Estructura Recomendada
+
+### Proyectos pequeños o MVP
+
+```text
 lib/
 ├── main.dart
 ├── app/
-│   ├── app.dart                  # MaterialApp + routing bootstrap
-│   ├── routes/
-│   │   ├── app_pages.dart        # GetPages list
-│   │   └── app_routes.dart       # Route name constants
+│   ├── app.dart
+│   ├── router.dart
 │   └── theme/
-│       └── app_theme.dart
-├── core/
-│   ├── di/
-│   │   └── injection.dart        # Global GetX bindings / Get.put
-│   ├── network/
-│   │   └── dio_client.dart
-│   ├── error/
-│   │   ├── failures.dart         # Freezed sealed classes
-│   │   └── exceptions.dart
-│   └── utils/
-│       └── extensions.dart
-└── features/
-    └── [feature_name]/           ← screams what the feature does
-        ├── data/
-        │   ├── datasources/
-        │   │   └── [feature]_remote_datasource.dart
-        │   ├── models/
-        │   │   └── [feature]_model.dart      # freezed + json_serializable
-        │   └── repositories/
-        │       └── [feature]_repository_impl.dart
-        ├── domain/
-        │   ├── entities/
-        │   │   └── [feature]_entity.dart     # freezed, pure Dart
-        │   ├── repositories/
-        │   │   └── [feature]_repository.dart # abstract interface
-        │   └── usecases/
-        │       └── get_[feature].dart
-        └── presentation/
-            ├── bindings/
-            │   └── [feature]_binding.dart    # GetX dependency injection
-            ├── controllers/
-            │   └── [feature]_controller.dart # GetxController
-            ├── pages/
-            │   └── [feature]_page.dart
-            └── widgets/
-                └── [feature]_card.dart
+├── features/
+│   └── counter/
+│       ├── presentation/
+│       │   ├── counter_page.dart
+│       │   └── widgets/
+│       ├── state/
+│       │   └── counter_notifier.dart
+│       └── data/
+│           └── counter_repository.dart
+└── shared/
+    ├── widgets/
+    ├── utils/
+    └── services/
 ```
 
-**Regla crítica**: nunca importes de `presentation/` dentro de `domain/` ni `data/`.
-Las dependencias solo fluyen hacia adentro: `presentation → domain ← data`.
+### Proyectos medianos o grandes
+
+```text
+lib/
+├── main.dart
+├── app/
+│   ├── app.dart
+│   ├── router/
+│   └── theme/
+├── core/
+│   ├── errors/
+│   ├── network/
+│   ├── constants/
+│   └── utils/
+├── features/
+│   └── auth/
+│       ├── data/
+│       │   ├── datasources/
+│       │   ├── models/
+│       │   └── repositories/
+│       ├── domain/
+│       │   ├── entities/
+│       │   ├── repositories/
+│       │   └── usecases/
+│       └── presentation/
+│           ├── pages/
+│           ├── widgets/
+│           └── state/
+└── shared/
+    ├── widgets/
+    └── services/
+```
+
+### Regla de arquitectura
+
+- Si el proyecto es pequeño: **feature-first simple**.
+- Si el proyecto crece: evoluciona a capas (`data/domain/presentation`) sin rehacer todo.
+- No mezcles llamadas HTTP directas dentro de widgets.
+- No pongas lógica de negocio pesada dentro de `build()`.
 
 ---
 
-## State Management: GetX
+## State Management: Qué usar y cuándo
 
-### Controller
+### 1. Estado local
+
+Usa `StatefulWidget` y `setState()` cuando el estado:
+
+- vive solo en un widget o pantalla,
+- no se comparte,
+- es efímero (toggle, loading local, índice actual, tabs, animación simple).
+
 ```dart
-class AuthController extends GetxController {
-  final LoginUseCase _loginUseCase;
-  AuthController(this._loginUseCase);
-
-  // Observables — usa .obs, nunca ValueNotifier ni setState
-  final _user = Rxn<UserEntity>();
-  final _status = Rx<AuthStatus>(AuthStatus.initial);
-
-  // Expón solo getters, nunca el Rx directamente
-  UserEntity? get user => _user.value;
-  AuthStatus get status => _status.value;
-  bool get isLoading => _status.value == AuthStatus.loading;
-
-  Future<void> login(String email, String password) async {
-    _status.value = AuthStatus.loading;
-
-    final result = await _loginUseCase(LoginParams(email: email, password: password));
-
-    result.fold(
-      (failure) {
-        _status.value = AuthStatus.error;
-        Get.snackbar('Error', failure.message);
-      },
-      (user) {
-        _user.value = user;
-        _status.value = AuthStatus.success;
-        Get.offAllNamed(AppRoutes.home);
-      },
-    );
-  }
+class CounterPage extends StatefulWidget {
+  const CounterPage({super.key});
 
   @override
-  void onClose() {
-    // Limpia recursos si los hay
-    super.onClose();
-  }
+  State<CounterPage> createState() => _CounterPageState();
 }
-```
 
-### Binding (inyección de dependencias por feature)
-```dart
-class AuthBinding extends Bindings {
-  @override
-  void dependencies() {
-    // Registra siempre la interfaz, no la implementación
-    Get.lazyPut<AuthRemoteDataSource>(
-      () => AuthRemoteDataSourceImpl(Get.find()),
-    );
-    Get.lazyPut<AuthRepository>(
-      () => AuthRepositoryImpl(Get.find()),
-    );
-    // Casos de uso
-    Get.lazyPut(() => LoginUseCase(Get.find<AuthRepository>()));
-    // Controlador
-    Get.lazyPut(() => AuthController(Get.find<LoginUseCase>()));
+class _CounterPageState extends State<CounterPage> {
+  int _counter = 0;
+
+  void _increment() {
+    setState(() {
+      _counter++;
+    });
   }
-}
-```
-
-### Page (Obx en el árbol, no GetBuilder salvo casos específicos)
-```dart
-class LoginPage extends GetView<AuthController> {
-  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Obx(() {
-        if (controller.isLoading) return const Center(child: CircularProgressIndicator());
-        return LoginForm(onSubmit: controller.login);
-      }),
+      body: Center(child: Text('$_counter')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _increment,
+      ),
     );
   }
 }
 ```
 
-**Cuándo usar cada primitiva:**
-- `Obx` → reactivo, rebuild automático. Úsalo por defecto.
-- `GetBuilder` → performance crítica, rebuild manual con `update()`.
-- `GetX<Controller>` → cuando necesitas acceso al controller Y reactividad en el mismo widget.
-- `ever`, `once`, `interval` → side effects reactivos en el controller, no en widgets.
+### 2. Estado levantado al padre
 
----
+Úsalo cuando varios widgets hermanos comparten un valor.
 
-## Routing con GetX
+- El padre posee el estado.
+- Los hijos reciben datos y callbacks.
+
+### 3. Estado global o compartido
+
+#### Opción por defecto para aprender y proyectos personales: `Provider + ChangeNotifier`
+
+Úsalo cuando:
+
+- necesitas algo simple y entendible,
+- quieres aprender flujo de datos sin demasiada magia,
+- el estado se comparte entre pantallas o widgets.
+
 ```dart
-// app_routes.dart
-abstract class AppRoutes {
-  static const splash = '/';
-  static const login = '/login';
-  static const home = '/home';
-  static const profile = '/profile/:id'; // parámetros con :nombre
-}
+class CartNotifier extends ChangeNotifier {
+  final List<Item> _items = [];
 
-// app_pages.dart
-class AppPages {
-  static final pages = [
-    GetPage(
-      name: AppRoutes.login,
-      page: () => const LoginPage(),
-      binding: AuthBinding(),
-      transition: Transition.fadeIn,
-    ),
-    GetPage(
-      name: AppRoutes.home,
-      page: () => const HomePage(),
-      binding: HomeBinding(),
-      middlewares: [AuthMiddleware()], // guards de ruta
-    ),
-  ];
-}
-```
+  List<Item> get items => List.unmodifiable(_items);
 
----
-
-## Code Generation: freezed + json_serializable
-
-### Modelo (Data Layer)
-```dart
-// features/product/data/models/product_model.dart
-import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../domain/entities/product_entity.dart';
-
-part 'product_model.freezed.dart';
-part 'product_model.g.dart';
-
-@freezed
-class ProductModel with _$ProductModel {
-  const factory ProductModel({
-    required String id,
-    required String name,
-    required double price,
-    @Default(0) int stock,
-    @JsonKey(name: 'image_url') String? imageUrl,
-  }) = _ProductModel;
-
-  factory ProductModel.fromJson(Map<String, dynamic> json) =>
-      _$ProductModelFromJson(json);
-
-  // Mapper a entidad de dominio — NUNCA al revés
-  const ProductModel._();
-  ProductEntity toEntity() => ProductEntity(
-    id: id,
-    name: name,
-    price: price,
-    stock: stock,
-  );
-}
-```
-
-### Entidad (Domain Layer — sin json, sin framework)
-```dart
-// features/product/domain/entities/product_entity.dart
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-part 'product_entity.freezed.dart';
-
-@freezed
-class ProductEntity with _$ProductEntity {
-  const factory ProductEntity({
-    required String id,
-    required String name,
-    required double price,
-    required int stock,
-  }) = _ProductEntity;
-}
-```
-
-### Failures sellados (Either pattern)
-```dart
-// core/error/failures.dart
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-part 'failures.freezed.dart';
-
-@freezed
-sealed class Failure with _$Failure {
-  const factory Failure.network({required String message}) = NetworkFailure;
-  const factory Failure.server({required String message, required int code}) = ServerFailure;
-  const factory Failure.cache({required String message}) = CacheFailure;
-  const factory Failure.unauthorized() = UnauthorizedFailure;
-}
-```
-
-### Comandos de generación
-```bash
-# Generar una sola vez
-dart run build_runner build --delete-conflicting-outputs
-
-# Modo watch durante desarrollo
-dart run build_runner watch --delete-conflicting-outputs
-```
-
-**Regla**: Nunca edites archivos `.freezed.dart` o `.g.dart` manualmente.
-Siempre re-genera después de cambiar un modelo.
-
----
-
-## Use Cases (Domain Layer)
-```dart
-// Patrón callable — cada use case hace UNA sola cosa
-class GetProductsUseCase {
-  final ProductRepository _repository;
-  GetProductsUseCase(this._repository);
-
-  // Either<Failure, T> — nunca lances exceptions desde domain
-  Future<Either<Failure, List<ProductEntity>>> call(NoParams params) =>
-      _repository.getProducts();
-}
-```
-
----
-
-## Repository (contrato en domain, implementación en data)
-```dart
-// domain/repositories/product_repository.dart
-abstract interface class ProductRepository {
-  Future<Either<Failure, List<ProductEntity>>> getProducts();
-  Future<Either<Failure, ProductEntity>> getProductById(String id);
-}
-
-// data/repositories/product_repository_impl.dart
-class ProductRepositoryImpl implements ProductRepository {
-  final ProductRemoteDataSource _remote;
-  final ProductLocalDataSource _local;
-
-  const ProductRepositoryImpl(this._remote, this._local);
-
-  @override
-  Future<Either<Failure, List<ProductEntity>>> getProducts() async {
-    try {
-      final models = await _remote.fetchProducts();
-      return Right(models.map((m) => m.toEntity()).toList());
-    } on ServerException catch (e) {
-      return Left(Failure.server(message: e.message, code: e.code));
-    } on NetworkException {
-      return Left(const Failure.network(message: 'Sin conexión'));
-    }
+  void add(Item item) {
+    _items.add(item);
+    notifyListeners();
   }
 }
 ```
 
+#### `Riverpod`
+
+Úsalo cuando:
+
+- quieres más control, testabilidad y escalabilidad,
+- no quieres depender de `BuildContext` para leer estado,
+- el proyecto ya tiene varias features.
+
+#### `Bloc/Cubit`
+
+Úsalo cuando:
+
+- el equipo prefiere flujos explícitos por eventos/estados,
+- hay lógica compleja y quieres alta predictibilidad.
+
+#### `GetX`
+
+No es el default para esta skill.
+Solo se permite si:
+
+- el proyecto legacy ya lo usa,
+- necesitas mantener compatibilidad,
+- puedes justificar por qué aporta más de lo que complica.
+
 ---
 
-## Performance: Reglas No Negociables
+## Manejo Asíncrono y Datos
+
+### Reglas
+
+- Usa repositorios o servicios para IO.
+- No hagas llamadas HTTP dentro del widget.
+- Siempre modela estados de `loading`, `success` y `error`.
+- Si el dato viene una sola vez desde UI simple, `FutureBuilder` puede ser suficiente.
+- Si el flujo crece, mueve la carga a un notifier/viewmodel/controller.
+
+### Ejemplo simple con `FutureBuilder`
 
 ```dart
-// ✅ const donde sea posible
-const MyWidget({super.key});
+FutureBuilder<User>(
+  future: repository.fetchUser(),
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-// ✅ RepaintBoundary para animaciones costosas
-RepaintBoundary(child: ComplexAnimation())
+    if (snapshot.hasError) {
+      return Text('Error: ${snapshot.error}');
+    }
 
-// ✅ Divide widgets grandes — un widget = una responsabilidad
-// ✅ Usa ListView.builder, nunca Column con map() para listas largas
-ListView.builder(
-  itemCount: items.length,
-  itemBuilder: (_, i) => ProductCard(product: items[i]),
+    if (!snapshot.hasData) {
+      return const Text('Sin datos');
+    }
+
+    return Text(snapshot.data!.name);
+  },
 )
-
-// ❌ NUNCA — context.watch / setState en features con GetX
-// ❌ NUNCA — BuildContext across async gaps sin montar verificación
-if (!context.mounted) return;
-await someAsyncOperation();
 ```
 
 ---
 
-## pubspec.yaml — Dependencias Base
+## Modelos y Serialización
+
+### Usa `freezed` + `json_serializable` cuando:
+
+- consumes APIs reales,
+- necesitas modelos inmutables,
+- quieres copyWith, equality y parsing robusto.
+
+### Evítalo cuando:
+
+- estás haciendo prototipos diminutos,
+- un modelo manual de 3 campos resuelve el problema.
+
+### Regla
+
+- Las entidades de dominio NO deben conocer JSON.
+- El parsing vive en data/model.
+
+---
+
+## Performance Best Practices
+
+Estas sí están alineadas con la documentación oficial de Flutter:
+
+1. **Usa `const` constructors** siempre que sea posible.
+2. **Evita trabajo pesado en `build()`**.
+3. **Prefiere widgets a funciones helper** para reutilizar UI.
+4. **Usa `ListView.builder`** para listas largas.
+5. **Usa `RepaintBoundary`** en widgets que repintan frecuentemente.
+6. **Parte widgets grandes** según cómo cambian sus dependencias.
+
+```dart
+class DashboardPage extends StatelessWidget {
+  const DashboardPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: items.length,
+      itemBuilder: (context, index) => ItemTile(item: items[index]),
+    );
+  }
+}
+```
+
+```dart
+const Text('Hola Flutter');
+```
+
+```dart
+const RepaintBoundary(
+  child: CircularProgressIndicator(),
+)
+```
+
+---
+
+## Navegación
+
+Para proyectos personales:
+
+- Proyecto simple → `Navigator` / `Navigator 2` abstraído mínimamente.
+- Proyecto mediano/grande → `go_router` como opción preferida por claridad.
+
+Evita mezclar navegación, estado y DI en una sola herramienta si no hace falta.
+
+---
+
+## Testing
+
+Todo proyecto Flutter serio debería tener al menos:
+
+1. **Unit tests** para lógica pura.
+2. **Widget tests** para componentes importantes.
+3. **Integration tests** para flujos críticos si el proyecto ya maduró.
+
+### Qué sí testear primero
+
+- validaciones,
+- notifiers/viewmodels/controllers,
+- mappers de modelos,
+- widgets con comportamiento.
+
+### Qué no hacer
+
+- testear getters triviales solo por inflar cobertura,
+- meter lógica no testeable en widgets gigantes.
+
+---
+
+## Dependencias Base Recomendadas
 
 ```yaml
 dependencies:
   flutter:
     sdk: flutter
-  get: ^4.6.6
-  dartz: ^0.10.1               # Either<L, R>
-  dio: ^5.4.0
+  provider: ^6.1.2
+  go_router: ^14.2.0
+  http: ^1.2.2
   freezed_annotation: ^2.4.1
-  json_annotation: ^4.8.1
-  get_it: ^8.0.0               # opcional si usas Get.find() como DI global
+  json_annotation: ^4.9.0
 
 dev_dependencies:
-  build_runner: ^2.4.8
-  freezed: ^2.4.7
-  json_serializable: ^6.7.1
-  flutter_lints: ^3.0.0
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  build_runner: ^2.4.11
+  freezed: ^2.5.2
+  json_serializable: ^6.8.0
 ```
 
----
+### Dependencias opcionales
 
-## Checklist de Feature Nueva
-
-Antes de hacer el PR, verifica:
-- [ ] Binding registra dependencias usando interfaces, no implementaciones.
-- [ ] Controller no importa nada de `data/` directamente (solo `domain/usecases`).
-- [ ] Modelos tienen `toEntity()`, entidades NO tienen `fromJson()`.
-- [ ] Todos los archivos generados están actualizados (`build_runner build`).
-- [ ] No hay `setState` ni `StatefulWidget` donde GetX puede resolver.
-- [ ] Use cases retornan `Either<Failure, T>`, nunca lanzan exceptions.
-- [ ] GetPage tiene su Binding asociado.
-- [ ] Widgets > 60 líneas fueron extraídos a componentes independientes.
-- [ ] Uso extensivo de `const` en constructores y árboles de widgets.
+- `flutter_riverpod` → si necesitas más escalabilidad en estado.
+- `bloc` / `flutter_bloc` → si quieres arquitectura basada en eventos.
+- `dio` → si el proyecto requiere interceptores, cancelación o clientes más complejos.
 
 ---
 
-## Referencias
+## Checklist Antes de Crear una Feature
 
-Para profundizar, lee los archivos en `references/`:
-- `references/getx-patterns.md` — Patrones avanzados: workers, services, middleware
-- `references/testing.md` — Testing de controllers, use cases y widgets con GetX
-- `references/code-generation.md` — Configuración avanzada de build_runner y freezed
+- [ ] ¿La estructura es proporcional al tamaño del proyecto?
+- [ ] ¿El estado local se quedó local?
+- [ ] ¿El estado compartido está en una solución apropiada?
+- [ ] ¿La UI no hace llamadas HTTP directas?
+- [ ] ¿Los widgets grandes se partieron en piezas pequeñas?
+- [ ] ¿Se usó `const` donde aplica?
+- [ ] ¿Las listas largas usan `ListView.builder`?
+- [ ] ¿Existe manejo de loading/error/empty state?
+- [ ] ¿La nueva dependencia está realmente justificada?
+- [ ] ¿La lógica importante tiene tests?
+
+---
+
+## Decisiones por Defecto de Esta Skill
+
+Si el usuario no especifica otra cosa:
+
+- arquitectura inicial → **feature-first simple**,
+- estado local → **StatefulWidget/setState**,
+- estado compartido → **Provider + ChangeNotifier**,
+- navegación → **go_router** para proyectos medianos,
+- modelos complejos → **freezed + json_serializable**,
+- performance → **const + widgets pequeños + lazy lists**.
+
+La idea es aprender fundamentos primero. Luego ya te pones mamalón con arquitecturas más pesadas.
+
+---
+
+## Recursos Oficiales
+
+- Flutter App Architecture: https://docs.flutter.dev/app-architecture
+- State Management: https://docs.flutter.dev/data-and-backend/state-mgmt/intro
+- UI Interactivity: https://docs.flutter.dev/ui/interactivity
+- Performance Best Practices: https://docs.flutter.dev/perf/best-practices

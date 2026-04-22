@@ -1,6 +1,7 @@
 # Windows
 Thumbs.db
 Thumbs.db:Zone.Identifier
+*:Zone.Identifier
 *.zone_identifier
 Desktop.ini
 $RECYCLE.BIN/
