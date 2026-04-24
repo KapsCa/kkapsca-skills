@@ -4,12 +4,35 @@
 
 Este repositorio reúne skills pensadas desde la experiencia personal de **KkapsCa**, pero redactadas para que **cualquier persona pueda reutilizarlas** en sus propios proyectos.
 
+Al mismo tiempo, estas skills están **optimizadas para trabajar especialmente bien dentro del stack de [Gentle AI](https://github.com/Gentleman-Programming/gentle-ai)** y flujos coordinados por **`sdd-orchestrator`**.
+
+En otras palabras:
+
+- **sí son reutilizables** fuera de ese ecosistema,
+- pero su mejor rendimiento aparece cuando se usan como **potenciador del stack de Gentle AI**.
+
 La filosofía es simple:
 
 - no correr al código sin entender el problema,
 - no elegir tecnologías por moda,
 - no meter complejidad antes de tiempo,
 - construir con fundamentos, no con ocurrencias.
+
+---
+
+## Mejor experiencia de uso
+
+Estas skills están pensadas para ser útiles por sí solas, pero fueron afinadas para que den mejores resultados cuando:
+
+- el agente opera con contexto consistente,
+- existe un `sdd-orchestrator` coordinando fases o subagentes,
+- y el entorno ya sigue las convenciones del stack de Gentle AI.
+
+Si quieres la mejor experiencia de instalación, ejecución y contexto compartido, ve al repo de **Gentle AI** y sigue su guía:
+
+- https://github.com/Gentleman-Programming/gentle-ai
+
+La idea correcta no es vender estas skills como piezas aisladas mágicas, sino como un **potenciador del stack** para lograr mejor ejecución, menos ambigüedad y mejores resultados con agentes IA.
 
 ---
 
