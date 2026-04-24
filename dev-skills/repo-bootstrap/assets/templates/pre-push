@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+protected_branch_regex='^(refs/heads/)?(main|master|release)$'
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  if [[ "$remote_ref" =~ $protected_branch_regex ]]; then
+    printf '\n🚫 Push directo bloqueado a %s\n' "$remote_ref" >&2
+    printf 'Usa una rama de trabajo y abre PR.\n' >&2
+    printf 'Ejemplo:\n' >&2
+    printf '  git switch -c feat/mi-cambio\n' >&2
+    printf '  git push -u origin feat/mi-cambio\n' >&2
+    printf '  gh pr create --fill\n\n' >&2
+    exit 1
+  fi
+done
+
+exit 0

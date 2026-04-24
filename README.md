@@ -25,8 +25,11 @@ KkapsCa-project-kickstart/
 ├── 03-tech-feasibility/
 │   └── SKILL.md
 └── dev-skills/
-    └── flutter/
-        └── SKILL.md
+    ├── flutter/
+    │   └── SKILL.md
+    └── repo-bootstrap/
+        ├── SKILL.md
+        └── assets/
 ```
 
 Se divide en dos grupos:
@@ -42,6 +45,7 @@ Sirven para aterrizar una idea antes de construir.
 Sirven cuando el proyecto ya tiene claridad suficiente y toca implementar.
 
 - **dev-skills/flutter** → guía para desarrollo Flutter y Dart con buenas prácticas.
+- **dev-skills/repo-bootstrap** → prepara el repositorio para ejecutar bien: PR workflow, hook local, release-please y estándares base.
 
 ---
 
@@ -50,7 +54,7 @@ Sirven cuando el proyecto ya tiene claridad suficiente y toca implementar.
 El flujo ideal para un proyecto nuevo es este:
 
 ```text
-Idea → Brainstorm → Product Discovery → Tech Feasibility → Desarrollo
+Idea → Brainstorm → Product Discovery → Tech Feasibility → Repo Bootstrap → Desarrollo
 ```
 
 Pero este repositorio **no es dogmático**.
@@ -88,11 +92,13 @@ Este repo puede servirle a:
 1. Usa `01-brainstorm`
 2. Continúa con `02-product-discovery`
 3. Sigue con `03-tech-feasibility`
-4. Pasa a la skill de desarrollo adecuada
+4. Aplica `dev-skills/repo-bootstrap`
+5. Pasa a la skill de desarrollo adecuada
 
 ### Si ya estás en etapa de implementación
 
 Ve directo a `dev-skills/` y usa la skill que corresponda al stack.
+Si el repo aún no tiene estándares operativos claros, aplica primero `repo-bootstrap`.
 
 ---
 
@@ -114,6 +120,7 @@ Skills disponibles hoy:
 - `product-discovery`
 - `tech-feasibility`
 - `flutter`
+- `repo-bootstrap`
 
 Skills futuras posibles:
 
