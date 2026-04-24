@@ -31,15 +31,6 @@ Usa esta skill cuando:
 
 ---
 
-## Propósito
-
-En Ananta, GetX NO es una opción entre varias.
-Es parte del contexto del proyecto.
-
-Esta skill existe para que el agente no improvise arquitectura y no convierta GetX en espagueti.
-
----
-
 ## Reglas No Negociables
 
 1. **No abuses de `Get.find()`**
@@ -136,15 +127,18 @@ class ProfileBinding extends Bindings {
 
 ---
 
-## Cómo Decidir con esta Skill
+## PRE-FLIGHT CHECKLIST
 
-Cuando el agente trabaje en Ananta, debe preguntarse:
+Antes de escribir código en Ananta, confirma explícitamente:
 
-1. ¿La feature ya tiene módulo/feature claro?
-2. ¿Las dependencias están entrando por binding?
-3. ¿El controller solo coordina o está haciendo de todo?
-4. ¿La vista está limpia?
-5. ¿El uso de GetX está justificado en cada parte?
+- [ ] La feature ya tiene módulo/feature claro
+- [ ] Las dependencias importantes entran por `Bindings`
+- [ ] La vista solo renderiza y dispara eventos
+- [ ] El controller coordina y no concentra toda la lógica
+- [ ] El acceso a datos no sale desde la UI
+- [ ] El uso de `Rx` está justificado variable por variable
+
+Si alguna casilla falla, primero corrige estructura y luego implementa funcionalidad.
 
 ---
 

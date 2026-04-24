@@ -32,32 +32,16 @@ Usa esta skill cuando:
 
 ---
 
-## Propósito
-
-Esta skill NO reemplaza las skills oficiales de Flutter.
-Sirve como una capa de criterio personal para decidir bien:
-
-- cuánto diseño necesita el proyecto,
-- qué state management tiene sentido,
-- cuándo mantener simple,
-- cuándo usar una skill oficial especializada.
-
-La idea es evitar dos errores clásicos:
-
-1. sobre-arquitectura por ansiedad,
-2. soluciones improvisadas sin separación de responsabilidades.
-
----
-
 ## Principios No Negociables
 
 1. **Primero simple, luego escalable**
    - No metas arquitectura pesada antes de necesitarla.
    - Empieza con la estructura mínima correcta.
 
-2. **La arquitectura debe ser proporcional al proyecto**
-   - MVP o proyecto pequeño → feature-first simple.
-   - Proyecto que ya creció → capas más claras y módulos mejor separados.
+2. **Usa umbrales simples para decidir complejidad**
+   - hasta 5 pantallas → estructura simple por feature
+   - más de 5 pantallas o estado compartido entre múltiples flows → Riverpod recomendado
+   - si el equipo ya usa eventos/estados explícitos como estándar → Bloc/Cubit
 
 3. **Separa responsabilidades**
    - UI renderiza.
@@ -91,6 +75,10 @@ La idea es evitar dos errores clásicos:
 | Equipo ama eventos/estados explícitos | Bloc/Cubit |
 | Proyecto ya usa GetX | aceptarlo como restricción, no como default |
 
+### Regla operativa
+
+Si no puedes ubicar el caso del usuario en una fila de la tabla anterior, no improvises framework: pregunta antes de imponer uno.
+
 ---
 
 ## Routing hacia Skills Oficiales
@@ -121,6 +109,15 @@ No reexplique aquí lo que ya resuelven mejor las skills oficiales.
 - usar una librería de estado solo porque está de moda,
 - hacer un widget monstruo con lógica, IO y navegación mezclados,
 - meter GetX como respuesta automática a todo.
+
+## PRE-FLIGHT CHECKLIST
+
+- [ ] Ya identifiqué si el problema es general o específico
+- [ ] Ya confirmé si el proyecto ya trae una librería de estado impuesta
+- [ ] Ya confirmé si el caso cabe en `setState`, Provider, Riverpod o Bloc
+- [ ] Ya confirmé si en realidad conviene cargar una skill oficial especializada
+
+Si la respuesta a la última casilla es sí, enruta a la skill oficial y no reinventes la guía aquí.
 
 ---
 

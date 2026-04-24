@@ -15,6 +15,24 @@ Este repositorio sigue el flujo estándar de trabajo personal:
 - En repos públicos, aplicar Classic Branch Protection si GitHub lo permite
 - En repos privados Free personales, la protección local via hook sigue siendo obligatoria porque GitHub puede no enforcear reglas del servidor
 
+## Checks, tests y auto-merge
+
+- Ningún PR debe mergearse sin checks funcionales reales
+- Todo repo debe tener al menos un workflow de validación útil para su stack
+- Auto-merge solo se habilita cuando PR validation y checks funcionales ya existen y pasan
+- Si GitHub Copilot code review está disponible por plan/licencia, se activa como capa extra de review
+
+### Ejemplos de check funcional por stack
+
+- Flutter → `flutter test`
+- Go → `go test ./...`
+- Python → `pytest`
+- Node → `npm test`
+- Repos de scripts/herramientas → lint/checks relevantes del propio repo
+
+La regla universal no es un mismo comando.
+La regla universal es que exista validación real antes de merge automático.
+
 ## Release Please
 
 El uso de `release-please` es obligatorio en proyectos nuevos y forma parte de la definición base del repositorio.
@@ -30,9 +48,10 @@ El uso de `release-please` es obligatorio en proyectos nuevos y forma parte de l
 
 1. Trabaja en una rama
 2. Abre PR
-3. Merge a `main`
-4. `release-please` crea o actualiza Release PR
-5. Al mergear ese PR se publica tag/release
+3. Espera checks y review automático si aplica
+4. Auto-merge cierra el PR cuando todo pasa
+5. `release-please` crea o actualiza Release PR
+6. Al mergear ese PR se publica tag/release
 
 ## Protección de main
 
