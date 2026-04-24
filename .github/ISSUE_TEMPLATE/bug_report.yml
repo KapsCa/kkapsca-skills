@@ -1,0 +1,111 @@
+name: Bug Report
+description: Reporta un bug con suficiente contexto para reproducirlo y aprobarlo.
+title: "fix(scope): short description"
+labels:
+  - bug
+  - status:needs-review
+body:
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Pre-flight Checks
+      options:
+        - label: I have searched existing issues and this is not a duplicate
+          required: true
+        - label: I understand this issue needs status:approved before a PR can be opened
+          required: true
+
+  - type: textarea
+    id: bug_description
+    attributes:
+      label: Bug Description
+      description: Describe claramente el problema.
+      placeholder: What is broken?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps_to_reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Número o lista de pasos reproducibles.
+      placeholder: |
+        1. Go to ...
+        2. Run ...
+        3. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected Behavior
+      placeholder: What should have happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: Actual Behavior
+      description: Incluye errores, síntomas o comportamiento observado.
+      placeholder: What happened instead?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: operating_system
+    attributes:
+      label: Operating System
+      options:
+        - macOS
+        - Linux
+        - Windows
+        - WSL
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: agent_client
+    attributes:
+      label: Agent / Client
+      options:
+        - Claude Code
+        - OpenCode
+        - Gemini CLI
+        - Cursor
+        - Windsurf
+        - Codex
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: shell
+    attributes:
+      label: Shell
+      options:
+        - bash
+        - zsh
+        - fish
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: relevant_logs
+    attributes:
+      label: Relevant Logs
+      description: Pega logs o errores relevantes.
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context
+      description: Screenshots, workarounds, notas adicionales.
+    validations:
+      required: false
