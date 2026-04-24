@@ -131,7 +131,7 @@ Antes de escribir nada, confirmar:
 
 - tipo de repo: nuevo o existente,
 - público o privado,
-- rama principal (`main` o `master`),
+- rama principal (`main` por estándar; `master` solo si es un repo legacy),
 - si ya existen workflows, templates o changelog,
 - si el usuario es solo-dev o equipo.
 

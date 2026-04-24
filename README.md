@@ -139,7 +139,7 @@ Este repositorio usa **release-please** para manejar versionado semántico, chan
 ### Flujo
 
 1. Los cambios se integran por Pull Request usando Conventional Commits.
-2. Al llegar cambios a `master`, `release-please` analiza los commits.
+2. Al llegar cambios a `main`, `release-please` analiza los commits.
 3. GitHub crea o actualiza un **Release PR** con versión y changelog.
 4. Al mergear ese Release PR, se publica el tag y el GitHub Release.
 
