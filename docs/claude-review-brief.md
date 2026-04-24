@@ -43,19 +43,22 @@ The main philosophy of this repo is:
 Recommended flow in this repo:
 
 ```text
-Idea → Brainstorm → Product Discovery → Tech Feasibility → Repo Bootstrap → Development Skill
+Idea → brainstorm → product-discovery → tech-feasibility → repo-bootstrap → Development Skill
 ```
 
 ### Early-stage skills
 
-- `01-brainstorm`
-- `02-product-discovery`
-- `03-tech-feasibility`
+- `brainstorm`
+- `product-discovery`
+- `tech-feasibility`
 
 ### Development skills
 
 - `repo-bootstrap`
 - `flutter-personal-standards`
+
+### Internal / company-specific skills
+
 - `ananta-standards`
 
 ---
@@ -117,7 +120,7 @@ Important conventions:
 - navigation should use named routes and `GetPage`
 - feature/module structure should be explicit
 
-This skill is intentionally project-specific and should not be treated as generic Flutter guidance.
+This skill is intentionally internal to the company and should not be treated as generic Flutter guidance.
 
 ### 4. `skill-creator`
 

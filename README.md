@@ -41,16 +41,14 @@ La idea correcta no es vender estas skills como piezas aisladas mágicas, sino c
 ```text
 KkapsCa-project-kickstart/
 ├── README.md
-├── 01-brainstorm/
+├── brainstorm/
 │   └── SKILL.md
-├── 02-product-discovery/
+├── product-discovery/
 │   └── SKILL.md
-├── 03-tech-feasibility/
+├── tech-feasibility/
 │   └── SKILL.md
 └── dev-skills/
     ├── flutter-personal-standards/
-    │   └── SKILL.md
-    ├── ananta-standards/
     │   └── SKILL.md
     └── repo-bootstrap/
         ├── SKILL.md
@@ -62,16 +60,22 @@ Se divide en dos grupos:
 ### 1. Skills de inicio de proyecto
 Sirven para aterrizar una idea antes de construir.
 
-- **01-brainstorm** → convierte una idea vaga en un Product Brief.
-- **02-product-discovery** → valida mercado, usuario, competencia y negocio.
-- **03-tech-feasibility** → evalúa stack, riesgos, arquitectura y esfuerzo.
+- **brainstorm** → convierte una idea vaga en un Product Brief.
+- **product-discovery** → valida mercado, usuario, competencia y negocio.
+- **tech-feasibility** → evalúa stack, riesgos, arquitectura y esfuerzo.
 
 ### 2. Skills de desarrollo
 Sirven cuando el proyecto ya tiene claridad suficiente y toca implementar.
 
 - **dev-skills/flutter-personal-standards** → criterio personal para Flutter y puente hacia las skills oficiales.
-- **dev-skills/ananta-standards** → estándares específicos de Ananta para Flutter con GetX.
 - **dev-skills/repo-bootstrap** → prepara el repositorio para ejecutar bien: PR workflow, hook local, release-please y estándares base.
+
+### 3. Skills internas / exclusivas de empresa
+Sirven para contextos internos y no forman parte del camino público por defecto.
+
+- **dev-skills/ananta-standards** → estándares específicos de Ananta para Flutter con GetX.
+
+> Nota: `ananta-standards` es una skill interna de empresa. Va al final a propósito porque no es parte del flujo público base.
 
 ---
 
@@ -80,7 +84,7 @@ Sirven cuando el proyecto ya tiene claridad suficiente y toca implementar.
 El flujo ideal para un proyecto nuevo es este:
 
 ```text
-Idea → Brainstorm → Product Discovery → Tech Feasibility → Repo Bootstrap → Desarrollo
+Idea → brainstorm → product-discovery → tech-feasibility → repo-bootstrap → Desarrollo
 ```
 
 Pero este repositorio **no es dogmático**.
@@ -115,9 +119,9 @@ Este repo puede servirle a:
 
 ### Si comienzas con una idea
 
-1. Usa `01-brainstorm`
-2. Continúa con `02-product-discovery`
-3. Sigue con `03-tech-feasibility`
+1. Usa `brainstorm`
+2. Continúa con `product-discovery`
+3. Sigue con `tech-feasibility`
 4. Aplica `dev-skills/repo-bootstrap`
 5. Pasa a la skill de desarrollo adecuada
 
@@ -146,8 +150,11 @@ Skills disponibles hoy:
 - `product-discovery`
 - `tech-feasibility`
 - `flutter-personal-standards`
-- `ananta-standards`
 - `repo-bootstrap`
+
+Skills internas hoy:
+
+- `ananta-standards`
 
 Skills futuras posibles:
 
