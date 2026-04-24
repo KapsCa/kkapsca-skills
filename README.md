@@ -25,7 +25,9 @@ KkapsCa-project-kickstart/
 ├── 03-tech-feasibility/
 │   └── SKILL.md
 └── dev-skills/
-    ├── flutter/
+    ├── flutter-personal-standards/
+    │   └── SKILL.md
+    ├── ananta-standards/
     │   └── SKILL.md
     └── repo-bootstrap/
         ├── SKILL.md
@@ -44,7 +46,8 @@ Sirven para aterrizar una idea antes de construir.
 ### 2. Skills de desarrollo
 Sirven cuando el proyecto ya tiene claridad suficiente y toca implementar.
 
-- **dev-skills/flutter** → guía para desarrollo Flutter y Dart con buenas prácticas.
+- **dev-skills/flutter-personal-standards** → criterio personal para Flutter y puente hacia las skills oficiales.
+- **dev-skills/ananta-standards** → estándares específicos de Ananta para Flutter con GetX.
 - **dev-skills/repo-bootstrap** → prepara el repositorio para ejecutar bien: PR workflow, hook local, release-please y estándares base.
 
 ---
@@ -119,7 +122,8 @@ Skills disponibles hoy:
 - `brainstorm`
 - `product-discovery`
 - `tech-feasibility`
-- `flutter`
+- `flutter-personal-standards`
+- `ananta-standards`
 - `repo-bootstrap`
 
 Skills futuras posibles:
