@@ -71,11 +71,7 @@ Sirven cuando el proyecto ya tiene claridad suficiente y toca implementar.
 - **dev-skills/repo-bootstrap** → prepara el repositorio para ejecutar bien: PR workflow, hook local, release-please y estándares base.
 
 ### 3. Skills internas / exclusivas de empresa
-Sirven para contextos internos y no forman parte del camino público por defecto.
-
-- **dev-skills/ananta-standards** → estándares específicos de Ananta para Flutter con GetX.
-
-> Nota: `ananta-standards` es una skill interna de empresa. Va al final a propósito porque no es parte del flujo público base.
+Estas skills no se distribuyen en este repo público. Si existe una convención interna, vive en su repositorio o instalación privada correspondiente.
 
 ---
 
@@ -154,7 +150,7 @@ Skills disponibles hoy:
 
 Skills internas hoy:
 
-- `ananta-standards`
+- (no distribuidas en este repo público)
 
 Skills futuras posibles:
 

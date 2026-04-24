@@ -59,7 +59,7 @@ Idea → brainstorm → product-discovery → tech-feasibility → repo-bootstra
 
 ### Internal / company-specific skills
 
-- `ananta-standards`
+- (not distributed in this public repository)
 
 ---
 
@@ -106,23 +106,7 @@ Important conventions:
 
 This skill replaced an older generic `flutter` skill that overlapped too much with official Flutter skills.
 
-### 3. `ananta-standards`
-
-Purpose:
-- define project-specific standards for **Ananta**,
-- assume Flutter + GetX as project context,
-- impose bindings, feature structure, and clear layer responsibilities.
-
-Important conventions:
-- `Get.find()` should not be scattered everywhere
-- dependencies should enter through `Bindings`
-- UI should not hold business logic
-- navigation should use named routes and `GetPage`
-- feature/module structure should be explicit
-
-This skill is intentionally internal to the company and should not be treated as generic Flutter guidance.
-
-### 4. `skill-creator`
+### 3. `skill-creator`
 
 Purpose:
 - help create or improve skills.
@@ -165,7 +149,7 @@ Please review this repository with special focus on these questions:
    - deterministic state/action flows?
 5. Are any skills still duplicating knowledge that should instead be delegated to official skills?
 6. Does `repo-bootstrap` look like a strong transversal standard for all new projects?
-7. Are `flutter-personal-standards` and `ananta-standards` clearly separated in responsibility?
+7. Are public skills clearly separated from any internal/private skills that are not distributed in this repository?
 
 ---
 
