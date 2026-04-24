@@ -132,6 +132,28 @@ Skills futuras posibles:
 
 ---
 
+## Versionado y releases
+
+Este repositorio usa **release-please** para manejar versionado semántico, changelog y GitHub Releases.
+
+### Flujo
+
+1. Los cambios se integran por Pull Request usando Conventional Commits.
+2. Al llegar cambios a `main`, `release-please` analiza los commits.
+3. GitHub crea o actualiza un **Release PR** con versión y changelog.
+4. Al mergear ese Release PR, se publica el tag y el GitHub Release.
+
+### Reglas de commits
+
+- `feat:` → minor
+- `fix:` → patch
+- `!` o `BREAKING CHANGE:` → major
+- `docs:`, `chore:`, `refactor:`, `test:`, `ci:` → normalmente no disparan release funcional
+
+La meta es NO versionar manualmente a mano ni mantener changelogs a puro copy-paste.
+
+---
+
 ## Agradecimientos
 
 Gracias a [Gentleman-Programming/gentle-ai](https://github.com/Gentleman-Programming/gentle-ai).
