@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.2](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.2.1...kkapsca-skills-v0.2.2) (2026-04-24)
+
+
+### Bug Fixes
+
+* **dev-skills:** quote curl -F args with brackets for ShellCheck ([cea9701](https://github.com/KapsCa/kkapsca-skills/commit/cea97019c59c6e8ff501809d29e9d782792003e7))
+
 ## [0.2.1](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.2.0...kkapsca-skills-v0.2.1) (2026-04-24)
 
 
