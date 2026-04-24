@@ -24,10 +24,10 @@ ARGS=(
   --method PUT "repos/$REPO_SLUG/branches/main/protection"
   -H "Accept: application/vnd.github+json"
   -F enforce_admins=true
-  -F required_pull_request_reviews[dismiss_stale_reviews]=false
-  -F required_pull_request_reviews[require_code_owner_reviews]=false
-  -F required_pull_request_reviews[required_approving_review_count]=0
-  -F required_pull_request_reviews[require_last_push_approval]=false
+  -F 'required_pull_request_reviews[dismiss_stale_reviews]=false'
+  -F 'required_pull_request_reviews[require_code_owner_reviews]=false'
+  -F 'required_pull_request_reviews[required_approving_review_count]=0'
+  -F 'required_pull_request_reviews[require_last_push_approval]=false'
   -F restrictions=
   -F required_linear_history=true
   -F allow_force_pushes=false
@@ -38,7 +38,7 @@ ARGS=(
 )
 
 if [[ ${#CHECK_NAMES[@]} -gt 0 ]]; then
-  ARGS+=( -F required_status_checks[strict]=true )
+  ARGS+=( -F 'required_status_checks[strict]=true' )
   for check_name in "${CHECK_NAMES[@]}"; do
     ARGS+=( -F "required_status_checks[contexts][]=$check_name" )
   done
