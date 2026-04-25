@@ -43,6 +43,16 @@ Usa esta skill cuando el usuario diga cosas como:
 
 ---
 
+## Pre-flight Checklist
+
+- [ ] El usuario realmente tiene una idea, no un Product Brief completo.
+- [ ] Todavía no existe claridad suficiente de problema, usuario y MVP.
+- [ ] El objetivo es aterrizar la idea, no decidir stack.
+
+Si alguna casilla falla, no uses esta skill; pasa a la skill correcta.
+
+---
+
 ## Filosofía
 
 Brainstorm no es lanzar ideas al aire.
@@ -64,6 +74,10 @@ La tecnología va al final, no al principio.
 ## Fase 1 — Idea cruda
 
 Pide una explicación corta y sin filtros.
+
+### Regla para avanzar
+
+Avanza a Fase 2 solo cuando exista una explicación de 30 segundos y haya al menos una pista concreta de problema y usuario.
 
 ### Pregunta de arranque
 
@@ -96,11 +110,19 @@ Solución actual: [cómo lo resuelven hoy]
 Gap: [qué queda mal resuelto]
 ```
 
+### Regla para avanzar
+
+No avances a Fase 3 si faltan problema, solución actual o gap.
+
 ---
 
 ## Fase 3 — Usuario principal
 
 “Para todos” no sirve.
+
+### Regla para avanzar
+
+Avanza a Fase 4 solo si el usuario principal ya no es genérico y puede describirse con claridad.
 
 Define un usuario primario con estas preguntas:
 
@@ -126,11 +148,19 @@ para que pueda [resultado valioso].
 
 Si esta frase sale borrosa, todavía no hay suficiente claridad.
 
+### Regla para avanzar
+
+Avanza a Fase 5 solo cuando la frase de valor sea clara y específica.
+
 ---
 
 ## Fase 5 — MVP
 
 Separa lo esencial de lo decorativo.
+
+### Regla para avanzar
+
+Avanza a Fase 6 solo cuando el MVP esté recortado y no incluya más de lo necesario para resolver el problema principal.
 
 ### Clasificación sugerida
 
@@ -160,6 +190,10 @@ Elige máximo 2.
 
 Si no hay diferenciador claro, todavía falta trabajo de pensamiento.
 
+### Regla para avanzar
+
+Si no puedes elegir máximo 2 diferenciadores claros, no cierres el brief todavía.
+
 ---
 
 ## Reglas de conducción
@@ -173,6 +207,8 @@ Si no hay diferenciador claro, todavía falta trabajo de pensamiento.
 ---
 
 ## Output Final — Product Brief
+
+Solo genera este bloque cuando ya pasaste por todas las reglas de avance anteriores.
 
 ```markdown
 # [Nombre Tentativo] — Product Brief

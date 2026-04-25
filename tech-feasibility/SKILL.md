@@ -43,6 +43,16 @@ Usa esta skill cuando el usuario quiera responder preguntas como:
 
 ---
 
+## Pre-flight Checklist
+
+- [ ] Existe un Product Brief o un Discovery Report suficientemente claro.
+- [ ] El problema, usuario y MVP ya están definidos a nivel útil.
+- [ ] El objetivo es decidir cómo construir, no explorar la idea desde cero.
+
+Si alguna casilla falla, regresa a la skill anterior.
+
+---
+
 ## Filosofía
 
 La factibilidad técnica NO es escoger frameworks favoritos.
@@ -66,6 +76,22 @@ Es reducir incertidumbre técnica antes de gastar semanas construyendo.
 ## Paso 0 — Clasifica el proyecto
 
 Antes de hablar de stack, define qué tipo de proyecto es:
+
+| Tipo | Señal principal | Nivel de rigor |
+|---|---|---|
+| **Proyecto de aprendizaje** | aprender y terminar | bajo |
+| **Side project / microproducto** | velocidad y costo bajo | medio |
+| **Herramienta interna** | utilidad y bajo costo de mantenimiento | medio |
+| **Producto serio / negocio** | mantenibilidad y operación | alto |
+
+### Regla de clasificación
+
+- 1 = research / exploración muy temprana
+- 2 = internal-tool
+- 3 = side-project
+- 4-5 = production
+
+Si no puedes clasificar el proyecto con claridad, no sigas a Fase 1.
 
 - **Proyecto de aprendizaje** → prioridad: entender, iterar, terminar.
 - **Side project / microproducto** → prioridad: velocidad y costo bajo.
@@ -111,6 +137,15 @@ Sin este inventario, elegir stack es disparar a ciegas.
 ## Fase 2 — Framework de decisión de stack
 
 No propongas tecnología todavía. Primero responde estas preguntas:
+
+### Stack Selection Gate
+
+Solo puedes recomendar stack si ya sabes:
+
+- qué plataforma o plataformas soportará,
+- qué sabe ya el equipo,
+- qué dependencias nativas o de terceros son críticas,
+- y si la prioridad es velocidad, control o costo operativo.
 
 ### Cliente / frontend
 
@@ -194,6 +229,15 @@ Plan B: [alternativa realista]
 - riesgo de deuda técnica,
 - riesgo de incertidumbre no investigada.
 
+### Protocolo de incertidumbre
+
+Si una feature está marcada como `Incierta`, debes:
+
+1. documentar qué no está claro,
+2. indicar qué investigación o prototipo la resolvería,
+3. evitar tratarla como simple,
+4. reflejarla en el plan B o en la estimación.
+
 ### Regla crítica
 
 Si algo es técnicamente incierto, no lo estimes como si fuera simple.
@@ -259,6 +303,18 @@ La arquitectura propuesta debe ser proporcional al tipo de proyecto.
 - Siempre presenta al menos una alternativa y su tradeoff.
 - Si el modelo de negocio o el usuario no están claros, dilo: el problema ya no es técnico.
 - Si una dependencia externa puede romper el producto, documenta esa fragilidad.
+
+---
+
+## Criterio de salida
+
+Esta fase está completa cuando ya existe:
+
+- una propuesta de stack justificada,
+- un mapa claro de riesgos,
+- una estimación razonable por rangos,
+- una arquitectura proporcional al tamaño del proyecto,
+- claridad suficiente para comenzar a desarrollar sin improvisar todo.
 
 ---
 

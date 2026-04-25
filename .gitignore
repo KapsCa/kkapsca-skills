@@ -29,3 +29,6 @@ pubspec.lock
 # OS
 .DS_Store
 .DS_Store:Zone.Identifier
+
+# Local AI workflow artifacts
+.atl/

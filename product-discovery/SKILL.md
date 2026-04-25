@@ -45,6 +45,16 @@ Usa esta skill cuando el usuario quiera responder cosas como:
 
 ---
 
+## Pre-flight Checklist
+
+- [ ] Existe al menos un Product Brief o una idea ya suficientemente aterrizada.
+- [ ] Ya se puede nombrar el problema principal sin hablar de solución.
+- [ ] Ya hay una pista mínima de usuario o nicho.
+
+Si alguna casilla falla, no uses esta skill todavía; vuelve a `brainstorm`.
+
+---
+
 ## Filosofía
 
 Discovery no es burocracia.
@@ -72,23 +82,24 @@ Clasifica primero:
 
 ## Dos modos de trabajo
 
+| Condición | Modo |
+|---|---|
+| Quieren lanzar un producto serio | Modo A — Discovery completo |
+| Planean monetizar | Modo A — Discovery completo |
+| Hay inversión importante de tiempo o dinero | Modo A — Discovery completo |
+| Necesitan justificar la idea ante otras personas | Modo A — Discovery completo |
+| Es side project | Modo B — Discovery ligero |
+| Es herramienta personal o interna | Modo B — Discovery ligero |
+| Están aprendiendo | Modo B — Discovery ligero |
+| Quieren validar interés rápido | Modo B — Discovery ligero |
+
 ### Modo A — Discovery completo
 
-Úsalo si:
-
-- quieres lanzar un producto serio,
-- planeas monetizar,
-- hay inversión de tiempo o dinero importante,
-- necesitas justificar la idea ante otras personas.
+Si ninguna fila aplica claramente, pregunta al usuario antes de continuar.
 
 ### Modo B — Discovery ligero
 
-Úsalo si:
-
-- es un side project,
-- es una herramienta personal o interna,
-- estás aprendiendo,
-- quieres validar interés rápido antes de profundizar.
+Si ninguna fila aplica claramente, pregunta al usuario antes de continuar.
 
 ---
 
@@ -139,6 +150,11 @@ Si el proyecto es pequeño o interno, puedes sustituir esto por:
 - número estimado de usuarios potenciales,
 - intensidad del problema.
 
+#### Regla de avance
+
+Solo usa TAM / SAM / SOM si el proyecto es un producto serio o un negocio.
+Si es side project, aprendizaje o herramienta interna, usa nicho + usuarios potenciales + intensidad del problema.
+
 #### Preguntas clave
 
 - ¿Este problema ocurre con suficiente frecuencia?
@@ -187,6 +203,10 @@ Job to be done:
 
 Si el usuario responde “esto es para todos”, hay que empujarlo a elegir un usuario primario.
 
+### Regla para avanzar
+
+No avances si el usuario principal sigue siendo genérico o difuso.
+
 ---
 
 ### Fase 4 — Propuesta de valor
@@ -231,6 +251,10 @@ Pregunta también:
 
 > “¿Qué tipo de valor genera este producto y cómo se podría capturar?”
 
+### Regla para avanzar
+
+No avances a la siguiente fase si la propuesta de valor todavía no se puede escribir con claridad.
+
 ---
 
 ### Fase 6 — Estrategia de validación
@@ -250,6 +274,10 @@ Siempre busca primero la validación más barata posible.
 
 No construyas un MVP técnico si todavía puedes aprender lo mismo con algo más barato.
 
+### Regla para avanzar
+
+No avances a `tech-feasibility` si la validación mínima todavía puede hacerse con algo más barato.
+
 ---
 
 ## Reglas de conducción
@@ -259,6 +287,19 @@ No construyas un MVP técnico si todavía puedes aprender lo mismo con algo más
 - Si el usuario no conoce el mercado, ayúdalo a investigarlo; no inventes.
 - Si el proyecto es pequeño, usa la ruta ligera y no lo asfixies con formalismo.
 - Si el proyecto busca negocio serio, sí mete más rigor.
+
+---
+
+## Criterio de salida
+
+Esta skill está suficientemente bien resuelta cuando ya existe:
+
+- un usuario principal claro,
+- una necesidad entendible,
+- una alternativa actual identificada,
+- una propuesta de valor concreta,
+- un método realista de validación,
+- y contexto suficiente para tomar decisiones técnicas con sentido.
 
 ---
 
