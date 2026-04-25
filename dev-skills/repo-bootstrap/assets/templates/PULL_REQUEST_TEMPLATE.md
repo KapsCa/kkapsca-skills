@@ -2,9 +2,11 @@
 
 - describe el cambio principal
 - explica por qué existe este cambio
+- referencia el issue aprobado que lo motivó
 
 ## Checklist
 
+- [ ] Este PR está ligado a un issue aprobado (`status:approved`)
 - [ ] No hice push directo a `main`
 - [ ] Este cambio vive en una rama de trabajo
 - [ ] Usé Conventional Commits

@@ -1,4 +1,6 @@
-# Claude Review Brief — KkapsCa Skills Repository
+# Claude Review Brief — Internal Meta Context
+
+> Archivo interno/meta. No cargar como contexto operativo de skills.
 
 ## Project Goal
 
@@ -105,20 +107,6 @@ Important conventions:
 - route to official Flutter skills when the problem is specialized.
 
 This skill replaced an older generic `flutter` skill that overlapped too much with official Flutter skills.
-
-### 3. `skill-creator`
-
-Purpose:
-- help create or improve skills.
-
-Recent direction:
-- moved toward a more deterministic design,
-- stronger intent capture,
-- less fluff,
-- clearer state → action flow,
-- better fit for this repository's “weak-agent friendly” philosophy.
-
----
 
 ## Git/GitHub Standards Already Introduced
 

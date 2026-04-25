@@ -1,8 +1,8 @@
 # KkapsCa Skills Repository
 
-> Skills públicas para pasar de una idea a un producto y de un producto a una implementación técnica con criterio.
+> Skills públicas para pasar de una idea a un producto y de un producto a una implementación técnica con criterio en un servicio de edición **AI-first**.
 
-Este repositorio reúne skills pensadas desde la experiencia personal de **KkapsCa**, pero redactadas para que **cualquier persona pueda reutilizarlas** en sus propios proyectos.
+Este repositorio reúne skills pensadas desde la experiencia personal de **KkapsCa**, optimizadas para flujos de trabajo asistidos por IA (como Cursor, Windsurf o **opencode**) y redactadas para que **cualquier persona pueda reutilizarlas** en sus propios proyectos.
 
 Al mismo tiempo, estas skills están **optimizadas para trabajar especialmente bien dentro del stack de [Gentle AI](https://github.com/Gentleman-Programming/gentle-ai)** y flujos coordinados por **`sdd-orchestrator`**.
 
@@ -17,6 +17,16 @@ La filosofía es simple:
 - no elegir tecnologías por moda,
 - no meter complejidad antes de tiempo,
 - construir con fundamentos, no con ocurrencias.
+
+## Nota de entorno
+
+Si vas a usar **opencode en Windows**, la recomendación es correrlo bajo **WSL2** para mantener un entorno más consistente con Linux y evitar fricción innecesaria con rutas, shells y dependencias.
+
+Referencias útiles:
+
+- https://learn.microsoft.com/windows/wsl/
+- https://learn.microsoft.com/windows/wsl/install
+- https://learn.microsoft.com/windows/wsl/filesystems
 
 ---
 
@@ -33,6 +43,12 @@ Si quieres la mejor experiencia de instalación, ejecución y contexto compartid
 - https://github.com/Gentleman-Programming/gentle-ai
 
 La idea correcta no es vender estas skills como piezas aisladas mágicas, sino como un **potenciador del stack** para lograr mejor ejecución, menos ambigüedad y mejores resultados con agentes IA.
+
+### Windows + opencode
+
+- En Windows, usa **WSL2** como entorno base para opencode.
+- Evita mezclar rutas de Windows y Linux dentro del mismo flujo.
+- Si una guía o skill asume shell Unix, WSL te deja mucho más cerca de ese comportamiento real.
 
 ---
 
@@ -54,6 +70,10 @@ KkapsCa-project-kickstart/
         ├── SKILL.md
         └── assets/
 ```
+
+### Documentación interna
+
+- `docs/internal/` contiene briefs y meta-documentación interna; no es contexto operativo de skills.
 
 Se divide en dos grupos:
 

@@ -3,9 +3,7 @@ name: flutter-personal-standards
 description: >
   Criterio personal para proyectos Flutter: simplicidad primero, arquitectura proporcional,
   state management según el alcance real del estado y uso de las skills oficiales de Flutter
-  cuando el problema es específico. Trigger: Usa esta skill cuando el usuario trabaje con
-  Flutter/Dart y necesite guía general de arquitectura, estructura, decisiones técnicas o
-  dirección sobre qué skill oficial conviene cargar. No la uses para imponer GetX como default.
+  cuando el problema es específico. No la uses para imponer GetX como default.
 
 license: Apache-2.0
 metadata:
@@ -23,6 +21,11 @@ Usa esta skill cuando:
 - haya dudas sobre estructura, estado, complejidad o arquitectura,
 - toque decidir qué tan simple o qué tan escalable debe ser una solución,
 - haga falta enrutar el problema hacia una skill oficial más específica.
+
+## Trigger
+
+Usa esta skill cuando el usuario trabaje con Flutter/Dart y necesite guía general de arquitectura,
+estructura, decisiones técnicas o dirección sobre qué skill oficial conviene cargar.
 
 ## When NOT to Use
 
@@ -118,6 +121,41 @@ No reexplique aquí lo que ya resuelven mejor las skills oficiales.
 - [ ] Ya confirmé si en realidad conviene cargar una skill oficial especializada
 
 Si la respuesta a la última casilla es sí, enruta a la skill oficial y no reinventes la guía aquí.
+
+---
+
+## Criterio de salida
+
+Esta skill está completa cuando el agente ya:
+
+- propuso una estructura proporcional al proyecto,
+- justificó la elección de state management,
+- separó UI/estado/datos,
+- evitó sobrecomplejidad,
+- y, cuando aplicaba, delegó a la skill oficial correcta.
+
+---
+
+## Output esperado
+
+```markdown
+# Decisión Flutter — [Proyecto]
+
+## Tipo de proyecto
+[simple / intermedio / escalable]
+
+## Estructura propuesta
+[feature-first simple / capas separadas / otra]
+
+## State management
+[setState / Provider / Riverpod / Bloc] — Justificación: [razón]
+
+## Skills oficiales a cargar
+- [skill-name] para [problema específico]
+
+## Anti-patrones a evitar
+- [anti-patrón relevante]
+```
 
 ---
 
