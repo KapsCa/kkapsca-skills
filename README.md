@@ -71,10 +71,6 @@ KkapsCa-project-kickstart/
         └── assets/
 ```
 
-### Documentación interna
-
-- `docs/internal/` contiene briefs y meta-documentación interna; no es contexto operativo de skills.
-
 Se divide en dos grupos:
 
 ### 1. Skills de inicio de proyecto
