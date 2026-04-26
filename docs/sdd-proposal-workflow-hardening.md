@@ -14,7 +14,7 @@ Harden existing skills and define a standard for future skills to ensure high-qu
 ## Approach
 1. **Spec**: Draft `docs/skill-hardening-guide.md`.
 2. **Refactor**: Update `dev-skills/repo-bootstrap/SKILL.md` with the new decision table.
-3. **Verify**: Ensure the proposed changes align with the "weak-agent friendly" design philosophy defined in `docs/internal/claude-review-brief.md`.
+3. **Verify**: Ensure the proposed changes align with the repository's weak-agent friendly philosophy defined in `README.md`.
 
 ## Rollback / Risks
 - **Rollback**: Simple revert of commits.
