@@ -12,14 +12,15 @@ description: >
 license: Apache-2.0
 metadata:
   author: KkapsCa
-  version: "3.0"
+  version: "4.0"
   pipeline: "project-kickstart/01"
   next: "product-discovery"
+  prev: ""
 ---
 
 # Brainstorm — Step 1
 
-> **Pipeline recomendado:** `brainstorm` → `product-discovery` → `tech-feasibility`
+> **Pipeline recomendado:** `brainstorm` → `product-discovery` → `project-init` → `tech-feasibility`
 > **Input:** idea vaga, intuición o problema mal definido
 > **Output:** Product Brief
 
@@ -29,11 +30,11 @@ metadata:
 
 Usa esta skill cuando el usuario diga cosas como:
 
-- “tengo una idea”,
-- “quiero hacer una app”,
-- “no sé por dónde empezar”,
-- “ayúdame a aterrizar esto”,
-- “quiero definir mejor mi producto”.
+- "tengo una idea",
+- "quiero hacer una app",
+- "no sé por dónde empezar",
+- "ayúdame a aterrizar esto",
+- "quiero definir mejor mi producto".
 
 ## When NOT to Use
 
@@ -58,14 +59,14 @@ Si alguna casilla falla, no uses esta skill; pasa a la skill correcta.
 Brainstorm no es lanzar ideas al aire.
 Es convertir intuición en una hipótesis de producto que se pueda analizar después.
 
-### Orden correcto
+### Orden correcto (PMBOK 8)
 
-1. **Problema**
-2. **Usuario**
-3. **Propuesta de valor**
-4. **MVP**
-5. **Diferenciadores**
-6. **Preguntas abiertas**
+1. **Problema** — Identificar el dolor real
+2. **Usuario** — Identificar el usuario principal
+3. **Propuesta de valor** — Proponer solución
+4. **MVP** — Definir lo mínimo necesario
+5. **Diferenciadores** — Elegir 1-2 ventajas clave
+6. **Preguntas abiertas** — Qué dudas quedan
 
 La tecnología va al final, no al principio.
 
@@ -81,12 +82,12 @@ Avanza a Fase 2 solo cuando exista una explicación de 30 segundos y haya al men
 
 ### Pregunta de arranque
 
-> “Explícame tu idea como si me la contaras en 30 segundos.”
+> "Explícame tu idea como si me la contaras en 30 segundos."
 
 ### Qué observar
 
 - ¿habla de un problema o solo de una solución?,
-- ¿hay un usuario concreto o “todo el mundo”?,
+- ¿hay un usuario concreto o "todo el mundo"?,
 - ¿menciona referentes?,
 - ¿suena a dolor real o a ocurrencia simpática?
 
@@ -116,9 +117,9 @@ No avances a Fase 3 si faltan problema, solución actual o gap.
 
 ---
 
-## Fase 3 — Usuario principal
+## Fase 3 — Usuario principal + Interesados (PMBOK 8)
 
-“Para todos” no sirve.
+"Para todos" no sirve.
 
 ### Regla para avanzar
 
@@ -133,7 +134,13 @@ Define un usuario primario con estas preguntas:
 
 ### Pregunta clave
 
-> “¿Quién es la persona que más necesita esto y que más se beneficiaría si existiera mañana?”
+> "¿Quién es la persona que más necesita esto y que más se beneficiaría si existiera mañana?"
+
+**PMBOK 8 - Interesados**: amplía a:
+- Usuario principal (quien sufre)
+- Patrocinador/decisor (quién aprueba/invierte)
+- Equipo (quién construirá)
+- Interesados secundarios/regulatorios (según aplique)
 
 ---
 
@@ -154,7 +161,7 @@ Avanza a Fase 5 solo cuando la frase de valor sea clara y específica.
 
 ---
 
-## Fase 5 — MVP
+## Fase 5 — MVP (y alcance inicial)
 
 Separa lo esencial de lo decorativo.
 
@@ -206,14 +213,16 @@ Si no puedes elegir máximo 2 diferenciadores claros, no cierres el brief todav�
 
 ---
 
-## Output Final — Product Brief
+## Output Final — Product Brief v4.0
 
 Solo genera este bloque cuando ya pasaste por todas las reglas de avance anteriores.
 
 ```markdown
 # [Nombre Tentativo] — Product Brief
-**Generado por:** brainstorm skill v3.0
+**Generado por:** brainstorm skill v4.0
 **Fecha:** [fecha]
+**Contexto org:** [personal / negocio / organización]
+**Interesados:** [lista principal]
 
 ## 1. Problema
 [descripción concreta del dolor]
@@ -235,20 +244,32 @@ Solo genera este bloque cuando ya pasaste por todas las reglas de avance anterio
 
 ## 6. MVP
 ### Must Have
-- [feature]
+- [feature 1]
+- [feature 2]
 
 ### Fuera del MVP
-- [feature]
+- [feature 3]
 
-## 7. Diferenciadores
+## 7. Valor esperado
+- Para el usuario: [qué gana]
+- Para el negocio: [qué valor genera]
+- Señal de éxito: [métrica o señal]
+
+## 8. Diferenciadores
 - [diferenciador 1]
 - [diferenciador 2]
 
-## 8. Dudas abiertas
-- [pregunta]
-- [supuesto por validar]
+## 9. Interesados ampliados (PMBOK 8)
+- Principal: [descripción]
+- Patrocinador: [descripción - si aplica]
+- Equipo: [descripción]
+- Regulatorios: [descripción - si aplica]
 
-## 9. Siguiente paso
+## 10. Dudas abiertas
+- [pregunta 1]
+- [supuesto por validar 1]
+
+## 11. Siguiente paso
 - Pasar a product-discovery
 ```
 
@@ -258,8 +279,10 @@ Solo genera este bloque cuando ya pasaste por todas las reglas de avance anterio
 
 Esta fase está suficientemente completa cuando ya existe:
 
-- un problema claro,
-- un usuario principal identificable,
-- una propuesta de valor entendible,
-- un MVP recortado,
-- y suficientes insumos para pasar a discovery sin improvisar todo.
+- ✅ un problema claro,
+- ✅ un usuario principal identificable,
+- ✅ una propuesta de valor entendible,
+- ✅ un MVP recortado,
+- ✅ valor esperado claro,
+- ✅ interesados ampliados según PMBOK 8,
+- ✅ suficientes insumos para pasar a discovery sin improvisar.
