@@ -189,6 +189,34 @@ Este repositorio usa **release-please** para manejar versionado semántico, chan
 3. GitHub crea o actualiza un **Release PR** con versión y changelog.
 4. Al mergear ese Release PR, se publica el tag y el GitHub Release.
 
+### Tipos de commits y su impacto en versiones
+
+| Tipo de commit | ¿Dispara release? | Tipo de cambio |
+|----------------|-------------------|---------------|
+| `feat:` | ✅ Sí | minor (0.1.0 → 0.2.0) |
+| `fix:` | ✅ Sí | patch (0.0.1 → 0.0.2) |
+| `feat:` + `!` o `BREAKING CHANGE:` | ✅ Sí | major (0.1.0 → 1.0.0) |
+| `fix:` + `!` o `BREAKING CHANGE:` | ✅ Sí | major (0.1.0 → 1.0.0) |
+| `docs:` | ❌ No | — |
+| `chore:` | ❌ No | — |
+| `refactor:` | ❌ No | — |
+| `test:` | ❌ No | — |
+| `ci:` | ❌ No | — |
+| `build:` | ❌ No | — |
+| `style:` | ❌ No | — |
+| `perf:` | ❌ Tal vez* | — |
+| `[skip release]` | ❌ No | fuerza skip |
+
+> **Nota**: Commits de `perf:` pueden disparar release depending configuración, pero típicamente no lo hacen.
+
+### Release-please跳过
+
+Para evitar que un commit dispare release, añade `[skip release]` o `[no-release]` en el mensaje:
+
+```bash
+git commit -m "chore: update deps [skip release]"
+```
+
 ### Reglas de commits
 
 - `feat:` → minor
@@ -197,6 +225,36 @@ Este repositorio usa **release-please** para manejar versionado semántico, chan
 - `docs:`, `chore:`, `refactor:`, `test:`, `ci:` → normalmente no disparan release funcional
 
 La meta es NO versionar manualmente a mano ni mantener changelogs a puro copy-paste.
+
+---
+
+## Protección de ramas
+
+### main branch protection
+
+Este repositorio **requiere** que la rama `main` tenga protección habilitada en GitHub:
+
+1. Ve a **Settings → Branches → Branch protection rules**
+2. Crea una regla para `main`
+3. Configura:
+   - ✅ **Require approvals** (al menos 1)
+   - ✅ **Require status checks to pass** antes de merge
+   - ✅ **Require conversation resolution** antes de merge
+   - ❌ **Allow force pushes** → NO permitido
+   - ❌ **Allow deletions** → NO permitido
+
+### Flujo de contribución
+
+1. **No seas ese wey que hace push directo a main** 😤
+2. Todo cambio entra por **Pull Request**
+3. El PR debe tener:
+   - Labels `type:*` y `status:approved`
+   - Referencia a issue (Closes #N)
+   - Commits en formato Conventional Commits
+   - Todos los status checks pasando
+4. **Auto-merge** solo después de validación exitosa
+
+La meta es mantener historial limpio, cambios trazables y releases automatizados sin intervención manual.
 
 ---
 
