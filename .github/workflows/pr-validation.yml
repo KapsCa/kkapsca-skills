@@ -83,3 +83,40 @@ jobs:
             }
 
             core.info(`PR type label detected: ${typeLabels[0]}`);
+
+  check-conventional-commits:
+    name: Validate Conventional Commits
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get PR commits
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: commits } = await github.rest.pulls.listCommits({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              per_page: 50,
+            });
+
+            const conventionalPattern = /^(feat|fix|docs|style|refactor|perf|test|ci|build|chore|revert)(\([^)]+\))?!?: .{1,}/;
+            const invalidCommits = [];
+
+            for (const commit of commits) {
+              const message = commit.commit.message.split('\n')[0];
+              if (!conventionalPattern.test(message)) {
+                invalidCommits.push(message);
+              }
+            }
+
+            if (invalidCommits.length > 0) {
+              core.setFailed(
+                `The following commits do not follow Conventional Commits format:\n` +
+                invalidCommits.map(c => `- ${c}`).join('\n') +
+                `\n\nRequired format: <type>(<scope>)?: <description>\n` +
+                `Types: feat, fix, docs, style, refactor, perf, test, ci, build, chore, revert`
+              );
+              return;
+            }
+
+            core.info(`All ${commits.length} commit(s) follow Conventional Commits format.`);
