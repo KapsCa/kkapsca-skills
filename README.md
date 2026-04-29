@@ -255,53 +255,11 @@ Skills futuras posibles:
 
 ---
 
-## Versionado y releases
+## Releases automatizadas
 
-Este repositorio usa **release-please** para manejar versionado semántico, changelog y GitHub Releases.
+La documentación específica de release automation vive en el repositorio original de **release-please**.
 
-### Flujo
-
-1. Los cambios se integran por Pull Request usando Conventional Commits.
-2. Al llegar cambios a `main`, `release-please` analiza los commits.
-3. GitHub crea o actualiza un **Release PR** con versión y changelog.
-4. Al mergear ese Release PR, se publica el tag y el GitHub Release.
-
-### Tipos de commits y su impacto en versiones
-
-| Tipo de commit | ¿Dispara release? | Tipo de cambio |
-|----------------|-------------------|---------------|
-| `feat:` | ✅ Sí | minor (0.1.0 → 0.2.0) |
-| `fix:` | ✅ Sí | patch (0.0.1 → 0.0.2) |
-| `feat:` + `!` o `BREAKING CHANGE:` | ✅ Sí | major (0.1.0 → 1.0.0) |
-| `fix:` + `!` o `BREAKING CHANGE:` | ✅ Sí | major (0.1.0 → 1.0.0) |
-| `docs:` | ❌ No | — |
-| `chore:` | ❌ No | — |
-| `refactor:` | ❌ No | — |
-| `test:` | ❌ No | — |
-| `ci:` | ❌ No | — |
-| `build:` | ❌ No | — |
-| `style:` | ❌ No | — |
-| `perf:` | ❌ Tal vez* | — |
-| `[skip release]` | ❌ No | fuerza skip |
-
-> **Nota**: Commits de `perf:` pueden disparar release depending configuración, pero típicamente no lo hacen.
-
-### Release-please skip
-
-Para evitar que un commit dispare release, añade `[skip release]` o `[no-release]` en el mensaje:
-
-```bash
-git commit -m "chore: update deps [skip release]"
-```
-
-### Reglas de commits
-
-- `feat:` → minor
-- `fix:` → patch
-- `!` o `BREAKING CHANGE:` → major
-- `docs:`, `chore:`, `refactor:`, `test:`, `ci:` → normalmente no disparan release funcional
-
-La meta es NO versionar manualmente a mano ni mantener changelogs a puro copy-paste.
+Para este proyecto, basta con saber que los cambios deben entrar por PR y seguir las reglas del repo.
 
 ---
 
