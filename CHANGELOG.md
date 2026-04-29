@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.2.2...kkapsca-skills-v0.3.0) (2026-04-29)
+
+
+### Features
+
+* **skills:** align project pipeline with PMBOK lite ([7d2783d](https://github.com/KapsCa/kkapsca-skills/commit/7d2783d253ab722be8458acbe99b8417d6b3670d))
+* **skills:** align project pipeline with PMBOK lite ([eb77c79](https://github.com/KapsCa/kkapsca-skills/commit/eb77c790cece67757dfb049abf15bcac1e19e1dd))
+
 ## [0.2.2](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.2.1...kkapsca-skills-v0.2.2) (2026-04-24)
 
 
