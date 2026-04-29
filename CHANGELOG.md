@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.3.0...kkapsca-skills-v0.4.0) (2026-04-29)
+
+
+### Features
+
+* add clone-friendly opencode bootstrap ([4d64fe2](https://github.com/KapsCa/kkapsca-skills/commit/4d64fe2d99c1ade300cb97796e718d2ec21aa929))
+
 ## [0.3.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.2.2...kkapsca-skills-v0.3.0) (2026-04-29)
 
 
