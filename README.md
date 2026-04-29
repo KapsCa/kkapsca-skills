@@ -245,10 +245,6 @@ Skills disponibles hoy:
 - `flutter-personal-standards`
 - `repo-bootstrap`
 
-Skills internas hoy:
-
-- (no distribuidas en este repo público)
-
 Skills futuras posibles:
 
 - backend
@@ -290,7 +286,7 @@ Este repositorio usa **release-please** para manejar versionado semántico, chan
 
 > **Nota**: Commits de `perf:` pueden disparar release depending configuración, pero típicamente no lo hacen.
 
-### Release-please跳过
+### Release-please skip
 
 Para evitar que un commit dispare release, añade `[skip release]` o `[no-release]` en el mensaje:
 
