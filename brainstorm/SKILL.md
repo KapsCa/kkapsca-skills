@@ -80,6 +80,26 @@ Pide una explicación corta y sin filtros.
 
 Avanza a Fase 2 solo cuando exista una explicación de 30 segundos y haya al menos una pista concreta de problema y usuario.
 
+### Micro-contrato de salida (Fase 1)
+
+```text
+Captura:
+  - Explicación de 30 segundos (idea cruda)
+  - Al menos una pista de problema
+  - Al menos una pista de usuario potencial
+  - Contexto org preliminar (personal / negocio / organización)
+
+NO responde aún:
+  - ¿Quién es exactamente el usuario? (Fase 3)
+  - ¿Cuál es la propuesta de valor exacta? (Fase 4)
+  - ¿Qué incluye el MVP? (Fase 5)
+  - Valor esperado completo (Fase 4)
+  - Dudas abiertas finales (Fase 6)
+
+Señal de avance:
+  - Explicación de 30s documentada + rastro de problema/usuario identifiers
+```
+
 ### Pregunta de arranque
 
 > "Explícame tu idea como si me la contaras en 30 segundos."
@@ -115,6 +135,23 @@ Gap: [qué queda mal resuelto]
 
 No avances a Fase 3 si faltan problema, solución actual o gap.
 
+### Micro-contrato de salida (Fase 2)
+
+```text
+Captura:
+  - Problema concreto identificado
+  - Solución actual documentada
+  - Gap detectado (qué queda mal resuelto)
+
+NO responde aún:
+  - Perfil detallado del usuario (Fase 3)
+  - Propuesta de valor final (Fase 4)
+  - Alcance del MVP (Fase 5)
+
+Señal de avance:
+  - Bloque "Problema / Solución actual / Gap" completado y validado
+```
+
 ---
 
 ## Fase 3 — Usuario principal + Interesados (PMBOK 8)
@@ -124,6 +161,22 @@ No avances a Fase 3 si faltan problema, solución actual o gap.
 ### Regla para avanzar
 
 Avanza a Fase 4 solo si el usuario principal ya no es genérico y puede describirse con claridad.
+
+### Micro-contrato de salida (Fase 3)
+
+```text
+Captura:
+  - Usuario principal definido (perfil, frecuencia, motivación, fricción)
+  - Interesados ampliados (PMBOK 8): patrocinador, equipo, regulatorios si aplica
+
+NO responde aún:
+  - Propuesta de valor final (Fase 4)
+  - Definición de MVP (Fase 5)
+  - Diferenciadores (Fase 6)
+
+Señal de avance:
+  - Usuario principal con perfil no genérico + interesados mapeados
+```
 
 Define un usuario primario con estas preguntas:
 
@@ -159,11 +212,45 @@ Si esta frase sale borrosa, todavía no hay suficiente claridad.
 
 Avanza a Fase 5 solo cuando la frase de valor sea clara y específica.
 
+### Micro-contrato de salida (Fase 4)
+
+```text
+Captura:
+  - Frase de propuesta de valor: "Ayudamos a [usuario] a [resolver problema] mediante [solución], para que pueda [resultado valioso]"
+  - Valor esperado preliminar: beneficio para el usuario, valor para el negocio y señal de éxito
+
+NO responde aún:
+  - Definición de MVP (Fase 5)
+  - Diferenciadores (Fase 6)
+
+Señal de avance:
+  - Frase de valor clara, específica y documentada
+```
+
 ---
 
 ## Fase 5 — MVP (y alcance inicial)
 
 Separa lo esencial de lo decorativo.
+
+### Qué significa MVP
+
+MVP = la versión más pequeña que todavía resuelve el problema principal y permite aprender si la idea tiene sentido.
+
+Ejemplos cortos: una landing con formulario, una demo manual, una automatización básica, o un flujo mínimo que pruebe la idea.
+
+#### MVP en palabras simples (para no técnicos)
+
+> El MVP es la versión "esquelética" de tu idea: solo lo que realmente hace que alguien diga "esto me sirve".
+> No es un producto terminado, es una **prueba de que el problema existe y tu solución ayuda**.
+> Piénsalo como el prototipo de cartón antes de fabricar el producto real.
+
+#### Ejemplos cotidianos (no técnicos)
+
+- **Pizza de prueba**: antes de abrir una pizzería, cocinas 5 pizzas en tu casa y se las das a vecinos para ver si las devoran.
+- **Landing page**: antes de programar una app, haces una página web que explica la idea y mides cuánta gente deja su email.
+- **Demo manual**: antes de automatizar, haces el proceso a mano con 3 clientes para ver si de verdad les ahorras tiempo.
+- **WhatsApp group**: antes de crear una red social, abres un grupo y ves si la gente participa activamente.
 
 ### Regla para avanzar
 
@@ -179,6 +266,20 @@ Avanza a Fase 6 solo cuando el MVP esté recortado y no incluya más de lo neces
 ### Regla del MVP
 
 > El MVP es la versión más pequeña que resuelve el problema principal del usuario principal.
+
+### Micro-contrato de salida (Fase 5)
+
+```text
+Captura:
+  - MVP recortado (Must Have / Should Have / Could Have / Not in MVP)
+  - Definición clara de qué resuelve el problema principal
+
+NO responde aún:
+  - Diferenciadores (Fase 6)
+
+Señal de avance:
+  - MVP con Must Have listados y Fuera de MVP explícito
+```
 
 ---
 
@@ -201,15 +302,139 @@ Si no hay diferenciador claro, todavía falta trabajo de pensamiento.
 
 Si no puedes elegir máximo 2 diferenciadores claros, no cierres el brief todavía.
 
+### Micro-contrato de salida (Fase 6)
+
+```text
+Captura:
+  - Máximo 2 diferenciadores claros
+  - Dudas abiertas y supuestos por validar
+  - Product Brief completo listo para product-discovery
+
+NO responde aún:
+  - Definición de mercado/competencia (eso es product-discovery)
+  - Validación pesada (product-discovery)
+  - Decisiones de stack (tech-feasibility)
+
+Señal de avance:
+  - Diferenciadores definidos + Product Brief completo generado
+```
+
 ---
 
 ## Reglas de conducción
+
+### Detector de desvío
+
+La skill debe detectar cuándo el usuario se sale del flujo. Señales de desvío:
+
+1. **Stack/Tech jumping**: el usuario pregunta "¿usamos React o Vue?", "¿qué base de datos?", "¿microservicios o monolito?".
+2. **Feature creep**: el usuario empieza a listar 15 funcionalidades antes de definir el problema.
+3. **Monetización prematura**: hablar de precios, suscripciones o modelos de negocio antes de validar el problema.
+4. **Competencia distracción**: comparar con gigantes (Netflix, Uber) antes de definir su propio usuario.
+
+### Frases de reconducción estándar
+
+| Tipo de desvío | Frase de reconducción |
+|---|---|
+| Stack/Tech | "Oye, antes de elegir tech, necesitamos tener claro el problema y el usuario. Vamos a completar la Fase X primero." |
+| Feature creep | "Todavía no estamos recortando features. Primero define el problema en la Fase 2, luego el MVP en la Fase 5." |
+| Monetización prematura | "El dinero viene después de validar que alguien necesita esto. Terminemos la propuesta de valor en Fase 4." |
+| Competencia | "Entendido, pero primero define tu usuario principal en Fase 3. Después veremos competencia en product-discovery." |
+
+### Regla anti-desvío
+
+> Si el usuario salta a stack/tech, responde con la frase de reconducción correspondiente y vuelve a la fase actual. No respondas la pregunta técnica hasta que el flujo lo permita.
 
 - Una pregunta a la vez.
 - No sugerir features demasiado pronto.
 - Desafiar ideas difusas con respeto pero con firmeza.
 - No hablar de stack si el problema aún no está bien definido.
 - Terminar siempre con un output útil, no con conversación suelta.
+- Mantener el orden de la skill: no saltar fases aunque el usuario pregunte algo fuera de secuencia.
+- Si falta información, hacer la pregunta mínima necesaria del paso actual y volver al flujo.
+- Si el usuario se desvía, reconducir con una frase corta y continuar desde la fase correcta.
+- No cerrar la skill hasta completar el output final válido o dejar explícito qué fase quedó pendiente.
+
+---
+
+## Product Brief Parcial (salida controlada)
+
+Cuando el usuario no completa todas las fases, la skill debe entregar un **Product Brief Parcial** en lugar de forzar el cierre o dejar conversación suelta.
+
+### Cuándo usar Brief Parcial vs Brief Completo
+
+| Condición | Salida |
+|---|---|
+| Se completaron todas las fases (1-6) + micro-contratos cumplidos | **Product Brief Completo** (usar template de Output Final) |
+| Faltan fases pero hay micro-contrato de la fase actual cumplido | **Product Brief Parcial** (usar template abajo) |
+| El usuario se detiene a mitad de una fase sin cumplir el micro-contrato | **No generar Brief** — reconducir a completar la fase actual |
+| Faltan datos críticos pero hay suficiente para ser útil | **Product Brief Parcial** con campos "Pendientes de validación" |
+
+### Template de Product Brief Parcial
+
+```markdown
+# [Nombre Tentativo] — Product Brief PARCIAL
+**Generado por:** brainstorm skill v4.0
+**Fecha:** [fecha]
+**Contexto org:** [personal / negocio / organización]
+**Interesados:** [lista principal si aplica]
+**Fases completadas:** [lista de fases terminadas con su micro-contrato]
+**Fase pendiente:** [qué falta para el Brief Completo]
+
+## 1. Problema
+[descripción concreta del dolor — si se completó Fase 2]
+
+## 2. Solución actual
+[cómo se resuelve hoy — si se completó Fase 2]
+
+## 3. Gap detectado
+[qué sigue mal resuelto — si se completó Fase 2]
+
+## 4. Usuario principal
+- Perfil: [descripción — si se completó Fase 3]
+- Frecuencia del problema: [alta/media/baja]
+- Motivación: [qué gana]
+- Fricción principal: [qué podría frenarlo]
+
+## 5. Propuesta de valor
+[frase clara — si se completó Fase 4]
+
+## 6. MVP
+### Must Have
+- [feature 1 — si se completó Fase 5]
+
+### Should Have
+- [feature 2 — si se completó Fase 5]
+
+### Could Have
+- [feature 3 — si se completó Fase 5]
+
+### Fuera del MVP
+- [feature 4 — si se completó Fase 5]
+
+## 7. Valor esperado
+- Para el usuario: [qué gana — si se completó Fase 4]
+- Para el negocio: [qué valor genera — si aplica]
+- Señal de éxito: [métrica o señal — si se completó Fase 4]
+
+## 8. Diferenciadores
+- [diferenciador 1 — si se completó Fase 6]
+
+## 9. Interesados ampliados (PMBOK 8)
+- Principal: [descripción — si se completó Fase 3]
+- Patrocinador: [descripción - si aplica]
+- Equipo: [descripción]
+- Regulatorios: [descripción - si aplica]
+
+## 10. Dudas abiertas
+- [pregunta 1]
+- [supuesto por validar 1]
+
+## 11. Siguiente paso
+- Volver a brainstorm para completar fase(s) faltante(s) **O** pasar a product-discovery con este Brief Parcial (solo si las fases críticas 1-4 están completas)
+```
+
+> **Regla**: El Brief Parcial solo puede pasar a `product-discovery` si al menos las fases 1-4 (Idea, Problema, Usuario, Propuesta de valor) están completas. Si falta algo crítico, el siguiente paso siempre es terminar brainstorm.
 
 ---
 
@@ -272,6 +497,21 @@ Solo genera este bloque cuando ya pasaste por todas las reglas de avance anterio
 ## 11. Siguiente paso
 - Pasar a product-discovery
 ```
+
+## Nota de transición a `product-discovery`
+
+Este Product Brief está diseñado para ser el **input directo y compatible** con la skill `product-discovery`. Los campos clave que alimentan el siguiente paso son:
+
+| Campo del Product Brief | Uso en `product-discovery` |
+|---|---|
+| 1. Problema + 2. Solución actual + 3. Gap | Valida el problema (Fase1 y Discovery ligero punto 1) |
+| 4. Usuario principal | Define el usuario a validar (Fase3 y Discovery ligero punto 2) |
+| 5. Propuesta de valor | Base para la propuesta de valor en discovery (Fase4) |
+| 6. MVP | Referencia para no sobre-dimensionar el discovery |
+| 10. Dudas abiertas | Se convierten en hipótesis de riesgos para `project-init` |
+| 11. Siguiente paso | Confirma el pipeline `brainstorm → product-discovery` |
+
+> **Nota**: Si el Brief es Parcial, `product-discovery` usará las secciones disponibles y marcará las faltantes como "pendientes de validación en discovery".
 
 ---
 
