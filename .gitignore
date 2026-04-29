@@ -32,3 +32,10 @@ pubspec.lock
 
 # Local AI workflow artifacts
 .atl/
+
+# Internal planning / research artifacts (do not publish)
+docs/resumen flujo de trabajo.txt
+docs/Flujo_de_Procesos_PMBOK_8.md
+docs/sdd-*.md
+docs/*archive*.json
+sdd-*.md

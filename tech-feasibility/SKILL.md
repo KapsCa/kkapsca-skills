@@ -1,26 +1,30 @@
 ---
 name: tech-feasibility
 description: >
-  PASO 3 de un pipeline de definición de producto. Evalúa factibilidad técnica,
+  PASO 4 de un pipeline de definición de producto. Evalúa factibilidad técnica,
   aterriza requisitos, identifica riesgos, propone una arquitectura proporcional
   al alcance y ayuda a elegir stack con un framework de decisión, no con recetas.
 
   Usa esta skill cuando ya exista claridad suficiente del problema, usuario y MVP,
   y haga falta decidir cómo construirlo, cuánto esfuerzo implica y qué riesgos técnicos
-  existen antes de arrancar el desarrollo.
+  existen antes de arrancar el desarrollo. Recibe input de project-init (o Discovery Report por bypass).
 
 license: Apache-2.0
 metadata:
   author: KkapsCa
-  version: "2.0"
-  pipeline: "project-kickstart/03"
-  prev: "product-discovery"
+  version: "3.0"
+  pipeline: "project-kickstart/04"
+  prev: "project-init"
+  next: ""
+  input_principal: "Project Framing Doc"
+  input_bypass: "Discovery Report"
 ---
 
-# Tech Feasibility — Step 3
+# Tech Feasibility — Step 4
 
-> **Pipeline recomendado:** `brainstorm` → `product-discovery` → `tech-feasibility`
-> **Input ideal:** Discovery Report, Product Brief o contexto suficientemente claro
+> **Pipeline recomendado:** `brainstorm` → `product-discovery` → `project-init` → `tech-feasibility`
+> **Input principal:** Project Framing Doc de `project-init`
+> **Input bypass:** Discovery Report (cuando se usa bypass de project-init)
 > **Output:** Tech Spec listo para iniciar implementación
 
 ---
@@ -108,7 +112,7 @@ Para cada feature del MVP, responde:
 
 ```text
 Feature: [nombre]
-────────────────────────────────────────
+──────────────────────────────────────
 ¿Necesita autenticación?         [ ] Sí  [ ] No
 ¿Necesita persistencia?          [ ] Sí  [ ] No
 ¿Necesita tiempo real?           [ ] Sí  [ ] No
@@ -127,7 +131,6 @@ Feature: [nombre]
 - latencia tolerable,
 - sensibilidad de datos,
 - regiones o idiomas,
-- restricciones regulatorias si existen,
 - presupuesto y tiempo disponibles.
 
 Sin este inventario, elegir stack es disparar a ciegas.
@@ -199,11 +202,6 @@ Presenta alternativas con contexto y tradeoffs.
 | **SQLite** | Estado/datos locales o modo offline en cliente |
 | **MongoDB** | Documentos y estructura cambiante, si el caso realmente lo pide |
 | **Redis** | Caché, colas o sesiones; no reemplaza tu base principal en la mayoría de casos |
-
-### Regla
-
-No digas “usa X”.
-Di: **“Dado A, B y C, X parece mejor que Y por estas razones.”**
 
 ---
 
@@ -322,8 +320,9 @@ Esta fase está completa cuando ya existe:
 
 ```markdown
 # [Nombre del Producto] — Tech Spec
-**Generado por:** tech-feasibility skill v2.0
+**Generado por:** tech-feasibility skill v3.0
 **Fecha:** [fecha]
+**Input usado:** [Project Framing Doc / Discovery Report por bypass]
 
 ## 1. Contexto
 - Tipo de proyecto: [aprendizaje / side project / producto / herramienta interna]

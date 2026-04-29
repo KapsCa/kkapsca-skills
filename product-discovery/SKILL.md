@@ -13,15 +13,15 @@ description: >
 license: Apache-2.0
 metadata:
   author: KkapsCa
-  version: "2.0"
+  version: "3.0"
   pipeline: "project-kickstart/02"
   prev: "brainstorm"
-  next: "tech-feasibility"
+  next: "project-init"
 ---
 
 # Product Discovery — Step 2
 
-> **Pipeline recomendado:** `brainstorm` → `product-discovery` → `tech-feasibility`
+> **Pipeline recomendado:** `brainstorm` → `product-discovery` → `project-init` → `tech-feasibility`
 > **Input ideal:** Product Brief o idea ya suficientemente definida
 > **Output:** Discovery Report
 
@@ -74,7 +74,7 @@ No todos los proyectos requieren el mismo nivel de discovery.
 Clasifica primero:
 
 - **Aprendizaje** → prioridad: entender problema, usuario y utilidad.
-- **Side project / microproducto** → prioridad: validar interés rápido.
+- **Side project / microproducto** → prioridad: validar interés rápido (lanzar `project-init` tras discovery).
 - **Producto serio / negocio** → prioridad: mercado, monetización y viabilidad.
 - **Herramienta interna** → prioridad: utilidad clara y ahorro de tiempo/costo.
 
@@ -82,16 +82,16 @@ Clasifica primero:
 
 ## Dos modos de trabajo
 
-| Condición | Modo |
-|---|---|
-| Quieren lanzar un producto serio | Modo A — Discovery completo |
-| Planean monetizar | Modo A — Discovery completo |
-| Hay inversión importante de tiempo o dinero | Modo A — Discovery completo |
-| Necesitan justificar la idea ante otras personas | Modo A — Discovery completo |
-| Es side project | Modo B — Discovery ligero |
-| Es herramienta personal o interna | Modo B — Discovery ligero |
-| Están aprendiendo | Modo B — Discovery ligero |
-| Quieren validar interés rápido | Modo B — Discovery ligero |
+| Condición | Modo | Pipeline resultante |
+|---|---|---|
+| Quieren lanzar un producto serio | Modo A — Discovery completo | `brainstorm → product-discovery → project-init → tech-feasibility` |
+| Planean monetizar | Modo A — Discovery completo | `brainstorm → product-discovery → project-init → tech-feasibility` |
+| Hay inversión importante de tiempo o dinero | Modo A — Discovery completo | `brainstorm → product-discovery → project-init → tech-feasibility` |
+| Necesitan justificar la idea ante otras personas | Modo A — Discovery completo | `brainstorm → product-discovery → project-init → tech-feasibility` |
+| Es side project | Modo B — Discovery ligero | `brainstorm → product-discovery → project-init (opcional) → tech-feasibility` |
+| Es herramienta personal o interna | Modo B — Discovery ligero | `brainstorm → product-discovery → project-init (opcional) → tech-feasibility` |
+| Están aprendiendo | Modo B — Discovery ligero | `brainstorm → product-discovery → project-init (opcional) → tech-feasibility` |
+| Quieren validar interés rápido | Modo B — Discovery ligero | `brainstorm → product-discovery → project-init (opcional) → tech-feasibility` |
 
 ### Modo A — Discovery completo
 
@@ -100,6 +100,17 @@ Si ninguna fila aplica claramente, pregunta al usuario antes de continuar.
 ### Modo B — Discovery ligero
 
 Si ninguna fila aplica claramente, pregunta al usuario antes de continuar.
+
+### Transición a `project-init`
+
+**Desde `product-discovery`**: El Discovery Report debe incluir:
+- Usuario principal identificado
+- Problema validado
+- Hipótesis de riesgos
+- Enfoque sugerido (enlace a la señal de Paso 0)
+- Estos son los insumos para `project-init`
+
+**Nota**: `project-init` recibe el output de `product-discovery` y produce el Project Framing Doc que `tech-feasibility` consume.
 
 ---
 
@@ -126,7 +137,7 @@ Si el proyecto no requiere análisis pesado, responde estas 5 cosas:
 
 ### Salida del modo ligero
 
-Si estas 5 respuestas están claras, puedes pasar a `tech-feasibility` sin hacer discovery completo.
+Si estas 5 respuestas están claras, puedes pasar a `project-init` (opcional) → `tech-feasibility` sin hacer discovery completo.
 
 ---
 
@@ -342,7 +353,7 @@ Esta skill está suficientemente bien resuelta cuando ya existe:
 - [duda 2]
 
 ## 10. Siguiente paso
-- pasar a tech-feasibility
+- Pasar a project-init (o tech-feasibility por bypass)
 ```
 
 ---

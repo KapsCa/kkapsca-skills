@@ -61,6 +61,9 @@ KkapsCa-project-kickstart/
 │   └── SKILL.md
 ├── product-discovery/
 │   └── SKILL.md
+├── project-init/
+│   ├── SKILL.md
+│   └── README.md
 ├── tech-feasibility/
 │   └── SKILL.md
 └── dev-skills/
@@ -78,6 +81,7 @@ Sirven para aterrizar una idea antes de construir.
 
 - **brainstorm** → convierte una idea vaga en un Product Brief.
 - **product-discovery** → valida mercado, usuario, competencia y negocio.
+- **project-init** → cierra la brecha entre discovery y factibilidad (opcional por bypass).
 - **tech-feasibility** → evalúa stack, riesgos, arquitectura y esfuerzo.
 
 ### 2. Skills de desarrollo
@@ -96,8 +100,19 @@ Estas skills no se distribuyen en este repo público. Si existe una convención 
 El flujo ideal para un proyecto nuevo es este:
 
 ```text
+Idea → brainstorm → product-discovery → project-init → tech-feasibility → repo-bootstrap → Desarrollo
+```
+
+**Ruta ligera (bypass de project-init)**:
+```text
 Idea → brainstorm → product-discovery → tech-feasibility → repo-bootstrap → Desarrollo
 ```
+
+**Condiciones para bypass de project-init**:
+- Proyecto personal con alcance muy pequeño (1-2 features)
+- El usuario es el único interesado y decisor
+- No hay restricciones regulatorias ni organizacionales
+- tech-feasibility puede funcionar con Discovery Report directo
 
 Pero este repositorio **no es dogmático**.
 
@@ -107,10 +122,11 @@ Si ya tienes trabajo previo real, puedes entrar más adelante en el pipeline.
 
 - Si solo tienes una idea vaga → empieza en **brainstorm**.
 - Si ya tienes claro problema, usuario y MVP → puedes entrar en **product-discovery**.
-- Si ya validaste el mercado y solo necesitas aterrizar la ejecución técnica → entra en **tech-feasibility**.
+- Si ya tienes Discovery Report completo y quieres cerrar brecha → usa **project-init** (recomendado).
+- Si ya tienes claridad funcional y solo falta tech → entra en **tech-feasibility**.
 - Si ya tienes claridad funcional y técnica → usa una **dev-skill**.
 
-La regla no es “seguir pasos porque sí”.
+La regla no es "seguir pasos porque sí".
 La regla es **no saltarte el pensamiento que todavía no has hecho**.
 
 ---
@@ -133,9 +149,10 @@ Este repo puede servirle a:
 
 1. Usa `brainstorm`
 2. Continúa con `product-discovery`
-3. Sigue con `tech-feasibility`
-4. Aplica `dev-skills/repo-bootstrap`
-5. Pasa a la skill de desarrollo adecuada
+3. Sigue con `project-init` (o sáltala solo si aplica el bypass)
+4. Continúa con `tech-feasibility`
+5. Aplica `dev-skills/repo-bootstrap`
+6. Pasa a la skill de desarrollo adecuada
 
 ### Si ya estás en etapa de implementación
 
@@ -158,9 +175,10 @@ Si el repo aún no tiene estándares operativos claros, aplica primero `repo-boo
 
 Skills disponibles hoy:
 
-- `brainstorm`
-- `product-discovery`
-- `tech-feasibility`
+- `brainstorm` (Paso 1)
+- `product-discovery` (Paso 2)
+- `project-init` (Paso 3 — transición, opcional para proyectos pequeños)
+- `tech-feasibility` (Paso 4)
 - `flutter-personal-standards`
 - `repo-bootstrap`
 
