@@ -143,6 +143,69 @@ Este repo puede servirle a:
 
 ---
 
+## Instalación para opencode
+
+Hoy este repo **no se autodetecta solo por existir en tu filesystem**. opencode lista las skills desde `~/.config/opencode/skills`, así que después de clonar el repo hay que registrarlas una vez.
+
+### Primer paso: Bootstrap local
+
+El método recomendado y más sencillo es usar el comando único de bootstrap. Esto garantiza que siempre uses el flujo correcto sin preocuparte por permisos de ejecución:
+
+```bash
+git clone https://github.com/KapsCa/kkapsca-skills.git
+cd kkapsca-skills
+bash scripts/bootstrap.sh
+```
+
+> **Nota**: `bash scripts/bootstrap.sh` funciona **siempre**, sin importar si los archivos tienen el bit de ejecución activado. Si prefieres usar `./scripts/bootstrap.sh`, asegúrate de que el archivo sea ejecutable (`chmod +x scripts/bootstrap.sh`).
+
+#### Opciones del bootstrap
+
+Por defecto, `bootstrap.sh` crea **symlinks** (ideal para mantener las skills actualizadas al hacer `git pull`). Si prefieres una copia física independiente:
+
+```bash
+bash scripts/bootstrap.sh --copy
+```
+
+Después de ejecutar el bootstrap, **reinicia opencode** para que refresque la lista de skills disponibles.
+
+### Desinstalar
+
+```bash
+bash scripts/uninstall-opencode-skills.sh
+```
+
+### Qué hace el instalador
+
+- registra cada carpeta que contiene `SKILL.md`
+- instala tanto las skills raíz como las de `dev-skills/`
+- usa `~/.config/opencode/skills` por defecto (configurable vía `OPENCODE_SKILLS_DIR`)
+- respeta conflictos si ya existe una skill con el mismo nombre y no fue instalada por este repo
+
+> Si quieres instalar en otra ubicación, exporta `OPENCODE_SKILLS_DIR=/ruta/destino` antes de correr el script.
+
+---
+
+### Aclaración importante: Engram vs Descubrimiento local
+
+Es común confundir el papel de **Engram** con el registro de skills en opencode. Son cosas distintas y ambas cumplen roles diferentes:
+
+| Concepto | ¿Qué hace? | ¿Registra skills en opencode? |
+|----------|------------|-------------------------------|
+| **Engram** | Guarda memoria persistente del proyecto, contexto, decisiones y flujos de trabajo entre sesiones. | ❌ No |
+| **Bootstrap / Instalador** | Crea symlinks o copias de las skills en `~/.config/opencode/skills` para que opencode las detecte. | ✅ Sí |
+| **`.atl/skill-registry.md`** | Catálogo de skills del proyecto para que el `sdd-orchestrator` resuelva estándares y reglas de proyecto. | ❌ No |
+
+#### Resumen práctico
+
+1. **Engram** → memoria y contexto que sobrevive entre sesiones.
+2. **Bootstrap (`bash scripts/bootstrap.sh`)** → hace que opencode vea tus skills localmente.
+3. **`.atl/skill-registry.md`** → solo lo usa la orquestación SDD, no afecta la detección local de skills.
+
+Si tu repo ya usa Engram, úsalo para recordar contexto y decisiones; **igual debes correr el bootstrap** para que opencode detecte las skills.
+
+---
+
 ## Cómo usarlo
 
 ### Si comienzas con una idea
