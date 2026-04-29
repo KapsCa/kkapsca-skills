@@ -1,5 +1,7 @@
 # Branch Protection Settings — Requerido en GitHub
 
+> **Nota**: Este archivo es histórico/complementario. El documento canónico para flujo de contribución, branch protection y Conventional Commits es **[docs/governance.md](governance.md)**.
+>
 > Este archivo documenta la configuración necesaria de branch protection en GitHub. Los cambios deben aplicarse **manualmente en la interfaz de GitHub**; no pueden configurarse mediante archivos en el repositorio.
 
 ## Configuración requerida para `main`
