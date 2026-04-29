@@ -18,6 +18,24 @@ La filosofía es simple:
 - no meter complejidad antes de tiempo,
 - construir con fundamentos, no con ocurrencias.
 
+## Inicio rápido
+
+Si quieres usar estas skills en tu máquina local con **opencode**, haz esto:
+
+```bash
+git clone https://github.com/KapsCa/kkapsca-skills.git
+cd kkapsca-skills
+bash scripts/bootstrap.sh
+```
+
+Después:
+
+1. Reinicia opencode.
+2. Prueba una skill explícita, por ejemplo: `Usa la skill brainstorm`.
+3. Si todavía no tienes carpeta de proyecto, no pasa nada: puedes empezar con `brainstorm` o `product-discovery` antes de crearla.
+
+> El bootstrap se corre desde **este repo de skills**, no desde la carpeta de tu proyecto futuro.
+
 ## Nota de entorno
 
 Si vas a usar **opencode en Windows**, la recomendación es correrlo bajo **WSL2** para mantener un entorno más consistente con Linux y evitar fricción innecesaria con rutas, shells y dependencias.
@@ -168,6 +186,48 @@ bash scripts/bootstrap.sh --copy
 ```
 
 Después de ejecutar el bootstrap, **reinicia opencode** para que refresque la lista de skills disponibles.
+
+### ¿Desde qué carpeta se ejecuta?
+
+El bootstrap se ejecuta desde la **carpeta de este repo de skills**, no desde la carpeta de tu proyecto futuro.
+
+Si ya tienes este repo clonado en tu máquina local, no necesitas clonarlo otra vez. Solo entra al repo y corre:
+
+```bash
+bash scripts/bootstrap.sh
+```
+
+Si todavía no lo tienes clonado, entonces sí:
+
+```bash
+git clone https://github.com/KapsCa/kkapsca-skills.git
+cd kkapsca-skills
+bash scripts/bootstrap.sh
+```
+
+La razón es simple: el script necesita saber dónde viven realmente `brainstorm/`, `product-discovery/`, `project-init/`, `tech-feasibility/` y `dev-skills/` para registrarlas en opencode.
+
+### ¿Necesito tener ya creada la carpeta del proyecto?
+
+**No para instalar las skills.**
+
+Puedes instalar las skills una sola vez en tu máquina local y luego usarlas para pensar o descubrir ideas aunque todavía no exista la carpeta final del proyecto.
+
+Flujo recomendado:
+
+1. Clona este repo de skills.
+2. Ejecuta `bash scripts/bootstrap.sh` una sola vez.
+3. Usa `brainstorm` o `product-discovery` para aterrizar la idea.
+4. Cuando la idea ya tenga forma, crea la carpeta real del proyecto.
+5. Desde esa carpeta sigue con `project-init`, `tech-feasibility` o la skill de desarrollo que aplique.
+
+Ejemplo práctico:
+
+```text
+~/dev/kkapsca-skills   -> instalar skills
+~/dev/                 -> explorar idea
+~/dev/mi-nuevo-proyecto -> aterrizar e implementar
+```
 
 ### Desinstalar
 
