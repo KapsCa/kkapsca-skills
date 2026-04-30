@@ -1,28 +1,41 @@
-# Engram vs Bootstrap vs Skill-Registry
+# Engram — Memoria Persistente para Desarrollo
 
-Es común confundir el papel de **Engram** con el registro de skills en opencode. Son cosas distintas y ambas cumplen roles diferentes.
+**Engram** es un sistema de memoria persistente diseñado para entornos de desarrollo asistidos por Inteligencia Artificial. Su propósito es mantener contexto, decisiones y flujos de trabajo entre sesiones de desarrollo, incluso después de reinicios o compresiones de contexto (compactions) del agente.
 
-## Comparación rápida
+## ¿Por qué usamos Engram en este repositorio?
+
+Este repositorio de habilidades (**skills**) utiliza Engram para:
+
+- **Recordar decisiones de arquitectura** tomadas durante el desarrollo de las habilidades
+- **Mantener contexto de proyecto** para que el orquestador SDD (**sdd-orchestrator**) tenga información histórica
+- **Guardar patrones y convenciones** establecidos mientras se escriben las habilidades
+- **Recuperar trabajo previo** mediante búsqueda de texto completo (FTS5)
+
+Al usar Engram, las sesiones de desarrollo no empiezan desde cero: el agente puede recuperar qué se hizo, qué decisiones se tomaron y qué problemas se resolvieron anteriormente.
+
+## Comparación rápida: Engram vs Bootstrap vs Skill-Registry
+
+Es común confundir el papel de **Engram** con el registro de habilidades en opencode. Son cosas distintas y ambas cumplen roles diferentes.
 
 | Concepto | ¿Qué hace? | ¿Registra skills en opencode? |
 |----------|------------|-------------------------------|
 | **Engram** | Guarda memoria persistente del proyecto, contexto, decisiones y flujos de trabajo entre sesiones. | ❌ No |
-| **Bootstrap / Instalador** | Crea symlinks o copias de las skills en `~/.config/opencode/skills` para que opencode las detecte. | ✅ Sí |
+| **Bootstrap / Instalador** | Crea enlaces simbólicos o copias de las skills en `~/.config/opencode/skills` para que opencode las detecte. | ✅ Sí |
 | **`.atl/skill-registry.md`** | Catálogo de skills del proyecto para que el `sdd-orchestrator` resuelva estándares y reglas de proyecto. | ❌ No |
 
 ## Engram — Memoria persistente
 
-Engram es un sistema de memoria que sobrevive entre sesiones y compactions. Permite:
+Engram es un sistema de memoria que sobrevive entre sesiones y compresiones de contexto (compactions). Permite:
 
 - Guardar decisiones de arquitectura y diseño
-- Recordar bugs fixeados y lecciones aprendidas
+- Recordar errores corregidos y lecciones aprendidas
 - Mantener contexto de proyecto para el orquestador SDD
 - Buscar trabajo previo mediante búsqueda de texto completo (FTS5)
 
 ### Cuándo usarlo
 
 - Después de hacer una decisión de arquitectura
-- Al completar un bug fix importante
+- Al completar una corrección de error importante
 - Cuando estableces un patrón o convención
 - Al iniciar una sesión nueva (para recuperar contexto)
 
@@ -47,7 +60,7 @@ Después de ejecutar el bootstrap, **reinicia opencode** para que refresque la l
 
 ### Opciones
 
-- Por defecto: crea **symlinks** (se actualizan con `git pull`)
+- Por defecto: crea **enlaces simbólicos** (se actualizan con `git pull`)
 - Con `--copy`: crea copia física independiente
 
 ### Desde qué carpeta se ejecuta
@@ -58,9 +71,9 @@ El bootstrap se ejecuta desde la **carpeta de este repo de skills**, no desde la
 
 Este archivo es usado únicamente por el `sdd-orchestrator` para:
 
-- Resolver estándares de proyecto (compact rules)
+- Resolver estándares de proyecto (reglas compactas)
 - Inyectar reglas en sub-agentes
-- Mapear triggers de skills a contextos de código
+- Mapear disparadores (**triggers**) de skills a contextos de código
 
 No afecta la detección local de skills en opencode.
 
@@ -92,20 +105,20 @@ Es fundamental entender que:
 
 Si el registry dice "activa `supabase` tras stack confirmado", eso es solo una **regla de orquestación lógica** para el `sdd-orchestrator`. Para que opencode realmente use esa skill, debes:
 
-1. Tener la skill en `~/.config/opencode/skills/supabase/` (vía symlink o copia)
+1. Tener la skill en `~/.config/opencode/skills/supabase/` (vía enlace simbólico o copia)
 2. Reiniciar opencode para refrescar la lista de skills
 
-Si la skill no está físicamente instalada, el routing fallará silenciosamente (el orquestador pedirá la skill, pero opencode no la tendrá disponible).
+Si la skill no está físicamente instalada, el enrutamiento (routing) fallará silenciosamente (el orquestador pedirá la skill, pero opencode no la tendrá disponible).
 
 ## Resumen práctico
 
 1. **Engram** → memoria y contexto que sobrevive entre sesiones
 2. **Bootstrap (`bash scripts/bootstrap.sh`)** → hace que opencode vea las skills del repo localmente
 3. **`.atl/skill-registry.md`** → solo lo usa la orquestación SDD, no afecta la detección local de skills
-4. **Skills externas** (como `supabase` y Firebase) → el bootstrap las procesa por default desde la carpeta configurada en `EXTERNAL_SKILLS_DIR`; usa esa variable solo si quieres otra fuente
+4. **Skills externas** (como `supabase` y Firebase) → el bootstrap las procesa por defecto desde la carpeta configurada en `EXTERNAL_SKILLS_DIR`; usa esa variable solo si quieres otra fuente
 5. **Firebase skills** → no activar solo por mencionar Firebase; requieren contexto técnico específico o confirmación de stack
 
-Si tu repo ya usa Engram, úsalo para recordar contexto y decisiones; **igual debes correr el bootstrap** para que opencode detecte las skills del repo. Para skills externas, documenta la dependencia y proporciona guidance de instalación. No activar skills Firebase prematuramente.
+Si tu repo ya usa Engram, úsalo para recordar contexto y decisiones; **igual debes correr el bootstrap** para que opencode detecte las skills del repo. Para skills externas, documenta la dependencia y proporciona una guía de instalación. No actives skills de Firebase prematuramente.
 
 ## Evaluación de `scripts/install-opencode-skills.sh` para Skills Externas
 
@@ -136,7 +149,7 @@ Si el bootstrap no se ejecutó todavía, tienes dos opciones equivalentes:
 # Opción A: bootstrap por defecto (usa ${HOME}/.agents/skills)
 bash scripts/bootstrap.sh
 
-# Opción B: symlinks manuales
+# Opción B: enlaces simbólicos manuales
 ln -s ${HOME}/.agents/skills/supabase ~/.config/opencode/skills/supabase
 ln -s ${HOME}/.agents/skills/supabase-postgres-best-practices ~/.config/opencode/skills/supabase-postgres-best-practices
 ```
@@ -147,6 +160,6 @@ Para Firebase, aplica el mismo patrón (o sobrescribe `EXTERNAL_SKILLS_DIR` si t
 bash scripts/bootstrap.sh
 ```
 
-Sin ese paso, el routing del registry fallará silenciosamente (el orquestador pedirá la skill, pero opencode no la tendrá disponible).
+Sin ese paso, el enrutamiento del registry fallará silenciosamente (el orquestador pedirá la skill, pero opencode no la tendrá disponible).
 
-> **Regla crítica**: No activar skills Firebase solo por mencionar Firebase. Cada skill requiere contexto técnico específico o confirmación de stack en `tech-feasibility`. Sin instalación física, el routing fallará silenciosamente.
+> **Regla crítica**: No activar skills Firebase solo por mencionar Firebase. Cada skill requiere contexto técnico específico o confirmación de stack en `tech-feasibility`. Sin instalación física, el enrutamiento (routing) fallará silenciosamente.

@@ -1,6 +1,6 @@
 # Instalación Detallada — KkapsCa Skills
 
-Este documento cubre el detalle operativo de instalación de las skills en tu entorno local.
+Este documento cubre el detalle operativo de instalación de las habilidades (**skills**) en tu entorno local usando el sistema **Skills.sh**.
 
 ## Inicio Rápido
 
@@ -10,12 +10,12 @@ cd kkapsca-skills
 bash scripts/bootstrap.sh
 ```
 
-> **Nota**: El bootstrap se corre desde **este repo de skills**, no desde la carpeta de tu proyecto futuro.
+> **Nota**: El proceso de inicialización (**bootstrap**) se corre desde **este repositorio de habilidades**, no desde la carpeta de tu proyecto futuro.
 
 ### Después del bootstrap
 
-1. Reinicia opencode para refrescar la lista de skills disponibles.
-2. Prueba una skill explícita, por ejemplo: `Usa la skill brainstorm`.
+1. Reinicia opencode para refrescar la lista de habilidades disponibles.
+2. Prueba una habilidad explícita, por ejemplo: `Usa la habilidad brainstorm`.
 3. Si todavía no tienes carpeta de proyecto, no pasa nada: puedes empezar con `brainstorm` o `product-discovery` antes de crearla.
 
 ---
@@ -23,43 +23,51 @@ bash scripts/bootstrap.sh
 ## ¿Qué hace el bootstrap?
 
 - Registra cada carpeta que contiene `SKILL.md`
-- Instala tanto las skills raíz como las de `dev-skills/`
+- Instala tanto las habilidades raíz como las de `dev-skills/`
 - Usa `~/.config/opencode/skills` por defecto (configurable vía `OPENCODE_SKILLS_DIR`)
-- Crea **symlinks** por defecto (ideal para mantener las skills actualizadas al hacer `git pull`)
+- Crea **enlaces simbólicos** por defecto (ideal para mantener las habilidades actualizadas al hacer `git pull`)
 
 ### Opciones de instalación
 
-**Symlinks (por defecto)**:
+**Enlaces simbólicos (por defecto)**:
 ```bash
 bash scripts/bootstrap.sh
 ```
-Ventaja: al hacer `git pull` en el repo de skills, los cambios se reflejan automáticamente.
+Ventaja: al hacer `git pull` en el repositorio de habilidades, los cambios se reflejan automáticamente.
 
 **Copia física independiente**:
 ```bash
 bash scripts/bootstrap.sh --copy
 ```
-Ventaja: las skills son independientes del repo original.
+Ventaja: las habilidades son independientes del repositorio original.
 
 > **Nota**: `bash scripts/bootstrap.sh` funciona **siempre**, sin importar si los archivos tienen el bit de ejecución activado.
 
 ---
 
-## Skills Externas (Supabase, Firebase, Genkit)
+## Habilidades Externas (Supabase, Firebase, Genkit)
 
-Las skills de Supabase y Firebase residen en una carpeta externa (por defecto `~/.agents/skills/`). El bootstrap las procesa automáticamente:
+Las habilidades de **Supabase** y **Firebase** provienen de las habilidades oficiales creadas por las respectivas plataformas. En este repositorio se integran para usarlas bajo el flujo de **Skills.sh**. Residen en una carpeta externa (por defecto `~/.agents/skills/`). El bootstrap las procesa automáticamente:
 
 ```bash
 # El bootstrap toma por defecto ~/.agents/skills como fuente externa
 bash scripts/bootstrap.sh
 ```
 
+### Origen de las habilidades oficiales
+
+| Plataforma | Habilidad | Origen Oficial |
+|------------|-----------|----------------|
+| **Supabase** | `supabase`, `supabase-postgres-best-practices` | Habilidades oficiales de Supabase adaptadas para el flujo de Skills.sh |
+| **Firebase** | `firebase-*` (10 habilidades) | Habilidades oficiales de Firebase adaptadas para el flujo de Skills.sh |
+| **Genkit** | `developing-genkit-*` | Habilidades oficiales de Genkit adaptadas para el flujo de Skills.sh |
+
 ### Rutas configurables
 
 | Variable | Valor por defecto | Propósito |
 |----------|-------------------|-----------|
-| `OPENCODE_SKILLS_DIR` | `~/.config/opencode/skills` | Dónde se instalan las skills |
-| `EXTERNAL_SKILLS_DIR` | `~/.agents/skills` | Fuente de skills externas |
+| `OPENCODE_SKILLS_DIR` | `~/.config/opencode/skills` | Dónde se instalan las habilidades |
+| `EXTERNAL_SKILLS_DIR` | `~/.agents/skills` | Fuente de habilidades externas |
 
 ---
 
@@ -73,22 +81,22 @@ bash scripts/uninstall-opencode-skills.sh
 
 ## ¿Necesito tener ya creada la carpeta del proyecto?
 
-**No para instalar las skills.**
+**No para instalar las habilidades.**
 
-Puedes instalar las skills una sola vez en tu máquina local y luego usarlas para pensar o descubrir ideas aunque todavía no exista la carpeta final del proyecto.
+Puedes instalar las habilidades una sola vez en tu máquina local y luego usarlas para pensar o descubrir ideas aunque todavía no exista la carpeta final del proyecto.
 
 ### Flujo recomendado
 
-1. Clona este repo de skills.
+1. Clona este repositorio de habilidades.
 2. Ejecuta `bash scripts/bootstrap.sh` una sola vez.
 3. Usa `brainstorm` o `product-discovery` para aterrizar la idea.
 4. Cuando la idea ya tenga forma, crea la carpeta real del proyecto.
-5. Desde esa carpeta sigue con `project-init`, `tech-feasibility` o la skill de desarrollo que aplique.
+5. Desde esa carpeta sigue con `project-init`, `tech-feasibility` o la habilidad de desarrollo que aplique.
 
 ### Ejemplo práctico
 
 ```text
-~/dev/kkapsca-skills        -> instalar skills
+~/dev/kkapsca-skills        -> instalar habilidades
 ~/dev/                       -> explorar idea
 ~/dev/mi-nuevo-proyecto      -> aterrizar e implementar
 ```
@@ -101,22 +109,22 @@ Si vas a usar **opencode en Windows**, la recomendación es correrlo bajo **WSL2
 
 ---
 
-## Enrutamiento de Skills por Stack
+## Enrutamiento de Habilidades por Stack
 
-Este repositorio usa un registro interno de skills para definir **orquestación lógica** (qué skill activar según el contexto), pero **no instala skills automáticamente**.
+Este repositorio usa un registro interno de habilidades para definir **orquestación lógica** (qué habilidad activar según el contexto), pero **no instala habilidades automáticamente**.
 
-### Cuándo se activa cada skill de Supabase
+### Cuándo se activa cada habilidad de Supabase
 
-| Skill | Cuándo se activa | Requiere stack confirmado |
-|-------|------------------|---------------------------|
+| Habilidad | Cuándo se activa | Requiere stack confirmado |
+|-----------|------------------|---------------------------|
 | `supabase` | Tras decidir Supabase en `tech-feasibility`; fases de diseño/implementación | ✅ Sí |
 | `supabase-postgres-best-practices` | En fases de diseño/apply con trabajo SQL, RLS, migrations o esquema Postgres | ✅ Sí + contexto técnico |
 | `skill-creator` | Solo referencia documental; NO participa en routing normal | ❌ No |
 
-### Cuándo se activa cada skill de Firebase
+### Cuándo se activa cada habilidad de Firebase
 
-| Skill | Cuándo se activa | Requiere stack confirmado |
-|-------|------------------|---------------------------|
+| Habilidad | Cuándo se activa | Requiere stack confirmado |
+|-----------|------------------|---------------------------|
 | `firebase-basics` | Tras decidir Firebase en `tech-feasibility` o setup de proyecto Firebase | ✅ Sí |
 | `firebase-auth-basics` | Con trabajo específico de Auth/sign-in/providers/tokens | ✅ Sí + contexto técnico |
 | `firebase-firestore-standard` | Con trabajo de Firestore Standard (queries, índices, SDK, reglas) | ✅ Sí + contexto técnico |
@@ -128,19 +136,19 @@ Este repositorio usa un registro interno de skills para definir **orquestación 
 | `firebase-ai-logic-basics` | Para Firebase AI Logic/Gemini desde cliente | ✅ Sí + contexto de IA |
 | `developing-genkit-js` | Para Genkit en JS/TS | ✅ Sí + stack JS/TS |
 
-> **Importante**: No activar skills Firebase solo por mencionar Firebase. Cada skill requiere contexto técnico específico o confirmación de stack.
+> **Importante**: No activar habilidades Firebase solo por mencionar Firebase. Cada habilidad requiere contexto técnico específico o confirmación de stack.
 
 ### Separación: Pipeline vs Disponibilidad Real
 
 ```
-Pipeline/Registry (lógico)  →  Define CUÁNDO activar skills
+Pipeline/Registry (lógico)  →  Define CUÁNDO activar habilidades
          ↓
-Bootstrap/Scripts (físico)  →  Hace que opencode DETECTE las skills
+Bootstrap/Scripts (físico)  →  Hace que opencode DETECTE las habilidades
 ```
 
-- **Pipeline/Registry**: la orquestación interna decide cuándo activar una skill tras confirmar el stack en `tech-feasibility`
-- **Bootstrap**: `scripts/install-opencode-skills.sh` instala skills del repo a `~/.config/opencode/skills/`
-- **Brecha actual**: Las skills externas requieren bootstrap + reinicio de opencode para quedar disponibles
+- **Pipeline/Registry**: la orquestación interna decide cuándo activar una habilidad tras confirmar el stack en `tech-feasibility`
+- **Bootstrap**: `scripts/install-opencode-skills.sh` instala habilidades del repo a `~/.config/opencode/skills/`
+- **Brecha actual**: Las habilidades externas requieren bootstrap + reinicio de opencode para quedar disponibles
 
 ---
 
@@ -148,3 +156,4 @@ Bootstrap/Scripts (físico)  →  Hace que opencode DETECTE las skills
 
 - [Gentle AI Repository](https://github.com/Gentleman-Programming/gentle-ai) — Contexto del stack y mejor experiencia de uso
 - [docs/engram.md](engram.md) — Diferencia entre memoria persistente, bootstrap y skill-registry
+- [docs/sdd.md](sdd.md) — Desarrollo Guiado por Especificaciones (SDD) y sdd-orchestrator
