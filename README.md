@@ -46,21 +46,7 @@ bash scripts/bootstrap.sh --copy
 2. Prueba una skill explícita, por ejemplo: `Usa la skill brainstorm`.
 3. Si todavía no tienes carpeta de proyecto, no pasa nada: puedes empezar con `brainstorm` o `product-discovery` antes de crearla.
 
-> **⚠️ Skills externas en el bootstrap**: Las skills `supabase` y `supabase-postgres-best-practices` residen en `/home/kkaps/.agents/skills/` y el bootstrap **ya las procesa por defecto**. Si quieres cambiar la ruta de origen, puedes sobrescribirla con `EXTERNAL_SKILLS_DIR`:
-> ```bash
-> bash scripts/bootstrap.sh
-> # o, para una ruta custom:
-> EXTERNAL_SKILLS_DIR=/ruta/a/skills externas bash scripts/bootstrap.sh
-> ```
-> El `.atl/skill-registry.md` define cuándo activar estas skills (orquestación lógica), pero requieren instalación física previa + reinicio de opencode para estar disponibles realmente.
-
-> **⚠️ Skills Firebase en el bootstrap**: Las skills de Firebase residen en `/home/kkaps/.agents/skills/` y el bootstrap **ya las procesa por defecto**. Si quieres cambiar la ruta de origen, puedes sobrescribirla con `EXTERNAL_SKILLS_DIR`:
-> ```bash
-> bash scripts/bootstrap.sh
-> # o, para una ruta custom:
-> EXTERNAL_SKILLS_DIR=/ruta/a/skills externas bash scripts/bootstrap.sh
-> ```
-> El `.atl/skill-registry.md` define cuándo activar estas skills (orquestación lógica), pero requieren instalación física previa + reinicio de opencode para estar disponibles realmente. No activar skills Firebase solo por mencionar Firebase genéricamente.
+> **⚠️ Skills externas**: Las skills de Supabase y Firebase se enrutan desde el registry, pero para que opencode las detecte debes instalarlas vía bootstrap. Los detalles operativos y de entorno están en [docs/engram.md](docs/engram.md).
 
 ### ¿Necesito tener ya creada la carpeta del proyecto?
 
@@ -138,7 +124,7 @@ Bootstrap/Scripts (físico)  →  Hace que opencode DETECTE las skills
 
 - **Pipeline/Registry**: `.atl/skill-registry.md` dice "activa `supabase` tras decidir el stack en tech-feasibility"
 - **Bootstrap**: `scripts/install-opencode-skills.sh` instala skills del repo a `~/.config/opencode/skills/`
-- **Brecha actual**: Las skills `supabase` y `supabase-postgres-best-practices` residen en `/home/kkaps/.agents/skills/` y el bootstrap ya las procesa por defecto; si quieres usar una fuente distinta, `EXTERNAL_SKILLS_DIR` actúa como override. Reinicia opencode para que queden disponibles.
+- **Brecha actual**: Las skills externas requieren bootstrap + reinicio de opencode para quedar disponibles. Si usas una fuente distinta a la predeterminada, `EXTERNAL_SKILLS_DIR` actúa como override.
 
 ---
 
