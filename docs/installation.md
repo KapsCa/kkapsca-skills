@@ -103,7 +103,7 @@ Si vas a usar **opencode en Windows**, la recomendación es correrlo bajo **WSL2
 
 ## Enrutamiento de Skills por Stack
 
-Este repositorio usa `.atl/skill-registry.md` para definir **orquestación lógica** (qué skill activar según el contexto), pero **no instala skills automáticamente**.
+Este repositorio usa un registro interno de skills para definir **orquestación lógica** (qué skill activar según el contexto), pero **no instala skills automáticamente**.
 
 ### Cuándo se activa cada skill de Supabase
 
@@ -138,7 +138,7 @@ Pipeline/Registry (lógico)  →  Define CUÁNDO activar skills
 Bootstrap/Scripts (físico)  →  Hace que opencode DETECTE las skills
 ```
 
-- **Pipeline/Registry**: `.atl/skill-registry.md` dice "activa `supabase` tras decidir el stack en tech-feasibility"
+- **Pipeline/Registry**: la orquestación interna decide cuándo activar una skill tras confirmar el stack en `tech-feasibility`
 - **Bootstrap**: `scripts/install-opencode-skills.sh` instala skills del repo a `~/.config/opencode/skills/`
 - **Brecha actual**: Las skills externas requieren bootstrap + reinicio de opencode para quedar disponibles
 
@@ -148,4 +148,3 @@ Bootstrap/Scripts (físico)  →  Hace que opencode DETECTE las skills
 
 - [Gentle AI Repository](https://github.com/Gentleman-Programming/gentle-ai) — Contexto del stack y mejor experiencia de uso
 - [docs/engram.md](engram.md) — Diferencia entre memoria persistente, bootstrap y skill-registry
-- [.atl/skill-registry.md](../.atl/skill-registry.md) — Catálogo completo de skills y triggers

@@ -71,7 +71,7 @@ Idea → brainstorm → product-discovery → tech-feasibility → repo-bootstra
 
 Las skills de **Supabase**, **Firebase** y **Genkit** se activan tras decidir el stack en `tech-feasibility`. Deben instalarse vía bootstrap para que opencode las detecte.
 
-Consulta el [registro de skills](.atl/skill-registry.md) para detalles de orquestación, o la [guía de instalación](docs/installation.md) para disponibilidad real.
+Consulta la [guía de instalación](docs/installation.md) para disponibilidad real y `docs/engram.md` para entender cómo se separan bootstrap, memoria persistente y orquestación.
 
 ---
 
