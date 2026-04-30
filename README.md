@@ -1,20 +1,20 @@
 # KkapsCa Skills
 
-> Skills públicas para pasar de una idea a un producto y de un producto a una implementación técnica con criterio en un servicio de edición **AI-first**.
+> Habilidades (**Skills**) públicas para pasar de una idea a un producto y de un producto a una implementación técnica con criterio en un servicio de edición **IA-primero** (IA = Inteligencia Artificial).
 
 [![GitHub repo](https://img.shields.io/badge/GitHub-KkapsCa%2Fkkapsca--skills-blue?logo=github)](https://github.com/KapsCa/kkapsca-skills)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Follow Gentle AI](https://img.shields.io/badge/Follow-Gentle%20AI-purple?logo=github)](https://github.com/Gentleman-Programming/gentle-ai)
 
-Este repositorio reúne skills pensadas desde la experiencia personal de **KkapsCa**, optimizadas para flujos de trabajo asistidos por IA (como Cursor, Windsurf o **opencode**) y redactadas para que **cualquier persona pueda reutilizarlas** en sus propios proyectos.
+Este repositorio reúne habilidades (**skills**) pensadas desde la experiencia personal de **KkapsCa**, optimizadas para flujos de trabajo asistidos por Inteligencia Artificial (como Cursor, Windsurf o **opencode**) y redactadas para que **cualquier persona pueda reutilizarlas** en sus propios proyectos.
 
-Al mismo tiempo, estas skills están **optimizadas para trabajar especialmente bien dentro del stack de [Gentle AI](https://github.com/Gentleman-Programming/gentle-ai)** y flujos coordinados por **`sdd-orchestrator`**.
+Al mismo tiempo, estas habilidades están **optimizadas para trabajar especialmente bien dentro del entorno tecnológico de [Gentle AI](https://github.com/Gentleman-Programming/gentle-ai)** y flujos coordinados por el **orquestador sdd-orchestrator** (una herramienta que coordina fases de desarrollo estructurado).
 
 ---
 
-## Quickstart
+## Inicio Rápido
 
-Si quieres usar estas skills en tu máquina local con **opencode**:
+Si quieres usar estas habilidades en tu máquina local con **opencode**:
 
 ```bash
 git clone https://github.com/KapsCa/kkapsca-skills.git
@@ -22,66 +22,69 @@ cd kkapsca-skills
 bash scripts/bootstrap.sh
 ```
 
-> **Nota**: El bootstrap se corre desde **este repo de skills**, no desde la carpeta de tu proyecto futuro. Reinicia opencode después de ejecutarlo.
+> **Nota**: El proceso de inicialización (**bootstrap**) se corre desde **este repositorio de habilidades**, no desde la carpeta de tu proyecto futuro. Reinicia opencode después de ejecutarlo.
 
-Para detalles operativos de instalación (opciones `--copy`, symlinks, skills externas), consulta la [guía de instalación](docs/installation.md).
+Para detalles operativos de instalación (opciones `--copy`, enlaces simbólicos, habilidades externas), consulta la [guía de instalación](docs/installation.md).
+
+---
+
+## ¿Qué es esto y para quién es?
+
+Este repositorio es una colección de **habilidades (skills)** —conjuntos de instrucciones y flujos de trabajo— diseñadas para ayudarte a:
+
+- **Desarrolladores** que arrancan proyectos desde cero
+- **Creadores técnicos** que necesitan estructura sin burocracia
+- **Creadores independientes** que quieren validar antes de construir
+- **Estudiantes** que quieren aprender a pensar antes de programar
+- **Equipos pequeños** que necesitan flujos de trabajo consistentes
 
 ---
 
 ## Pipeline Recomendado
 
 ```text
-Idea → brainstorm → product-discovery → project-init → tech-feasibility → repo-bootstrap → Desarrollo
+Idea → brainstorming → descubrimiento de producto → inicio de proyecto → factibilidad técnica → bootstrap del repo → Desarrollo
 ```
 
-**Ruta ligera** (side projects / proyectos personales):
+**Ruta ligera** (proyectos personales o proyectos paralelos):
 ```text
-Idea → brainstorm → product-discovery → tech-feasibility → repo-bootstrap → Desarrollo
+Idea → brainstorming → descubrimiento de producto → factibilidad técnica → bootstrap del repo → Desarrollo
 ```
 
-¿Por dónde entrar?
-- Idea vaga → **brainstorm**
-- Ya tienes problema + usuario + MVP → **product-discovery**
-- Tienes Discovery Report → **project-init** o directo a **tech-feasibility**
-- Ya tienes claridad técnica → usa una **dev-skill**
+### ¿Por dónde entrar?
+
+- Idea vaga → **brainstorming** (herramienta para aterrizar ideas)
+- Ya tienes problema + usuario + MVP → **descubrimiento de producto**
+- Tienes Discovery Report → **inicio de proyecto** o directo a **factibilidad técnica**
+- Ya tienes claridad técnica → usa una **habilidad de desarrollo**
 
 > La regla no es "seguir pasos porque sí". La regla es **no saltarte el pensamiento que todavía no has hecho**.
 
 ---
 
-## Skills Disponibles
+## Habilidades Disponibles
 
-### 1. Inicio de proyecto (brainstorm → discovery → factibilidad)
+### 1. Inicio de proyecto (brainstorming → descubrimiento → factibilidad)
 
-| Skill | Propósito |
-|-------|-----------|
+| Habilidad | Propósito |
+|-----------|-----------|
 | **brainstorm** | Convierte una idea vaga en un Product Brief |
 | **product-discovery** | Valida mercado, usuario, competencia y negocio |
-| **project-init** | Cierra la brecha entre discovery y factibilidad |
-| **tech-feasibility** | Evalúa stack, riesgos, arquitectura y esfuerzo |
+| **project-init** | Cierra la brecha entre descubrimiento y factibilidad |
+| **tech-feasibility** | Evalúa tecnología, riesgos, arquitectura y esfuerzo |
 
 ### 2. Desarrollo y estándares
 
-| Skill | Propósito |
-|-------|-----------|
+| Habilidad | Propósito |
+|-----------|-----------|
 | **dev-skills/flutter-personal-standards** | Criterio personal para Flutter |
-| **dev-skills/repo-bootstrap** | Prepara el repositorio: PR workflow, release-please, estándares |
+| **dev-skills/repo-bootstrap** | Prepara el repositorio: flujo de PR, release-please, estándares |
 
-### 3. Skills especializadas (requieren stack confirmado)
+### 3. Habilidades especializadas (requieren tecnología confirmada)
 
-Las skills de **Supabase**, **Firebase** y **Genkit** se activan tras decidir el stack en `tech-feasibility`. Deben instalarse vía bootstrap para que opencode las detecte.
+Las habilidades de **Supabase**, **Firebase** y **Genkit** se activan tras decidir la tecnología en `tech-feasibility`. Deben instalarse vía bootstrap para que opencode las detecte.
 
-Consulta la [guía de instalación](docs/installation.md) para disponibilidad real y `docs/engram.md` para entender cómo se separan bootstrap, memoria persistente y orquestación.
-
----
-
-## Para quién sirve
-
-- Developers que arrancan proyectos desde cero
-- Founders técnicos
-- Builders indie
-- Estudiantes que quieren aprender a pensar antes de programar
-- Equipos pequeños que necesitan estructura sin burocracia absurda
+Consulta la [guía de instalación](docs/installation.md) para disponibilidad real y `docs/engram.md` para entender cómo se separan inicialización, memoria persistente y orquestación.
 
 ---
 
@@ -103,7 +106,8 @@ Para detalles operativos, consulta la documentación en `docs/`:
 |------|-----------|
 | Contexto Gentle AI y relación con este repo | [docs/gentle-ai.md](docs/gentle-ai.md) |
 | Instalación detallada, bootstrap y skill-registry | [docs/installation.md](docs/installation.md) |
-| Engram vs Bootstrap vs Skill-Registry | [docs/engram.md](docs/engram.md) |
+| Memoria persistente (Engram) vs Bootstrap vs Skill-Registry | [docs/engram.md](docs/engram.md) |
+| Desarrollo estructurado (SDD) y sdd-orchestrator | [docs/sdd.md](docs/sdd.md) |
 | Flujo de contribución y branch protection | [docs/governance.md](docs/governance.md) |
 | Versionado semántico y release-please | [docs/release-please.md](docs/release-please.md) |
 | Configuración WSL para Windows | [docs/wsl-setup.md](docs/wsl-setup.md) |
@@ -113,10 +117,11 @@ Para detalles operativos, consulta la documentación en `docs/`:
 
 ## Mejor Experiencia de Uso
 
-Estas skills dan mejores resultados cuando:
+Estas habilidades dan mejores resultados cuando:
+
 - El agente opera con contexto consistente
-- Existe un `sdd-orchestrator` coordinando fases o subagentes
-- Y el entorno ya sigue las convenciones del stack de Gentle AI
+- Existe un **orquestador sdd-orchestrator** coordinando fases o subagentes
+- Y el entorno ya sigue las convenciones del entorno tecnológico de Gentle AI
 
 Si quieres la mejor experiencia: [Gentle AI Repository](https://github.com/Gentleman-Programming/gentle-ai)
 
@@ -124,7 +129,14 @@ Si quieres la mejor experiencia: [Gentle AI Repository](https://github.com/Gentl
 
 ## Agradecimientos
 
-Gracias a [Gentleman-Programming/gentle-ai](https://github.com/Gentleman-Programming/gentle-ai) por la herramienta que permitió revisar, corregir y refinar este repositorio.
+Este proyecto utiliza herramientas y referentes que han contribuido a su desarrollo:
+
+- **[Gentleman-Programming/gentle-ai](https://github.com/Gentleman-Programming/gentle-ai)**: Por el entorno de trabajo, la filosofía de desarrollo y las herramientas que permitieron revisar, corregir y refinar este repositorio.
+- **Supabase**: Por sus habilidades oficiales que extienden las capacidades de este repositorio.
+- **Firebase**: Por sus habilidades oficiales que cubren casos de uso específicos en la plataforma.
+- **Equipo de opencode**: Por la plataforma que hace posible la ejecución de estas habilidades.
+
+Este repositorio es un esfuerzo personal y no cuenta con patrocinio oficial de ninguna de las herramientas mencionadas. Las menciones se realizan únicamente para referencia técnica y reconocimiento de uso.
 
 ---
 
