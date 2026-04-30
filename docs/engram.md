@@ -20,12 +20,14 @@ Engram es un sistema de memoria que sobrevive entre sesiones y compactions. Perm
 - Buscar trabajo previo mediante búsqueda de texto completo (FTS5)
 
 ### Cuándo usarlo
+
 - Después de hacer una decisión de arquitectura
 - Al completar un bug fix importante
 - Cuando estableces un patrón o convención
 - Al iniciar una sesión nueva (para recuperar contexto)
 
 ### Ciclo de vida
+
 1. `mem_save` → guarda una observación
 2. `mem_search` → busca contexto previo
 3. `mem_get_observation` → recupera contenido completo
@@ -44,10 +46,12 @@ bash scripts/bootstrap.sh
 Después de ejecutar el bootstrap, **reinicia opencode** para que refresque la lista de skills disponibles.
 
 ### Opciones
+
 - Por defecto: crea **symlinks** (se actualizan con `git pull`)
 - Con `--copy`: crea copia física independiente
 
 ### Desde qué carpeta se ejecuta
+
 El bootstrap se ejecuta desde la **carpeta de este repo de skills**, no desde la carpeta de tu proyecto futuro.
 
 ## `.atl/skill-registry.md` — Catálogo para orquestación
@@ -98,7 +102,7 @@ Si la skill no está físicamente instalada, el routing fallará silenciosamente
 1. **Engram** → memoria y contexto que sobrevive entre sesiones
 2. **Bootstrap (`bash scripts/bootstrap.sh`)** → hace que opencode vea las skills del repo localmente
 3. **`.atl/skill-registry.md`** → solo lo usa la orquestación SDD, no afecta la detección local de skills
-4. **Skills externas** (como `supabase` y Firebase en `/home/kkaps/.agents/skills/`) → el bootstrap las procesa por default desde `~/.agents/skills`; `EXTERNAL_SKILLS_DIR` solo sirve como override si quieres otra fuente
+4. **Skills externas** (como `supabase` y Firebase) → el bootstrap las procesa por default desde la carpeta configurada en `EXTERNAL_SKILLS_DIR`; usa esa variable solo si quieres otra fuente
 5. **Firebase skills** → no activar solo por mencionar Firebase; requieren contexto técnico específico o confirmación de stack
 
 Si tu repo ya usa Engram, úsalo para recordar contexto y decisiones; **igual debes correr el bootstrap** para que opencode detecte las skills del repo. Para skills externas, documenta la dependencia y proporciona guidance de instalación. No activar skills Firebase prematuramente.
@@ -109,17 +113,17 @@ El script actual **sí puede exponer skills externas** y por defecto usa `EXTERN
 
 1. Procesa directorios dentro del repo: `"${REPO_ROOT}"/*` y `"${REPO_ROOT}"/dev-skills/*`
 2. Procesa directorios externos desde `"${EXTERNAL_SKILLS_DIR}"/*` cuando la variable apunta a una carpeta válida (o a la ruta por defecto)
-3. Puede enlazar skills de `/home/kkaps/.agents/skills/` hacia `~/.config/opencode/skills/`
+3. Puede enlazar skills de la carpeta externa hacia `~/.config/opencode/skills/`
 
 ### Implicaciones para Supabase
 
-- Las skills `supabase` y `supabase-postgres-best-practices` pueden enlazarse con `scripts/install-opencode-skills.sh`; por defecto ya toma `/home/kkaps/.agents/skills` como fuente externa
+- Las skills `supabase` y `supabase-postgres-best-practices` pueden enlazarse con `scripts/install-opencode-skills.sh`; por defecto ya toma `${HOME}/.agents/skills` como fuente externa
 - El `.atl/skill-registry.md` define orquestación lógica (cuándo activar), pero sin instalación física, opencode no las detectará
 - **No se promete autoactivación real**: cualquier documentación debe indicar que requiere paso previo de instalación o bootstrap con skills externas
 
 ### Implicaciones para Firebase
 
-- Las 10 skills de Firebase (`firebase-basics`, `firebase-auth-basics`, `firebase-firestore-standard`, `firebase-firestore-enterprise-native-mode`, `firebase-hosting-basics`, `firebase-app-hosting-basics`, `firebase-security-rules-auditor`, `firebase-data-connect`, `firebase-ai-logic-basics`, `developing-genkit-js`) pueden enlazarse con `scripts/install-opencode-skills.sh`; por defecto ya toma `/home/kkaps/.agents/skills` como fuente externa
+- Las 10 skills de Firebase pueden enlazarse con `scripts/install-opencode-skills.sh`; por defecto ya toma `${HOME}/.agents/skills` como fuente externa
 - El `.atl/skill-registry.md` define orquestación lógica (cuándo activar cada una), pero sin instalación física, opencode no las detectará
 - **No activar skills Firebase solo por mencionar Firebase**: requieren contexto técnico específico o confirmación de stack
 - **No se promete autoactivación real**: cualquier documentación debe indicar que requiere paso previo de instalación o bootstrap con skills externas
@@ -129,12 +133,12 @@ El script actual **sí puede exponer skills externas** y por defecto usa `EXTERN
 Si el bootstrap no se ejecutó todavía, tienes dos opciones equivalentes:
 
 ```bash
-# Opción A: bootstrap por defecto (usa ~/.agents/skills)
+# Opción A: bootstrap por defecto (usa ${HOME}/.agents/skills)
 bash scripts/bootstrap.sh
 
 # Opción B: symlinks manuales
-ln -s /home/kkaps/.agents/skills/supabase ~/.config/opencode/skills/supabase
-ln -s /home/kkaps/.agents/skills/supabase-postgres-best-practices ~/.config/opencode/skills/supabase-postgres-best-practices
+ln -s ${HOME}/.agents/skills/supabase ~/.config/opencode/skills/supabase
+ln -s ${HOME}/.agents/skills/supabase-postgres-best-practices ~/.config/opencode/skills/supabase-postgres-best-practices
 ```
 
 Para Firebase, aplica el mismo patrón (o sobrescribe `EXTERNAL_SKILLS_DIR` si tu fuente externa es otra):
