@@ -5,6 +5,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 TARGET_ROOT="${OPENCODE_SKILLS_DIR:-${HOME}/.config/opencode/skills}"
 MODE="symlink"
+EXTERNAL_SKILLS_DIR="${EXTERNAL_SKILLS_DIR:-${HOME}/.agents/skills}"
 
 if [[ "${1:-}" == "--copy" ]]; then
   MODE="copy"
@@ -18,11 +19,21 @@ mkdir -p "${TARGET_ROOT}"
 collect_skill_dirs() {
   local candidate
 
+  # Skills del repo (raíz y dev-skills/)
   for candidate in "${REPO_ROOT}"/* "${REPO_ROOT}"/dev-skills/*; do
     [[ -d "${candidate}" ]] || continue
     [[ -f "${candidate}/SKILL.md" ]] || continue
     printf '%s\n' "${candidate}"
   done
+
+  # Skills externas (ej. Firebase en ~/.agents/skills/)
+  if [[ -d "${EXTERNAL_SKILLS_DIR}" ]]; then
+    for candidate in "${EXTERNAL_SKILLS_DIR}"/*; do
+      [[ -d "${candidate}" ]] || continue
+      [[ -f "${candidate}/SKILL.md" ]] || continue
+      printf '%s\n' "${candidate}"
+    done
+  fi
 }
 
 install_skill() {

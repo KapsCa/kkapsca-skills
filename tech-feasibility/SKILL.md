@@ -164,6 +164,10 @@ Solo puedes recomendar stack si ya sabes:
 3. ¿El equipo puede operar infraestructura propia?
 4. ¿El producto necesita salir rápido con bajo costo operativo?
 
+> **⚠️ Nota de disponibilidad de skills**: Si el stack elegido es Supabase, las skills `supabase` y `supabase-postgres-best-practices` residen en `/home/kkaps/.agents/skills/` y el bootstrap ya las procesa por defecto. `EXTERNAL_SKILLS_DIR` solo sirve si quieres cambiar la fuente externa. El pipeline define orquestación lógica (cuándo activar), no disponibilidad real.
+>
+> **⚠️ Nota de disponibilidad de skills (Firebase)**: Si el stack elegido es Firebase, las skills de Firebase residen en `/home/kkaps/.agents/skills/` y el bootstrap ya las procesa por defecto. `EXTERNAL_SKILLS_DIR` solo sirve si quieres cambiar la fuente externa. El registry define orquestación lógica (cuándo activar), no garantiza disponibilidad real.
+
 ### Datos e infraestructura
 
 1. ¿Los datos son relacionales o muy variables?
@@ -313,6 +317,87 @@ Esta fase está completa cuando ya existe:
 - una estimación razonable por rangos,
 - una arquitectura proporcional al tamaño del proyecto,
 - claridad suficiente para comenzar a desarrollar sin improvisar todo.
+
+---
+
+## Stack Confirmado — Activación de Skills
+
+Cuando el stack elegido sea **Supabase**, se activarán las siguientes skills en fases posteriores:
+
+### `supabase`
+- **Cuándo activar**: Solo después de confirmar Supabase como backend en esta fase (`tech-feasibility`).
+- **Qué incluye**: Integración general (auth, realtime, storage, database).
+- **Fase de activación**: `sdd-design`, `sdd-apply`, desarrollo.
+- **⚠️ Advertencia de disponibilidad**: Esta skill reside en `/home/kkaps/.agents/skills/supabase/` y requiere instalación manual o script específico para estar disponible en `~/.config/opencode/skills`. Si no está instalada, el pipeline documenta la brecha pero no promete autoactivación real.
+
+### `supabase-postgres-best-practices`
+- **Cuándo activar**: En fases de diseño (`sdd-design`) o implementación (`sdd-apply`) cuando el trabajo entre en contexto SQL, RLS, migrations, performance o esquema Postgres.
+- **Qué incluye**: Mejores prácticas de PostgreSQL, políticas RLS, índices, optimización de consultas.
+- **NO activar**: Solo por haber elegido Supabase; debe haber trabajo técnico específico de base de datos.
+- **⚠️ Advertencia de disponibilidad**: Reside en `/home/kkaps/.agents/skills/supabase-postgres-best-practices/`. Requiere el mismo paso de instalación que `supabase`.
+
+### Propagación de señal
+Al confirmar Supabase, la señal debe pasar a fases siguientes (`project-init` → `sdd-design` → `sdd-apply`) para que el orquestador active las skills correspondientes en su momento, según el contexto técnico específico.
+
+---
+
+## Stack Confirmado — Activación de Skills (Firebase)
+
+Cuando el stack elegido sea **Firebase**, se activarán las siguientes skills en fases posteriores:
+
+### `firebase-basics`
+- **Cuándo activar**: Solo después de confirmar Firebase como backend/BaaS en esta fase (`tech-feasibility`) o cuando la conversación pida inicialización/CLI/proyecto Firebase.
+- **Qué incluye**: Configuración general (auth, proyectos, CLI, reglas base).
+- **Fase de activación**: `sdd-design`, `sdd-apply`, desarrollo.
+- **⚠️ Advertencia de disponibilidad**: Esta skill reside en `/home/kkaps/.agents/skills/firebase-basics/` y requiere instalación manual o script específico para estar disponible en `~/.config/opencode/skills`. Si no está instalada, el pipeline documenta la brecha pero no promete autoactivación real.
+
+### `firebase-auth-basics`
+- **Cuándo activar**: En fases de diseño/implementación cuando el trabajo sea específico de Auth (sign-in, providers, tokens, reglas con `request.auth`).
+- **Qué incluye**: Integración de autenticación, proveedores, manejo de tokens.
+- **NO activar**: Solo por haber elegido Firebase; debe haber trabajo técnico específico de autenticación.
+
+### `firebase-firestore-standard`
+- **Cuándo activar**: En fases de diseño/implementación cuando el trabajo entre en contexto de Firestore Standard (modelo documento, queries, índices, SDK, reglas).
+- **Qué incluye**: Guía completa de Firestore Standard Edition.
+- **NO activar**: Solo por mencionar Firebase; requiere contexto técnico de base de datos documental.
+
+### `firebase-firestore-enterprise-native-mode`
+- **Cuándo activar**: SOLO si el usuario confirma explícitamente Enterprise Native Mode.
+- **Qué incluye**: Guía de Firestore Enterprise con Native mode.
+- **NO activar**: Por default, ni solo por mencionar Firestore; es mutuamente excluyente con `firebase-firestore-standard`.
+
+### `firebase-hosting-basics`
+- **Cuándo activar**: Para hosting clásico de sitio estático/SPA sin SSR.
+- **Qué incluye**: Despliegue de static web apps, SPAs.
+- **NO activar**: Para Next.js/Angular SSR; usar `firebase-app-hosting-basics` en su lugar.
+
+### `firebase-app-hosting-basics`
+- **Cuándo activar**: Para Next.js/Angular/full-stack con SSR/ISR o App Hosting explícito.
+- **Qué incluye**: Deploy de apps con backends usando Firebase App Hosting.
+- **NO activar**: Para hosting clásico/estático; usar `firebase-hosting-basics` en su lugar.
+
+### `firebase-security-rules-auditor`
+- **Cuándo activar**: Cuando se creen, revisen o endurezcan Security Rules de Firestore o Storage.
+- **Qué incluye**: Auditoría de reglas de seguridad para Firebase.
+- **NO activar**: Como skill umbrella para todo Firebase; debe haber reglas concretas que auditar.
+
+### `firebase-data-connect`
+- **Cuándo activar**: Solo cuando el trabajo sea SQL Connect/Data Connect/PostgreSQL GraphQL/SDKs generados.
+- **Qué incluye**: Esquema, queries/mutations GraphQL, autorización, generación de SDKs.
+- **NO activar**: Solo por elegir Firebase o mencionar base de datos; requiere contexto SQL/Postgres/GraphQL.
+
+### `firebase-ai-logic-basics`
+- **Cuándo activar**: Cuando el trabajo sea Firebase AI Logic / Gemini desde cliente (web/app).
+- **Qué incluye**: Integración de Gemini API en aplicaciones web.
+- **NO activar**: Como reemplazo de Genkit; puede coexistir con `developing-genkit-js`.
+
+### `developing-genkit-js`
+- **Cuándo activar**: Cuando haya trabajo Genkit en JS/TS (Node.js/TypeScript).
+- **Qué incluye**: Desarrollo de features con Genkit en JavaScript/TypeScript.
+- **NO activar**: Para otros lenguajes; usar `developing-genkit-dart` (Flutter), `developing-genkit-go` (Go), o `developing-genkit-python` (Python) según stack real.
+
+### Propagación de señal (Firebase)
+Al confirmar Firebase, la señal debe pasar a fases siguientes (`project-init` → `sdd-design` → `sdd-apply`) para que el orquestador active las skills correspondientes en su momento, según el contexto técnico específico y el registry (`.atl/skill-registry.md`).
 
 ---
 
