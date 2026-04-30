@@ -46,6 +46,22 @@ bash scripts/bootstrap.sh --copy
 2. Prueba una skill explícita, por ejemplo: `Usa la skill brainstorm`.
 3. Si todavía no tienes carpeta de proyecto, no pasa nada: puedes empezar con `brainstorm` o `product-discovery` antes de crearla.
 
+> **⚠️ Skills externas en el bootstrap**: Las skills `supabase` y `supabase-postgres-best-practices` residen en `/home/kkaps/.agents/skills/` y el bootstrap **ya las procesa por defecto**. Si quieres cambiar la ruta de origen, puedes sobrescribirla con `EXTERNAL_SKILLS_DIR`:
+> ```bash
+> bash scripts/bootstrap.sh
+> # o, para una ruta custom:
+> EXTERNAL_SKILLS_DIR=/ruta/a/skills externas bash scripts/bootstrap.sh
+> ```
+> El `.atl/skill-registry.md` define cuándo activar estas skills (orquestación lógica), pero requieren instalación física previa + reinicio de opencode para estar disponibles realmente.
+
+> **⚠️ Skills Firebase en el bootstrap**: Las skills de Firebase residen en `/home/kkaps/.agents/skills/` y el bootstrap **ya las procesa por defecto**. Si quieres cambiar la ruta de origen, puedes sobrescribirla con `EXTERNAL_SKILLS_DIR`:
+> ```bash
+> bash scripts/bootstrap.sh
+> # o, para una ruta custom:
+> EXTERNAL_SKILLS_DIR=/ruta/a/skills externas bash scripts/bootstrap.sh
+> ```
+> El `.atl/skill-registry.md` define cuándo activar estas skills (orquestación lógica), pero requieren instalación física previa + reinicio de opencode para estar disponibles realmente. No activar skills Firebase solo por mencionar Firebase genéricamente.
+
 ### ¿Necesito tener ya creada la carpeta del proyecto?
 
 **No para instalar las skills.**
@@ -77,6 +93,52 @@ bash scripts/uninstall-opencode-skills.sh
 ### Requisito de entorno (Windows)
 
 Si vas a usar **opencode en Windows**, la recomendación es correrlo bajo **WSL2** para mantener un entorno más consistente con Linux. Ver detalles en [docs/wsl-setup.md](docs/wsl-setup.md).
+
+---
+
+## Enrutamiento de Skills por Stack
+
+Este repositorio usa `.atl/skill-registry.md` para definir **orquestación lógica** (qué skill activar según el contexto), pero **no instala skills automáticamente**.
+
+### Cuándo se activa cada skill de Supabase
+
+| Skill | Cuándo se activa | Requiere stack confirmado |
+|-------|------------------|---------------------------|
+| `supabase` | Tras decidir Supabase en `tech-feasibility`; fases de diseño/implementación | ✅ Sí (tech-feasibility) |
+| `supabase-postgres-best-practices` | En fases de diseño/apply con trabajo SQL, RLS, migrations o esquema Postgres | ✅ Sí + contexto técnico específico |
+| `skill-creator` | Solo referencia documental; NO participa en routing normal | ❌ No |
+
+> **Importante**: El registry define cuándo activar cada skill, pero esto es **orquestación lógica**. Para que opencode realmente detecte las skills, deben estar instaladas en `~/.config/opencode/skills/`.
+
+### Cuándo se activa cada skill de Firebase
+
+| Skill | Cuándo se activa | Requiere stack confirmado |
+|-------|------------------|---------------------------|
+| `firebase-basics` | Tras decidir Firebase en `tech-feasibility` o setup de proyecto Firebase | ✅ Sí (tech-feasibility) |
+| `firebase-auth-basics` | Con trabajo específico de Auth/sign-in/providers/tokens | ✅ Sí + contexto técnico |
+| `firebase-firestore-standard` | Con trabajo de Firestore Standard (queries, índices, SDK, reglas) | ✅ Sí + contexto técnico |
+| `firebase-firestore-enterprise-native-mode` | SOLO si Enterprise Native Mode está explícito | ✅ Sí + confirmación Enterprise |
+| `firebase-hosting-basics` | Para hosting clásico estático/SPA sin SSR | ✅ Sí + contexto de hosting |
+| `firebase-app-hosting-basics` | Para Next.js/Angular/SSR/App Hosting explícito | ✅ Sí + contexto de SSR/App |
+| `firebase-security-rules-auditor` | Para revisar/endurecer Security Rules | ✅ Sí + reglas concretas |
+| `firebase-data-connect` | Para Data Connect/SQL Connect/GraphQL/Postgres | ✅ Sí + contexto SQL/GraphQL |
+| `firebase-ai-logic-basics` | Para Firebase AI Logic/Gemini desde cliente | ✅ Sí + contexto de IA |
+| `developing-genkit-js` | Para Genkit en JS/TS | ✅ Sí + stack JS/TS |
+| `skill-creator` | Solo referencia documental; NO participa en routing normal | ❌ No |
+
+> **Importante**: No activar skills Firebase solo por mencionar Firebase. Cada skill requiere contexto técnico específico o confirmación de stack. El registry define orquestación lógica, no garantiza disponibilidad real.
+
+### Separación: Pipeline vs Disponibilidad Real
+
+```
+Pipeline/Registry (lógico)  →  Define CUÁNDO activar skills
+        ↓
+Bootstrap/Scripts (físico)  →  Hace que opencode DETECTE las skills
+```
+
+- **Pipeline/Registry**: `.atl/skill-registry.md` dice "activa `supabase` tras decidir el stack en tech-feasibility"
+- **Bootstrap**: `scripts/install-opencode-skills.sh` instala skills del repo a `~/.config/opencode/skills/`
+- **Brecha actual**: Las skills `supabase` y `supabase-postgres-best-practices` residen en `/home/kkaps/.agents/skills/` y el bootstrap ya las procesa por defecto; si quieres usar una fuente distinta, `EXTERNAL_SKILLS_DIR` actúa como override. Reinicia opencode para que queden disponibles.
 
 ---
 
