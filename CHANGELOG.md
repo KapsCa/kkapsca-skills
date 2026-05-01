@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.4.0...kkapsca-skills-v0.5.0) (2026-05-01)
+
+
+### Features
+
+* **skills:** add derived workflow helpers ([7f2363a](https://github.com/KapsCa/kkapsca-skills/commit/7f2363a0fff4b3b4939196b7a7ad6cbc218d6232))
+* **skills:** add derived workflow helpers ([6bd1597](https://github.com/KapsCa/kkapsca-skills/commit/6bd1597266b789686ff5c514483436279a712e76))
+
 ## [0.4.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.3.0...kkapsca-skills-v0.4.0) (2026-04-29)
 
 
