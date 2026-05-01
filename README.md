@@ -86,7 +86,7 @@ Idea → brainstorming → descubrimiento de producto → factibilidad técnica 
 
 ### 3. Habilidades especializadas (requieren tecnología confirmada)
 
-Las habilidades de **Supabase**, **Firebase** y **Genkit** se activan tras decidir la tecnología en `tech-feasibility`. Deben instalarse vía bootstrap para que opencode las detecte.
+Las habilidades de **Supabase** y **Firebase** se activan tras decidir la tecnología en `tech-feasibility`. Deben instalarse vía bootstrap para que opencode las detecte.
 
 Consulta la [guía de instalación](docs/installation.md) para disponibilidad real y `docs/engram.md` para entender cómo se separan inicialización, memoria persistente y orquestación.
 
