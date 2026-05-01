@@ -1,6 +1,6 @@
 # KkapsCa Skills
 
-> Habilidades (**Skills**) públicas para pasar de una idea a un producto y de un producto a una implementación técnica con criterio en un servicio de edición **IA-primero** (IA = Inteligencia Artificial).
+> Habilidades (**Skills**) públicas para pasar de una idea a un producto y de un producto a una implementación técnica con criterio en un servicio de edición **IA-first**.
 
 [![GitHub repo](https://img.shields.io/badge/GitHub-KkapsCa%2Fkkapsca--skills-blue?logo=github)](https://github.com/KapsCa/kkapsca-skills)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
