@@ -64,6 +64,10 @@ Idea → brainstorming → descubrimiento de producto → factibilidad técnica 
 
 ## Habilidades Disponibles
 
+> **Estado actual**: Ninguna habilidad derivada de `awesome-copilot` está disponible en este release. El cambio `adapt-awesome-copilot-skills-to-our-flow` es de documentación (MVP docs-first y non-routable). Las candidatas (`agent-governance`, `agentic-eval`) están documentadas en el registry como no instalables y no enrutableables hasta una futura migración.
+> **Ownership**: Las candidatas respetan un deny-list explícito (ver `.atl/skill-registry.md` → `## External Adaptation Gate` → `### Ownership Deny-List`): `agent-governance` no compite con `repo-bootstrap`, `branch-pr` ni `issue-creation`; `agentic-eval` no compite con `sdd-verify`.
+> **Nota de alcance**: Este cambio modifica únicamente `.atl/skill-registry.md`, `README.md` y `docs/installation.md`. Otros diffs en la rama (ej. `.github/workflows/release-please.yml`) son ajenos a este cambio y se tratan por separado.
+
 ### 1. Inicio de proyecto (brainstorming → descubrimiento → factibilidad)
 
 | Habilidad | Propósito |
