@@ -54,6 +54,22 @@ Regla de oro: **No seas ese wey que hace push directo a main** 😤
 7. Al mergear Release PR → tag + release
 ```
 
+## Repo Guardrails (Capa Advisory)
+
+Este repositorio cuenta con la skill `repo-guardrails` como capa **advisory/warning-first** que revisa el estado de ramas, PRs, labels y commits antes de acciones críticas.
+
+**Nota importante**: `repo-guardrails` NO bloquea nada; es una ayuda visual que opera sobre las reglas definidas en este documento y en `dev-skills/repo-bootstrap/SKILL.md`. Las reglas normativas y el bloqueo real los impone `repo-bootstrap` vía hook `pre-push` y branch protection.
+
+Antes de push / PR / merge, `repo-guardrails` revisa:
+- Push directo a `main`, `master` o `release`
+- Existencia de PR abierto para la rama
+- Formato Conventional Commits
+- Labels apropiados en el PR
+- Checks pasando
+- Plantilla de PR llenada
+
+---
+
 ## Conventional Commits
 
 Todos los commits deben seguir el estándar [Conventional Commits](https://www.conventionalcommits.org/):

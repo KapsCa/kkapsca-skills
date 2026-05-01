@@ -79,6 +79,10 @@ Idea → brainstorming → descubrimiento de producto → factibilidad técnica 
 |-----------|-----------|
 | **dev-skills/flutter-personal-standards** | Criterio personal para Flutter |
 | **dev-skills/repo-bootstrap** | Prepara el repositorio: flujo de PR, release-please, estándares |
+| **dev-skills/repo-guardrails** | Advisory/warning-first sobre ramas, PRs y commits (capa lateral) |
+| **dev-skills/sdd-to-issues** | Export-only: convierte artifacts SDD en issues GitHub |
+| **dev-skills/request-triage** | Enrutador opt-in que decide a dónde va un request |
+| **dev-skills/clarify-with-artifacts** | Estructura contexto usando artifacts existentes (opt-in) |
 
 ### 3. Habilidades especializadas (requieren tecnología confirmada)
 
@@ -132,6 +136,7 @@ Si quieres la mejor experiencia: [Gentle AI Repository](https://github.com/Gentl
 Este proyecto utiliza herramientas y referentes que han contribuido a su desarrollo:
 
 - **[Gentleman-Programming/gentle-ai](https://github.com/Gentleman-Programming/gentle-ai)**: Por el entorno de trabajo, la filosofía de desarrollo y las herramientas que permitieron revisar, corregir y refinar este repositorio.
+- **[mattpocock/skills](https://github.com/mattpocock/skills)**: Por servir como referencia e inspiración para varias habilidades adaptadas a este ecosistema, especialmente en utilidades tácticas de arquitectura, diagnóstico y flujo de trabajo.
 - **Supabase**: Por sus habilidades oficiales que extienden las capacidades de este repositorio.
 - **Firebase**: Por sus habilidades oficiales que cubren casos de uso específicos en la plataforma.
 - **Equipo de opencode**: Por la plataforma que hace posible la ejecución de estas habilidades.
