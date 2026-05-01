@@ -148,6 +148,22 @@ Bootstrap/Scripts (físico)  →  Hace que opencode DETECTE las habilidades
 - **Bootstrap**: `scripts/install-opencode-skills.sh` instala habilidades del repo a `~/.config/opencode/skills/`
 - **Brecha actual**: Las habilidades externas requieren bootstrap + reinicio de opencode para quedar disponibles
 
+### Candidatas Externas (Non-Routable)
+
+Las habilidades candidatas documentadas en el `.atl/skill-registry.md` bajo `## External Adaptation Gate` (como `agent-governance` o `agentic-eval`) **no son instalables ni enrutableables** en este release.
+
+- **Solo las carpetas físicas** que contienen un archivo `SKILL.md` y son procesadas por el `bootstrap` quedan disponibles para opencode.
+- Las entradas en el registry bajo `## External Adaptation Gate` son **lógicas únicamente** y no activan routing ni instalación.
+- Para que una candidata sea instalable, debe cumplir con los criterios de entrada futura (tener un `SKILL.md` nativo, scope único, etc.) y migrar a `## User Skills` en el registry.
+
+#### Ownership Deny-List (reiteración mínima)
+Consulte `.atl/skill-registry.md` → `## External Adaptation Gate` → `### Ownership Deny-List` para el detalle oficial. En resumen:
+- `agent-governance` **no compite** con `repo-bootstrap`, `branch-pr`, `issue-creation` (ownership fuera de alcance).
+- `agentic-eval` **no compite** con `sdd-verify` (ownership fuera de alcance).
+
+#### Nota de alcance (isolation disclaimer)
+El cambio `adapt-awesome-copilot-skills-to-our-flow` modifica **únicamente** `.atl/skill-registry.md`, `README.md` y `docs/installation.md`. Cualquier otro diff presente en la rama (por ejemplo, `.github/workflows/release-please.yml`) pertenece a cambios independientes y **no forma parte del scope** de esta adaptación.
+
 ---
 
 ## Referencias
