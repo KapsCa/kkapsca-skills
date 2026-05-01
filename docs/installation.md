@@ -45,7 +45,7 @@ Ventaja: las habilidades son independientes del repositorio original.
 
 ---
 
-## Habilidades Externas (Supabase, Firebase, Genkit)
+## Habilidades Externas (Supabase y Firebase)
 
 Las habilidades de **Supabase** y **Firebase** provienen de las habilidades oficiales creadas por las respectivas plataformas. En este repositorio se integran para usarlas bajo el flujo de **Skills.sh**. Residen en una carpeta externa (por defecto `~/.agents/skills/`). El bootstrap las procesa automáticamente:
 
@@ -60,7 +60,6 @@ bash scripts/bootstrap.sh
 |------------|-----------|----------------|
 | **Supabase** | `supabase`, `supabase-postgres-best-practices` | Habilidades oficiales de Supabase adaptadas para el flujo de Skills.sh |
 | **Firebase** | `firebase-*` (10 habilidades) | Habilidades oficiales de Firebase adaptadas para el flujo de Skills.sh |
-| **Genkit** | `developing-genkit-*` | Habilidades oficiales de Genkit adaptadas para el flujo de Skills.sh |
 
 ### Rutas configurables
 
@@ -134,7 +133,6 @@ Este repositorio usa un registro interno de habilidades para definir **orquestac
 | `firebase-security-rules-auditor` | Para revisar/endurecer Security Rules | ✅ Sí + reglas concretas |
 | `firebase-data-connect` | Para Data Connect/SQL Connect/GraphQL/Postgres | ✅ Sí + contexto SQL/GraphQL |
 | `firebase-ai-logic-basics` | Para Firebase AI Logic/Gemini desde cliente | ✅ Sí + contexto de IA |
-| `developing-genkit-js` | Para Genkit en JS/TS | ✅ Sí + stack JS/TS |
 
 > **Importante**: No activar habilidades Firebase solo por mencionar Firebase. Cada habilidad requiere contexto técnico específico o confirmación de stack.
 
