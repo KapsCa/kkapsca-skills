@@ -30,6 +30,22 @@ Exploración → Propuesta → Especificaciones → Diseño → Tareas → Imple
 | **sdd-verify** | Validar que la implementación coincide con especificaciones, diseño y tareas |
 | **sdd-archive** | Sincronizar especificaciones y archivar un cambio completado |
 
+### Helpers Opcionales (alrededor de SDD)
+
+Estas skills son **opt-in** y no reemplazan el flujo SDD principal. Viven como capa lateral:
+
+```text
+request → request-triage? → clarify-with-artifacts? → sdd-propose/spec/design/tasks → sdd-to-issues? → issue-creation / branch-pr
+```
+
+| Skill | Rol | Relación con SDD |
+|-------|-----|-------------------|
+| `request-triage` | Enrutador ultra-delgado que decide si el request va a SDD, a una skill existente o a issue/discussion | Solo decide destino; NO aclara contenido ni parte trabajo |
+| `clarify-with-artifacts` | Estructura contexto usando artifacts existentes (docs, Engram, proposal, spec) | Output mínimo inline; NO sustituye `sdd-propose`/`sdd-spec` |
+| `sdd-to-issues` | Exporta artifacts SDD (spec/design/tasks) a issue drafts o issues GitHub | Export-only; NO descompone trabajo (eso es `sdd-tasks`) |
+
+**Precedencia**: Comando `/sdd-*` explícito siempre gana sobre `request-triage` y `clarify-with-artifacts`. `sdd-tasks` gana sobre `sdd-to-issues` para partición de trabajo.
+
 ## El Orquestador sdd-orchestrator
 
 El **sdd-orchestrator** es el coordinador de flujos SDD. Es un agente que:
