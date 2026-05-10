@@ -1,6 +1,6 @@
 # Instalación Detallada — KkapsCa Skills
 
-Este documento cubre el detalle operativo de instalación de las habilidades (**skills**) en tu entorno local usando el sistema **Skills.sh**.
+Este documento cubre el detalle operativo de instalación de las habilidades (**skills**) en tu entorno local.
 
 ## Inicio Rápido
 
@@ -22,9 +22,7 @@ bash scripts/bootstrap.sh
 
 ## ¿Qué hace el bootstrap?
 
-- Registra cada carpeta que contiene `SKILL.md`
-- Instala tanto las habilidades raíz como las de `dev-skills/`
-- Usa `~/.config/opencode/skills` por defecto (configurable vía `OPENCODE_SKILLS_DIR`)
+- Hace que las habilidades estén disponibles en opencode
 - Crea **enlaces simbólicos** por defecto (ideal para mantener las habilidades actualizadas al hacer `git pull`)
 
 ### Opciones de instalación
@@ -45,28 +43,32 @@ Ventaja: las habilidades son independientes del repositorio original.
 
 ---
 
-## Habilidades Externas (Supabase y Firebase)
+## Routing vs Availability
 
-Las habilidades de **Supabase** y **Firebase** provienen de las habilidades oficiales creadas por las respectivas plataformas. En este repositorio se integran para usarlas bajo el flujo de **Skills.sh**. Residen en una carpeta externa (por defecto `~/.agents/skills/`). El bootstrap las procesa automáticamente:
+Este repositorio distingue tres conceptos que a menudo se confunden:
 
-```bash
-# El bootstrap toma por defecto ~/.agents/skills como fuente externa
-bash scripts/bootstrap.sh
-```
+| Concepto | Qué hace | Afecta detección en opencode |
+|----------|----------|-------------------------------|
+| **Routing lógico** (`.atl/skill-registry.md`) | Define **cuándo activar** cada skill según contexto y fase del proyecto | ❌ No |
+| **Bootstrap** (`scripts/bootstrap.sh`) | Instala skills en `~/.config/opencode/skills` vía enlaces simbólicos o copia | ✅ Sí |
+| **Instalación real** (`~/.config/opencode/skills/`) | Hace que opencode detecte y cargue la skill | ✅ Sí |
 
-### Origen de las habilidades oficiales
+### Skill State Model
 
-| Plataforma | Habilidad | Origen Oficial |
-|------------|-----------|----------------|
-| **Supabase** | `supabase`, `supabase-postgres-best-practices` | Habilidades oficiales de Supabase adaptadas para el flujo de Skills.sh |
-| **Firebase** | `firebase-*` (10 habilidades) | Habilidades oficiales de Firebase adaptadas para el flujo de Skills.sh |
+El registry clasifica cada skill con un estado que indica su disponibilidad real:
 
-### Rutas configurables
+- **repo-local**: La skill vive en este repositorio y el bootstrap la instala por defecto.
+- **external-bootstrappable**: La skill existe en `${AGENTS_DIR}` (por defecto `$HOME/.agents/skills`). El bootstrap puede enlazarla si el directorio externo está configurado.
+- **logical-only**: Regla de routing o candidato sin instalación garantizada. opencode no la cargará sin pasos manuales adicionales.
 
-| Variable | Valor por defecto | Propósito |
-|----------|-------------------|-----------|
-| `OPENCODE_SKILLS_DIR` | `~/.config/opencode/skills` | Dónde se instalan las habilidades |
-| `EXTERNAL_SKILLS_DIR` | `~/.agents/skills` | Fuente de habilidades externas |
+### ¿Por qué importa?
+
+Si el registry dice «activa `supabase` tras stack confirmado», eso es solo **routing lógico** para el orquestador. Para que opencode realmente use esa skill:
+
+1. La skill debe estar en `~/.config/opencode/skills/` (vía bootstrap o instalación manual)
+2. opencode debe estar reiniciado para refrescar la lista de skills
+
+Sin instalación física, el routing falla silenciosamente: el orquestador pedirá la skill pero opencode no la tendrá disponible. Consulta el [skill-registry](../.atl/skill-registry.md) para ver el estado actual de cada skill.
 
 ---
 
@@ -108,66 +110,9 @@ Si vas a usar **opencode en Windows**, la recomendación es correrlo bajo **WSL2
 
 ---
 
-## Enrutamiento de Habilidades por Stack
-
-Este repositorio usa un registro interno de habilidades para definir **orquestación lógica** (qué habilidad activar según el contexto), pero **no instala habilidades automáticamente**.
-
-### Cuándo se activa cada habilidad de Supabase
-
-| Habilidad | Cuándo se activa | Requiere stack confirmado |
-|-----------|------------------|---------------------------|
-| `supabase` | Tras decidir Supabase en `tech-feasibility`; fases de diseño/implementación | ✅ Sí |
-| `supabase-postgres-best-practices` | En fases de diseño/apply con trabajo SQL, RLS, migrations o esquema Postgres | ✅ Sí + contexto técnico |
-| `skill-creator` | Solo referencia documental; NO participa en routing normal | ❌ No |
-
-### Cuándo se activa cada habilidad de Firebase
-
-| Habilidad | Cuándo se activa | Requiere stack confirmado |
-|-----------|------------------|---------------------------|
-| `firebase-basics` | Tras decidir Firebase en `tech-feasibility` o setup de proyecto Firebase | ✅ Sí |
-| `firebase-auth-basics` | Con trabajo específico de Auth/sign-in/providers/tokens | ✅ Sí + contexto técnico |
-| `firebase-firestore-standard` | Con trabajo de Firestore Standard (queries, índices, SDK, reglas) | ✅ Sí + contexto técnico |
-| `firebase-firestore-enterprise-native-mode` | SOLO si Enterprise Native Mode está explícito | ✅ Sí + confirmación Enterprise |
-| `firebase-hosting-basics` | Para hosting clásico estático/SPA sin SSR | ✅ Sí + contexto de hosting |
-| `firebase-app-hosting-basics` | Para Next.js/Angular/SSR/App Hosting explícito | ✅ Sí + contexto de SSR/App |
-| `firebase-security-rules-auditor` | Para revisar/endurecer Security Rules | ✅ Sí + reglas concretas |
-| `firebase-data-connect` | Para Data Connect/SQL Connect/GraphQL/Postgres | ✅ Sí + contexto SQL/GraphQL |
-| `firebase-ai-logic-basics` | Para Firebase AI Logic/Gemini desde cliente | ✅ Sí + contexto de IA |
-
-> **Importante**: No activar habilidades Firebase solo por mencionar Firebase. Cada habilidad requiere contexto técnico específico o confirmación de stack.
-
-### Separación: Pipeline vs Disponibilidad Real
-
-```
-Pipeline/Registry (lógico)  →  Define CUÁNDO activar habilidades
-         ↓
-Bootstrap/Scripts (físico)  →  Hace que opencode DETECTE las habilidades
-```
-
-- **Pipeline/Registry**: la orquestación interna decide cuándo activar una habilidad tras confirmar el stack en `tech-feasibility`
-- **Bootstrap**: `scripts/install-opencode-skills.sh` instala habilidades del repo a `~/.config/opencode/skills/`
-- **Brecha actual**: Las habilidades externas requieren bootstrap + reinicio de opencode para quedar disponibles
-
-### Candidatas Externas (Non-Routable)
-
-Las habilidades candidatas documentadas en el `.atl/skill-registry.md` bajo `## External Adaptation Gate` (como `agent-governance` o `agentic-eval`) **no son instalables ni enrutableables** en este release.
-
-- **Solo las carpetas físicas** que contienen un archivo `SKILL.md` y son procesadas por el `bootstrap` quedan disponibles para opencode.
-- Las entradas en el registry bajo `## External Adaptation Gate` son **lógicas únicamente** y no activan routing ni instalación.
-- Para que una candidata sea instalable, debe cumplir con los criterios de entrada futura (tener un `SKILL.md` nativo, scope único, etc.) y migrar a `## User Skills` en el registry.
-
-#### Ownership Deny-List (reiteración mínima)
-Consulte `.atl/skill-registry.md` → `## External Adaptation Gate` → `### Ownership Deny-List` para el detalle oficial. En resumen:
-- `agent-governance` **no compite** con `repo-bootstrap`, `branch-pr`, `issue-creation` (ownership fuera de alcance).
-- `agentic-eval` **no compite** con `sdd-verify` (ownership fuera de alcance).
-
-#### Nota de alcance (isolation disclaimer)
-El cambio `adapt-awesome-copilot-skills-to-our-flow` modifica **únicamente** `.atl/skill-registry.md`, `README.md` y `docs/installation.md`. Cualquier otro diff presente en la rama (por ejemplo, `.github/workflows/release-please.yml`) pertenece a cambios independientes y **no forma parte del scope** de esta adaptación.
-
----
-
 ## Referencias
 
-- [Gentle AI Repository](https://github.com/Gentleman-Programming/gentle-ai) — Contexto del stack y mejor experiencia de uso
-- [docs/engram.md](engram.md) — Diferencia entre memoria persistente, bootstrap y skill-registry
-- [docs/sdd.md](sdd.md) — Desarrollo Guiado por Especificaciones (SDD) y sdd-orchestrator
+- [README principal](../README.md) — Qué es el repositorio, instalación rápida, flujo recomendado
+- [Contexto Gentle AI](gentle-ai.md) — Stack Gentle AI y relación con este repo
+- [Memoria Persistente (Engram)](engram.md) — Diferencia entre Engram, bootstrap y skill-registry
+- [Desarrollo Estructurado (SDD)](sdd.md) — SDD y sdd-orchestrator

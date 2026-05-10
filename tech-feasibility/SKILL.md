@@ -164,9 +164,7 @@ Solo puedes recomendar stack si ya sabes:
 3. ¿El equipo puede operar infraestructura propia?
 4. ¿El producto necesita salir rápido con bajo costo operativo?
 
-> **⚠️ Nota de disponibilidad de skills**: Si el stack elegido es Supabase, las skills `supabase` y `supabase-postgres-best-practices` residen en `/home/kkaps/.agents/skills/` y el bootstrap ya las procesa por defecto. `EXTERNAL_SKILLS_DIR` solo sirve si quieres cambiar la fuente externa. El pipeline define orquestación lógica (cuándo activar), no disponibilidad real.
->
-> **⚠️ Nota de disponibilidad de skills (Firebase)**: Si el stack elegido es Firebase, las skills de Firebase residen en `/home/kkaps/.agents/skills/` y el bootstrap ya las procesa por defecto. `EXTERNAL_SKILLS_DIR` solo sirve si quieres cambiar la fuente externa. El registry define orquestación lógica (cuándo activar), no garantiza disponibilidad real.
+> **⚠️ Disponibilidad de skills externas**: Para cualquier skill externa (Supabase, Firebase, Genkit), consulta el [skill-registry](../.atl/skill-registry.md) para ver el estado real de disponibilidad (repo-local, external-bootstrappable, logical-only). El bootstrap las procesa desde `${AGENTS_DIR}` (por defecto `$HOME/.agents/skills`). El pipeline y el registry definen orquestación lógica (cuándo activar), no disponibilidad real. Sin instalación física en `~/.config/opencode/skills`, opencode no detectará estas skills.
 
 ### Datos e infraestructura
 
@@ -328,13 +326,13 @@ Cuando el stack elegido sea **Supabase**, se activarán las siguientes skills en
 - **Cuándo activar**: Solo después de confirmar Supabase como backend en esta fase (`tech-feasibility`).
 - **Qué incluye**: Integración general (auth, realtime, storage, database).
 - **Fase de activación**: `sdd-design`, `sdd-apply`, desarrollo.
-- **⚠️ Advertencia de disponibilidad**: Esta skill reside en `/home/kkaps/.agents/skills/supabase/` y requiere instalación manual o script específico para estar disponible en `~/.config/opencode/skills`. Si no está instalada, el pipeline documenta la brecha pero no promete autoactivación real.
+- **⚠️ Disponibilidad**: external-bootstrappable vía `${AGENTS_DIR}/supabase/`. Requiere bootstrap (`bash scripts/bootstrap.sh`) o instalación manual. Sin instalación física en `~/.config/opencode/skills`, el routing es solo lógico.
 
 ### `supabase-postgres-best-practices`
 - **Cuándo activar**: En fases de diseño (`sdd-design`) o implementación (`sdd-apply`) cuando el trabajo entre en contexto SQL, RLS, migrations, performance o esquema Postgres.
 - **Qué incluye**: Mejores prácticas de PostgreSQL, políticas RLS, índices, optimización de consultas.
 - **NO activar**: Solo por haber elegido Supabase; debe haber trabajo técnico específico de base de datos.
-- **⚠️ Advertencia de disponibilidad**: Reside en `/home/kkaps/.agents/skills/supabase-postgres-best-practices/`. Requiere el mismo paso de instalación que `supabase`.
+- **⚠️ Disponibilidad**: external-bootstrappable vía `${AGENTS_DIR}/supabase-postgres-best-practices/`. Misma dependencia que `supabase`.
 
 ### Propagación de señal
 Al confirmar Supabase, la señal debe pasar a fases siguientes (`project-init` → `sdd-design` → `sdd-apply`) para que el orquestador active las skills correspondientes en su momento, según el contexto técnico específico.
@@ -349,7 +347,7 @@ Cuando el stack elegido sea **Firebase**, se activarán las siguientes skills en
 - **Cuándo activar**: Solo después de confirmar Firebase como backend/BaaS en esta fase (`tech-feasibility`) o cuando la conversación pida inicialización/CLI/proyecto Firebase.
 - **Qué incluye**: Configuración general (auth, proyectos, CLI, reglas base).
 - **Fase de activación**: `sdd-design`, `sdd-apply`, desarrollo.
-- **⚠️ Advertencia de disponibilidad**: Esta skill reside en `/home/kkaps/.agents/skills/firebase-basics/` y requiere instalación manual o script específico para estar disponible en `~/.config/opencode/skills`. Si no está instalada, el pipeline documenta la brecha pero no promete autoactivación real.
+- **⚠️ Disponibilidad**: external-bootstrappable vía `${AGENTS_DIR}/firebase-basics/`. Requiere bootstrap (`bash scripts/bootstrap.sh`) o instalación manual. Sin instalación física en `~/.config/opencode/skills`, el routing es solo lógico.
 
 ### `firebase-auth-basics`
 - **Cuándo activar**: En fases de diseño/implementación cuando el trabajo sea específico de Auth (sign-in, providers, tokens, reglas con `request.auth`).
@@ -394,10 +392,28 @@ Cuando el stack elegido sea **Firebase**, se activarán las siguientes skills en
 ### `developing-genkit-js`
 - **Cuándo activar**: Cuando haya trabajo Genkit en JS/TS (Node.js/TypeScript).
 - **Qué incluye**: Desarrollo de features con Genkit en JavaScript/TypeScript.
-- **NO activar**: Para otros lenguajes; usar `developing-genkit-dart` (Flutter), `developing-genkit-go` (Go), o `developing-genkit-python` (Python) según stack real.
+- **NO activar**: Para otros lenguajes; usar la skill específica según la matriz Genkit multi-lenguaje (ver sección más abajo).
+- **⚠️ Disponibilidad**: external-bootstrappable vía `${AGENTS_DIR}/developing-genkit-js/`. Ver [skill-registry](../.atl/skill-registry.md) para la matriz completa.
 
 ### Propagación de señal (Firebase)
 Al confirmar Firebase, la señal debe pasar a fases siguientes (`project-init` → `sdd-design` → `sdd-apply`) para que el orquestador active las skills correspondientes en su momento, según el contexto técnico específico y el registry (`.atl/skill-registry.md`).
+
+---
+
+## Genkit (independiente del stack)
+
+Cuando el producto requiera features de IA generativa con Genkit, la activación debe hacerse por lenguaje. Genkit no está atado a un stack específico (puede coexistir con Supabase, Firebase o backend propio).
+
+| Skill | Trigger | Disponibilidad |
+|-------|---------|----------------|
+| `developing-genkit-js` | Trabajo Genkit en JS/TS (Node.js/TypeScript) | external-bootstrappable |
+| `developing-genkit-dart` | Trabajo Genkit en Dart/Flutter | external-bootstrappable |
+| `developing-genkit-go` | Trabajo Genkit en Go | external-bootstrappable |
+| `developing-genkit-python` | Trabajo Genkit en Python | external-bootstrappable |
+
+> **Routing lógico**: La matriz completa con triggers detallados y reglas anti-solape está en el [skill-registry](../.atl/skill-registry.md). Todas las skills Genkit son external-bootstrappable: requieren bootstrap (`bash scripts/bootstrap.sh`) o instalación manual desde `${AGENTS_DIR}` para activación real en opencode.
+>
+> Genkit NO se activa por defecto al elegir un stack. Requiere que el trabajo entre explícitamente en contexto de IA generativa con el lenguaje correspondiente.
 
 ---
 
