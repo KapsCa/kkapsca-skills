@@ -318,7 +318,7 @@ Esta skill está suficientemente bien resuelta cuando ya existe:
 
 ```markdown
 # [Nombre del Producto] — Discovery Report
-**Generado por:** product-discovery skill v2.0
+**Generado por:** product-discovery skill v3.0
 **Fecha:** [fecha]
 
 ## 1. Tipo de proyecto

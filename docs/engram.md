@@ -114,9 +114,9 @@ Si la skill no está físicamente instalada, el enrutamiento (routing) fallará 
 
 1. **Engram** → memoria y contexto que sobrevive entre sesiones
 2. **Bootstrap (`bash scripts/bootstrap.sh`)** → hace que opencode vea las skills del repo localmente
-3. **`.atl/skill-registry.md`** → solo lo usa la orquestación SDD, no afecta la detección local de skills
-4. **Skills externas** (como `supabase` y Firebase) → el bootstrap las procesa por defecto desde la carpeta configurada en `EXTERNAL_SKILLS_DIR`; usa esa variable solo si quieres otra fuente
-5. **Firebase skills** → no activar solo por mencionar Firebase; requieren contexto técnico específico o confirmación de stack
+3. **`.atl/skill-registry.md`** → solo lo usa la orquestación SDD; incluye columna `State` (repo-local, external-bootstrappable, logical-only) para distinguir disponibilidad real de routing lógico. No afecta la detección local de skills.
+4. **Skills externas** (Supabase, Firebase, Genkit) → el bootstrap las procesa por defecto desde `${AGENTS_DIR}` (equivale a `$HOME/.agents/skills`). Usa `EXTERNAL_SKILLS_DIR` solo si quieres otra fuente.
+5. **Firebase skills** → no activar solo por mencionar Firebase; requieren contexto técnico específico o confirmación de stack.
 
 Si tu repo ya usa Engram, úsalo para recordar contexto y decisiones; **igual debes correr el bootstrap** para que opencode detecte las skills del repo. Para skills externas, documenta la dependencia y proporciona una guía de instalación. No actives skills de Firebase prematuramente.
 
@@ -128,18 +128,20 @@ El script actual **sí puede exponer skills externas** y por defecto usa `EXTERN
 2. Procesa directorios externos desde `"${EXTERNAL_SKILLS_DIR}"/*` cuando la variable apunta a una carpeta válida (o a la ruta por defecto)
 3. Puede enlazar skills de la carpeta externa hacia `~/.config/opencode/skills/`
 
-### Implicaciones para Supabase
+### Skills Externas
 
-- Las skills `supabase` y `supabase-postgres-best-practices` pueden enlazarse con `scripts/install-opencode-skills.sh`; por defecto ya toma `${HOME}/.agents/skills` como fuente externa
-- El `.atl/skill-registry.md` define orquestación lógica (cuándo activar), pero sin instalación física, opencode no las detectará
-- **No se promete autoactivación real**: cualquier documentación debe indicar que requiere paso previo de instalación o bootstrap con skills externas
+El registry ahora usa una convención portable (`${AGENTS_DIR}`) en lugar de rutas absolutas. El estado de cada skill se indica en la columna `State`:
 
-### Implicaciones para Firebase
+- **external-bootstrappable**: La skill existe en `${AGENTS_DIR}` (por defecto `$HOME/.agents/skills`). El bootstrap la procesa si el directorio externo está configurado.
+- **repo-local**: Vive en este repositorio.
+- **logical-only**: Candidato o referencia sin instalación garantizada.
 
-- Las 10 skills de Firebase pueden enlazarse con `scripts/install-opencode-skills.sh`; por defecto ya toma `${HOME}/.agents/skills` como fuente externa
-- El `.atl/skill-registry.md` define orquestación lógica (cuándo activar cada una), pero sin instalación física, opencode no las detectará
-- **No activar skills Firebase solo por mencionar Firebase**: requieren contexto técnico específico o confirmación de stack
-- **No se promete autoactivación real**: cualquier documentación debe indicar que requiere paso previo de instalación o bootstrap con skills externas
+Para cualquier skill externa (Supabase, Firebase, Genkit), aplica el mismo principio:
+
+- El `.atl/skill-registry.md` define orquestación lógica (cuándo activar), pero sin instalación física opencode no las detectará.
+- **No se promete autoactivación real**: cualquier documentación debe indicar que requiere paso previo de instalación o bootstrap con skills externas.
+- **No activar skills Firebase solo por mencionar Firebase**: requieren contexto técnico específico o confirmación de stack.
+- **Genkit**: cada lenguaje tiene su propia skill (`developing-genkit-{js,dart,go,python}`) con trigger específico. Consultar la matriz en el registry para el routing correcto.
 
 ### Fallback Guidance
 

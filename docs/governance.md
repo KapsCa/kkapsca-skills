@@ -1,19 +1,27 @@
 # Governance — Flujo de Contribución y Branch Protection
 
-Este documento describe las reglas operativas de este repositorio: protección de ramas, flujo de Pull Requests, validaciones y convenciones de commits.
+> **Vista derivada operativa.** Los recursos normativos de gobernanza viven en [`dev-skills/repo-bootstrap/SKILL.md`](../dev-skills/repo-bootstrap/SKILL.md).
+> Este documento resume las reglas para consulta rápida sin contradecir la fuente. Si existe conflicto, prevalece `repo-bootstrap/SKILL.md`.
 
 ## Branch Protection en `main`
 
-Este repositorio **requiere** que la rama `main` tenga protección habilitada en GitHub. La configuración se aplica **manualmente en la interfaz de GitHub** (no se puede configurar mediante archivos en el repositorio).
+Este repositorio **requiere** que la rama `main` tenga protección habilitada en GitHub. La configuración de protección varía según el modo de gobernanza:
 
-### Configuración requerida
+| Modo | Approvals requeridos | Aplica a |
+|------|---------------------|----------|
+| **Solo-dev** | 0 (GitHub no permite auto-aprobarse) | Proyectos personales / un solo contribuidor |
+| **Team** | ≥ 1 | Equipos con múltiples contribuidores |
+
+La configuración se aplica **manualmente en la interfaz de GitHub** (Settings → Branches → Branch protection rules), complementada por el hook local `pre-push` que instala `repo-bootstrap`.
+
+### Configuración requerida (modo Team)
 
 En GitHub: **Settings → Branches → Branch protection rules**
 
 | Configuración | Valor |
 |-------------|-------|
 | Branch name pattern | `main` |
-| ✅ Require pull request reviews before merging | 1 aprobación requerida |
+| ✅ Require pull request reviews before merging | ≥ 1 aprobación requerida |
 | ✅ Require status checks to pass before merging | selecciona los checks de PR validation |
 | ✅ Require conversation resolution | habilitado |
 | ✅ Require branches to be up to date before merging | habilitado |
@@ -21,10 +29,25 @@ En GitHub: **Settings → Branches → Branch protection rules**
 | ❌ Allow deletions | **DESACTIVADO** |
 | ✅ Include administrators | habilitado |
 
+### Configuración requerida (modo Solo-dev)
+
+| Configuración | Valor |
+|-------------|-------|
+| Branch name pattern | `main` |
+| ✅ Require pull request reviews before merging | **0 aprobaciones requeridas** |
+| ✅ Require status checks to pass before merging | selecciona los checks de PR validation |
+| ✅ Require conversation resolution | habilitado |
+| ✅ Require branches to be up to date before merging | habilitado |
+| ❌ Allow force pushes | **DESACTIVADO** |
+| ❌ Allow deletions | **DESACTIVADO** |
+| ✅ Include administrators | habilitado |
+
+> **Nota para repos privados Free**: GitHub puede mostrar "Not enforced" en la UI de branch protection. En ese caso, el hook local `pre-push` es la red de seguridad real. Ver `repo-bootstrap` para la instalación del hook.
+
 ### Por qué esto importa
 
 - **Sin protección en main**: cualquiera puede hacer push directo → se pierde trazabilidad
-- **Sin require approvals**: se pueden mergear cambios sin review
+- **Sin require approvals** (modo team): se pueden mergear cambios sin review
 - **Sin status checks**: cambios que no pasan validaciones pueden llegar a main
 
 ## Flujo de Contribución
@@ -33,16 +56,43 @@ Regla de oro: **No seas ese wey que hace push directo a main** 😤
 
 ### Pasos
 
+#### Modo Solo-dev
+
 1. Crear branch descriptivo: `feature/nombre-descriptivo` o `fix/nombre-descriptivo`
 2. Trabajar con commits en formato **Conventional Commits**
 3. Abrir Pull Request con:
    - Labels `type:*` y `status:approved`
    - Referencia a issue (ej. `Closes #N`)
    - Todos los status checks pasando
-4. Esperar aprobación y validación
-5. **Auto-merge** solo después de validación exitosa + checks verdes
+4. Esperar a que pasen los checks de validación (no requiere approvals)
+5. **Auto-merge** después de validación exitosa + checks verdes
+
+#### Modo Team
+
+1. Crear branch descriptivo: `feature/nombre-descriptivo` o `fix/nombre-descriptivo`
+2. Trabajar con commits en formato **Conventional Commits**
+3. Abrir Pull Request con:
+   - Labels `type:*` y `status:approved`
+   - Referencia a issue (ej. `Closes #N`)
+   - Todos los status checks pasando
+4. Esperar ≥1 approval + validación exitosa
+5. **Auto-merge** solo después de approvals + checks verdes
 
 ### Workflow esperado
+
+#### Solo-dev
+
+```text
+1. Crear branch feature/fix-descriptive-name
+2. Trabajar con commits Conventional Commits
+3. Abrir PR con labels type:*, status:approved
+4. Esperar a que pase PR validation (incluye conventional commits check)
+5. Una vez checks verdes → merge (approvals NO requeridos)
+6. release-please detecta y crea Release PR
+7. Al mergear Release PR → tag + release
+```
+
+#### Team
 
 ```text
 1. Crear branch feature/fix-descriptive-name

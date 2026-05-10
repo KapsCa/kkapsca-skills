@@ -4,11 +4,8 @@
 
 [![GitHub repo](https://img.shields.io/badge/GitHub-KkapsCa%2Fkkapsca--skills-blue?logo=github)](https://github.com/KapsCa/kkapsca-skills)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Follow Gentle AI](https://img.shields.io/badge/Follow-Gentle%20AI-purple?logo=github)](https://github.com/Gentleman-Programming/gentle-ai)
 
 Este repositorio reúne habilidades (**skills**) pensadas desde la experiencia personal de **KkapsCa**, optimizadas para flujos de trabajo asistidos por Inteligencia Artificial (como Cursor, Windsurf o **opencode**) y redactadas para que **cualquier persona pueda reutilizarlas** en sus propios proyectos.
-
-Al mismo tiempo, estas habilidades están **optimizadas para trabajar especialmente bien dentro del entorno tecnológico de [Gentle AI](https://github.com/Gentleman-Programming/gentle-ai)** y flujos coordinados por el **orquestador sdd-orchestrator** (una herramienta que coordina fases de desarrollo estructurado).
 
 ---
 
@@ -24,7 +21,7 @@ bash scripts/bootstrap.sh
 
 > **Nota**: El proceso de inicialización (**bootstrap**) se corre desde **este repositorio de habilidades**, no desde la carpeta de tu proyecto futuro. Reinicia opencode después de ejecutarlo.
 
-Para detalles operativos de instalación (opciones `--copy`, enlaces simbólicos, habilidades externas), consulta la [guía de instalación](docs/installation.md).
+Para detalles operativos de instalación (opciones `--copy`, enlaces simbólicos), consulta la [guía de instalación](docs/installation.md).
 
 ---
 
@@ -62,41 +59,6 @@ Idea → brainstorming → descubrimiento de producto → factibilidad técnica 
 
 ---
 
-## Habilidades Disponibles
-
-> Algunas habilidades de este repositorio están inspiradas en colecciones públicas como `awesome-copilot`, pero se incorporan aquí solo cuando encajan con el flujo, las reglas y el criterio de este proyecto.
->
-> **Nota:** Las habilidades derivadas de `awesome-copilot` aún **no están disponibles como parte del catálogo activo**. Por ahora solo se mantienen como **candidatas documentadas** para evaluación futura, sin instalación ni routing habilitado.
-> Si necesitas el detalle técnico, consulta `docs/installation.md` y `.atl/skill-registry.md`.
-
-### 1. Inicio de proyecto (brainstorming → descubrimiento → factibilidad)
-
-| Habilidad | Propósito |
-|-----------|-----------|
-| **brainstorm** | Convierte una idea vaga en un Product Brief |
-| **product-discovery** | Valida mercado, usuario, competencia y negocio |
-| **project-init** | Cierra la brecha entre descubrimiento y factibilidad |
-| **tech-feasibility** | Evalúa tecnología, riesgos, arquitectura y esfuerzo |
-
-### 2. Desarrollo y estándares
-
-| Habilidad | Propósito |
-|-----------|-----------|
-| **dev-skills/flutter-personal-standards** | Criterio personal para Flutter |
-| **dev-skills/repo-bootstrap** | Prepara el repositorio: flujo de PR, release-please, estándares |
-| **dev-skills/repo-guardrails** | Advisory/warning-first sobre ramas, PRs y commits (capa lateral) |
-| **dev-skills/sdd-to-issues** | Export-only: convierte artifacts SDD en issues GitHub |
-| **dev-skills/request-triage** | Enrutador opt-in que decide a dónde va un request |
-| **dev-skills/clarify-with-artifacts** | Estructura contexto usando artifacts existentes (opt-in) |
-
-### 3. Habilidades especializadas (requieren tecnología confirmada)
-
-Las habilidades de **Supabase** y **Firebase** se activan tras decidir la tecnología en `tech-feasibility`. Deben instalarse vía bootstrap para que opencode las detecte.
-
-Consulta la [guía de instalación](docs/installation.md) para disponibilidad real y `docs/engram.md` para entender cómo se separan inicialización, memoria persistente y orquestación.
-
----
-
 ## Filosofía
 
 - **Problema primero, tecnología después**
@@ -107,30 +69,18 @@ Consulta la [guía de instalación](docs/installation.md) para disponibilidad re
 
 ---
 
-## Documentación Detallada
+## Documentación
 
-Para detalles operativos, consulta la documentación en `docs/`:
+Para detalles operativos, consulta:
 
-| Tema | Documento |
-|------|-----------|
-| Contexto Gentle AI y relación con este repo | [docs/gentle-ai.md](docs/gentle-ai.md) |
-| Instalación detallada, bootstrap y skill-registry | [docs/installation.md](docs/installation.md) |
-| Memoria persistente (Engram) vs Bootstrap vs Skill-Registry | [docs/engram.md](docs/engram.md) |
-| Desarrollo estructurado (SDD) y sdd-orchestrator | [docs/sdd.md](docs/sdd.md) |
-| Flujo de contribución y branch protection | [docs/governance.md](docs/governance.md) |
-| Versionado semántico y release-please | [docs/release-please.md](docs/release-please.md) |
-| Configuración WSL para Windows | [docs/wsl-setup.md](docs/wsl-setup.md) |
-| Índice de documentación | [docs/README.md](docs/README.md) |
+- [Guía de instalación](docs/installation.md) — instalación detallada, bootstrap y opciones
+- [Índice de documentación](docs/README.md) — dónde encontrar contexto adicional (Gentle AI, SDD, Engram, contribución)
 
 ---
 
 ## Mejor Experiencia de Uso
 
-Estas habilidades dan mejores resultados cuando:
-
-- El agente opera con contexto consistente
-- Existe un **orquestador sdd-orchestrator** coordinando fases o subagentes
-- Y el entorno ya sigue las convenciones del entorno tecnológico de Gentle AI
+Estas habilidades dan mejores resultados cuando el agente opera con contexto consistente y el entorno ya sigue las convenciones de Gentle AI.
 
 Si quieres la mejor experiencia: [Gentle AI Repository](https://github.com/Gentleman-Programming/gentle-ai)
 
@@ -141,12 +91,9 @@ Si quieres la mejor experiencia: [Gentle AI Repository](https://github.com/Gentl
 Este proyecto utiliza herramientas y referentes que han contribuido a su desarrollo:
 
 - **[Gentleman-Programming/gentle-ai](https://github.com/Gentleman-Programming/gentle-ai)**: Por el entorno de trabajo, la filosofía de desarrollo y las herramientas que permitieron revisar, corregir y refinar este repositorio.
-- **[mattpocock/skills](https://github.com/mattpocock/skills)**: Por servir como referencia e inspiración para varias habilidades adaptadas a este ecosistema, especialmente en utilidades tácticas de arquitectura, diagnóstico y flujo de trabajo.
-- **Supabase**: Por sus habilidades oficiales que extienden las capacidades de este repositorio.
-- **Firebase**: Por sus habilidades oficiales que cubren casos de uso específicos en la plataforma.
+- **[mattpocock/skills](https://github.com/mattpocock/skills)**: Por servir como referencia e inspiración para varias habilidades adaptadas a este ecosistema.
+- **Supabase** y **Firebase**: Por sus habilidades oficiales que extienden las capacidades de este repositorio.
 - **Equipo de opencode**: Por la plataforma que hace posible la ejecución de estas habilidades.
-
-Este repositorio es un esfuerzo personal y no cuenta con patrocinio oficial de ninguna de las herramientas mencionadas. Las menciones se realizan únicamente para referencia técnica y reconocimiento de uso.
 
 ---
 
