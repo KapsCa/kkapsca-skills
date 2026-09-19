@@ -1,0 +1,80 @@
+name: PowerShell Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+      - feat/**
+      - fix/**
+      - chore/**
+      - docs/**
+      - refactor/**
+      - ci/**
+      - build/**
+
+jobs:
+  parse:
+    name: Parse PowerShell scripts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Collect PowerShell scripts
+        id: scripts
+        run: |
+          # --cached incluye los archivos versionados, --others los nuevos que
+          # todavía no lo están, y --exclude-standard respeta .gitignore. Sin
+          # --others, un script nuevo no versionado hacía pasar el job en verde
+          # sin haber parseado nada.
+          mapfile -t scripts < <(git ls-files --cached --others --exclude-standard '*.ps1')
+
+          if [ "${#scripts[@]}" -eq 0 ]; then
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          printf '%s\n' "${scripts[@]}" > powershell-files.txt
+          echo "found=true" >> "$GITHUB_OUTPUT"
+
+      - name: Parse PowerShell scripts
+        if: steps.scripts.outputs.found == 'true'
+        shell: pwsh
+        run: |
+          $failed = $false
+
+          foreach ($file in Get-Content -Path powershell-files.txt) {
+            if ([string]::IsNullOrWhiteSpace($file)) { continue }
+
+            $tokens = $null
+            $errors = $null
+            $null = [System.Management.Automation.Language.Parser]::ParseFile(
+              (Resolve-Path -LiteralPath $file).Path,
+              [ref]$tokens,
+              [ref]$errors
+            )
+
+            if ($errors.Count -gt 0) {
+              $failed = $true
+              Write-Host "::error file=$file::$($errors.Count) syntax error(s)"
+              foreach ($parseError in $errors) {
+                Write-Host "  line $($parseError.Extent.StartLineNumber): $($parseError.Message)"
+              }
+            }
+            else {
+              Write-Host "[ok] $file"
+            }
+          }
+
+          if ($failed) {
+            Write-Host "::error::PowerShell syntax validation failed."
+            exit 1
+          }
+
+      - name: No PowerShell scripts found
+        if: steps.scripts.outputs.found != 'true'
+        run: echo "No PowerShell scripts found to validate."

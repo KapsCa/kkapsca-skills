@@ -45,6 +45,21 @@ install_skill() {
   skill_name="$(basename "${source_dir}")"
   target_dir="${TARGET_ROOT}/${skill_name}"
 
+  # Si el origen y el destino son el mismo directorio, no hay nada que instalar.
+  # Pasa cuando OPENCODE_SKILLS_DIR apunta al mismo lugar que EXTERNAL_SKILLS_DIR
+  # (por ejemplo, ambos a "${HOME}/.agents/skills"). Sin este guard, el bloque de
+  # abajo borra el origen con rm -rf y después falla al copiarlo sobre sí mismo,
+  # así que una segunda corrida destruye las skills que el repo administra.
+  if [[ -d "${target_dir}" ]]; then
+    local resolved_source resolved_target
+    resolved_source="$(cd "${source_dir}" && pwd -P)"
+    resolved_target="$(cd "${target_dir}" && pwd -P)"
+    if [[ "${resolved_source}" == "${resolved_target}" ]]; then
+      printf '↷ Omitida (origen y destino son el mismo): %s\n' "${skill_name}"
+      return 0
+    fi
+  fi
+
   if [[ -L "${target_dir}" ]]; then
     current_link="$(readlink "${target_dir}")"
     if [[ "${current_link}" != "${source_dir}" ]]; then

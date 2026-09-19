@@ -20,6 +20,72 @@ Si preferís WSL2, esa ruta sigue documentada y es más simple: ver [Configuraci
 
 > **Regla de oro:** no mezcles rutas de WSL (`/mnt/c/...`) con rutas nativas de Windows (`C:\...`) en el mismo flujo. Si estás en Windows nativo, todo es `C:\...` o `/c/...` dentro de Git Bash.
 
+## Instalación automatizada (opcional)
+
+Este documento se puede ejecutar a mano, paso por paso, o correrlo de una sola vez con el instalador del repositorio:
+
+```powershell
+git clone https://github.com/KapsCa/kkapsca-skills.git
+cd kkapsca-skills
+.\scripts\install-windows.ps1 -WhatIf        # previsualizar, no muta nada
+.\scripts\install-windows.ps1                # instalar
+```
+
+El instalador es idempotente. Cubre los pasos 0 a 4 y el 7 de este documento: requisitos, pi, el binario de Engram, el CLI de Gentle AI, el stack de pi, herdr con su integración, y las skills del repositorio.
+
+También sirve para **actualizar** lo que ya está instalado, sin reinstalar desde cero:
+
+```powershell
+.\scripts\install-windows.ps1 -Update
+```
+
+`-Update` usa `pi update --all`, `gentle-ai upgrade` y `herdr update`, más `winget upgrade` para los requisitos. Los paquetes de pi se refrescan con `pi update --extensions`. El binario de Engram no tiene subcomando de actualización propio, así que el script compara la versión instalada contra el tag del último release y lo reinstala desde el zip oficial **solo si difieren**; si no, lo deja como está.
+
+También hay un modo de solo lectura:
+
+```powershell
+.\scripts\install-windows.ps1 -Status
+```
+
+Muestra las versiones instaladas de pi, gentle-ai, herdr y Engram, y avisa si `gentle-cfg` y codegraph están presentes. No modifica nada: en particular no ejecuta `gentle-ai update`, porque ese comando no es de solo lectura —escribe `~/.gentle-ai/state.json` y puede registrar telemetría—. Si querés la comparación contra la última versión publicada, correlo a mano asumiendo esa escritura.
+
+### Canales de versión
+
+| Canal | Qué usa | Para quién |
+|---|---|---|
+| `stable` (por defecto) | Las últimas versiones **estables** de cada herramienta | Cualquiera que use este script |
+| `beta` / `nightly` | Canales de desarrollo de Gentle AI | Quien quiera adelantarse |
+| `main` | El código de `main` de las herramientas Gentle, vía `gentle-cfg` | El autor del script |
+
+El canal `main` no usa los instaladores oficiales: delega en **`gentle-cfg`**, un script aparte que clona `main`, reconfigura `settings.json` y escribe `~/.pi/gentle-ai/dev-binary.json`. Ese camino requiere tres cosas que el script verifica y reporta si faltan: `gentle-cfg` en `%USERPROFILE%\.pi\agent\bin\gentle-cfg`, `bash`, y **`jq`** (que no viene con Windows ni con Git for Windows).
+
+El instalador delega en `gentle-cfg` **herramienta por herramienta** (`gentle-ai main` y `gentle-shell main`), nunca con `all main` ni `update main`. Esos dos últimos arrastran el `engram_install` de `gentle-cfg`, que compila desde fuente y enlaza con `ln -s` sin la extensión `.exe`, además de usar `pkill`: en Windows dejaría el binario de Engram roto. El binario de Engram que usa pi lo administra este instalador en `%USERPROFILE%\.pi\agent\bin\engram.exe`, desde el zip oficial y con verificación SHA256, y define `ENGRAM_BIN` apuntándolo. Ojo: `gentle-ai install` también coloca un Engram propio en `%LOCALAPPDATA%\engram\bin`; el que queda activo para pi es el del script, por `ENGRAM_BIN`.
+
+```powershell
+# Instalar siguiendo main
+.\scripts\install-windows.ps1 -Channel main
+
+# Actualizar siguiendo main
+.\scripts\install-windows.ps1 -Update -Channel main
+```
+
+Si no tenés `gentle-cfg`, usá el canal `stable`: es el camino soportado y el que funciona sin dependencias extra.
+
+**Lo que el instalador NO cubre** y queda como paso manual:
+
+| Paso del documento | Por qué queda fuera |
+|---|---|
+| Paso 5 — codegraph | No es parte del stack que instala Gentle AI |
+| Paso 6 — `settings.json`, `mcp.json`, `subagents.json` | Necesitan valores tuyos (provider, modelos, claves) que el script no puede inventar |
+| `pi-engram init` | Lo corre el instalador de Gentle AI; si no quedó, hay que correrlo a mano |
+| Paso 9 — verificación funcional | Necesita una sesión interactiva de pi |
+
+Opciones: `-IncludeIntercom` para agregar ese companion opcional, `-SkipHerdr` y `-SkipSkills` para omitir esos pasos, y `-Channel` para elegir canal de versiones.
+
+> **Sobre la integridad de las descargas:** el instalador baja los instaladores oficiales de herdr y de Gentle AI y los ejecuta. Los guarda en un archivo temporal de nombre irrepetible y te imprime la URL de origen antes de correrlos, pero no los verifica por hash. El binario de Engram sí se verifica por SHA256 contra `checksums.txt`, y el script aborta si ese archivo no existe en el release.
+>
+> **Brecha conocida:** el instalador no se pudo ejecutar en un host Windows durante su desarrollo. Su sintaxis se valida en CI, pero su comportamiento no está verificado de punta a punta. Dos revisiones estáticas independientes encontraron y corrigieron varias fallas bloqueantes antes del merge, pero eso no reemplaza una corrida real. Si algo falla, el mensaje de error incluye el comando exacto para correr ese paso a mano.
+
 ## Qué se instala
 
 | Componente | Rol | Cómo se obtiene en Windows |
@@ -394,6 +460,8 @@ OPENCODE_SKILLS_DIR="$HOME/.agents/skills" bash scripts/bootstrap.sh --copy
 > **Dos cosas importantes, y las dos son específicas de Windows.**
 >
 > **1. Hay que redirigir la ruta de destino.** El instalador apunta por defecto a `~/.config/opencode/skills`, que es la ruta de **opencode**. Pi lee `%USERPROFILE%\.agents\skills` y `%USERPROFILE%\.pi\agent\skills`. Si lo dejás por defecto, el instalador va a reportar éxito y pi **no va a ver ninguna skill**. `OPENCODE_SKILLS_DIR` es la variable que corrige esto.
+>
+> Ojo con un detalle: el instalador toma `~/.agents/skills` como **origen** de las skills externas y vos le estás poniendo ese mismo directorio como **destino**. Eso funciona porque el instalador omite las fuentes cuyo destino coincide con el origen. Si alguna vez ves el mensaje `Omitida (origen y destino son el mismo)`, es el comportamiento esperado, no un error.
 >
 > **2. Hay que usar `--copy`.** Por defecto el instalador crea enlaces simbólicos, y en Windows nativo crear symlinks requiere Developer Mode activado o privilegios de administrador. Sin eso, el comando falla. `--copy` hace una copia física y no necesita permisos especiales.
 
