@@ -247,7 +247,7 @@ function Install-WithWinget {
     }
 
     if (-not $PSCmdlet.ShouldProcess($Label, "winget install --id $Id --exact")) {
-        Write-Warn "$Label: se instalaría con winget (omitido)"
+        Write-Warn "${Label}: se instalaría con winget (omitido)"
         Add-Result $Label '' $true 'se instalaría'
         return
     }
@@ -287,7 +287,7 @@ function Invoke-RemoteFile {
     $tempFile = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), ([System.IO.Path]::GetRandomFileName() + '.ps1'))
 
     if (-not $PSCmdlet.ShouldProcess($DisplayName, "Descargar y ejecutar desde $Uri")) {
-        Write-Warn "$DisplayName: se descargaría y ejecutaría desde $Uri (omitido)"
+        Write-Warn "${DisplayName}: se descargaría y ejecutaría desde $Uri (omitido)"
         return $null
     }
 
@@ -980,7 +980,7 @@ function Update-EngramBinary {
         return
     }
 
-    Write-Host "  instalada $installed, última $latest: se reinstala" -ForegroundColor Gray
+    Write-Host "  instalada $installed, última ${latest}: se reinstala" -ForegroundColor Gray
     Install-Engram -Force
 }
 
