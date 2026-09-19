@@ -108,6 +108,8 @@ Puedes instalar las habilidades una sola vez en tu máquina local y luego usarla
 
 Si vas a usar **opencode en Windows**, la recomendación es correrlo bajo **WSL2** para mantener un entorno más consistente con Linux. Ver detalles en [docs/wsl-setup.md](wsl-setup.md).
 
+Si en cambio necesitás el ecosistema en **Windows nativo**, WSL2 no es una opción válida. Esa ruta tiene restricciones propias —el CLI de Gentle AI solo se instala desde fuente, el instalador de skills usa enlaces simbólicos y apunta a la ruta de opencode— y está cubierta paso a paso en [Instalación en Windows nativo](windows-native-setup.md).
+
 ---
 
 ## Referencias
@@ -116,3 +118,4 @@ Si vas a usar **opencode en Windows**, la recomendación es correrlo bajo **WSL2
 - [Contexto Gentle AI](gentle-ai.md) — Stack Gentle AI y relación con este repo
 - [Memoria Persistente (Engram)](engram.md) — Diferencia entre Engram, bootstrap y skill-registry
 - [Desarrollo Estructurado (SDD)](sdd.md) — SDD y sdd-orchestrator
+- [Instalación en Windows nativo](windows-native-setup.md) — Runbook del ecosistema completo sin WSL

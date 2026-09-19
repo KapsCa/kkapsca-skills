@@ -9,6 +9,7 @@
 ## 📦 Instalar
 
 - [Guía de instalación](installation.md) — Bootstrap, opciones `--copy`, enlaces simbólicos, desinstalación
+- [Instalación en Windows nativo](windows-native-setup.md) — Runbook para reconstruir el ecosistema completo sin WSL
 
 ## 📖 Contexto Adicional (Opcional)
 
