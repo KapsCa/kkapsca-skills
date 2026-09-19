@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.5.0...kkapsca-skills-v0.6.0) (2026-09-19)
+
+
+### Features
+
+* **scripts:** add native Windows ecosystem installer ([374134c](https://github.com/KapsCa/kkapsca-skills/commit/374134cb94087ed1985de3fe33e39525a2927b21))
+* **scripts:** instalador del ecosistema para Windows nativo ([58f3f84](https://github.com/KapsCa/kkapsca-skills/commit/58f3f8452ae31b271d2b635e49fed1f1e29cd39b))
+
+
+### Bug Fixes
+
+* **scripts:** delimit variables followed by a colon in installer messages ([c8c3919](https://github.com/KapsCa/kkapsca-skills/commit/c8c3919bf79517a76a991e9e82b6f41ca93b9b59))
+* **scripts:** skip skill sources whose target is themselves ([f21da3d](https://github.com/KapsCa/kkapsca-skills/commit/f21da3d46d3da755c1e1bf32aaf561cf58060b18))
+
 ## [0.5.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.4.0...kkapsca-skills-v0.5.0) (2026-05-01)
 
 
