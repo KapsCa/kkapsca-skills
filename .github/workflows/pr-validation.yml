@@ -18,6 +18,8 @@ permissions:
 jobs:
   check-issue-reference:
     name: Check Issue Reference
+    # Un PR de release-please no puede vincular un issue aprobado: lo genera un bot.
+    if: ${{ !startsWith(github.event.pull_request.head.ref, 'release-please--') }}
     runs-on: ubuntu-latest
     steps:
       - name: Validate linked issue in PR body
@@ -36,6 +38,8 @@ jobs:
 
   check-issue-approved:
     name: Check Issue Has status:approved
+    # Idem: sin issue vinculado no hay label que validar en un PR de release.
+    if: ${{ !startsWith(github.event.pull_request.head.ref, 'release-please--') }}
     runs-on: ubuntu-latest
     steps:
       - name: Validate approved issue label
@@ -68,6 +72,8 @@ jobs:
 
   check-pr-type-label:
     name: Check PR Has type:* Label
+    # Un PR de release lleva el label 'autorelease: pending', no un type:*.
+    if: ${{ !startsWith(github.event.pull_request.head.ref, 'release-please--') }}
     runs-on: ubuntu-latest
     steps:
       - name: Validate PR type label
