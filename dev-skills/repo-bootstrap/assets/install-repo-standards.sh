@@ -14,6 +14,12 @@ REPO_NAME="$(basename "$REPO_ROOT")"
 TEMPLATES="${SKILL_DIR}/templates"
 GITIGNORE_MARKER="# >>> repo-bootstrap: secretos y credenciales >>>"
 
+# El hook pre-push se pisa solo si se pide explicitamente, como dice el SKILL.md.
+REINSTALL_HOOK=false
+if [[ "${1:-}" == "--reinstall-hook" ]]; then
+  REINSTALL_HOOK=true
+fi
+
 mkdir -p "$REPO_ROOT/.git/hooks"
 mkdir -p "$REPO_ROOT/.github/workflows"
 mkdir -p "$REPO_ROOT/docs"
@@ -135,15 +141,32 @@ merge_gitignore() {
 }
 
 # ---------------------------------------------------------------------------
-# 1. Gobernanza. Comportamiento sin cambios: sobrescribe.
+# 1. Gobernanza.
+#
+# Los archivos de CONTENIDO del proyecto (plantilla de PR, changelog, estandares)
+# se crean solo si faltan. Pisarlos borra trabajo del proyecto: un CHANGELOG.md
+# tiene el historial real, y la plantilla de PR puede estar adaptada.
+#
+# Esto es lo que manda el SKILL.md normativo ("created if missing; if present,
+# left untouched") y lo que el script no cumplia: sobrescribia los tres.
+#
+# Los archivos de CONFIGURACION de release-please si se sobrescriben: son
+# canonicos, los genera la herramienta y no deberian editarse a mano.
 # ---------------------------------------------------------------------------
-install -m 0755 "$TEMPLATES/pre-push" "$REPO_ROOT/.git/hooks/pre-push"
-install -m 0644 "$TEMPLATES/PULL_REQUEST_TEMPLATE.md" "$REPO_ROOT/.github/PULL_REQUEST_TEMPLATE.md"
+if [[ "$REINSTALL_HOOK" == true ]]; then
+  install -m 0755 "$TEMPLATES/pre-push" "$REPO_ROOT/.git/hooks/pre-push"
+  printf '✓ reinstalado: .git/hooks/pre-push (--reinstall-hook)\n'
+else
+  install_if_missing "$TEMPLATES/pre-push" "$REPO_ROOT/.git/hooks/pre-push" 0755
+fi
+
 install -m 0644 "$TEMPLATES/release-please.yml" "$REPO_ROOT/.github/workflows/release-please.yml"
 install -m 0644 "$TEMPLATES/release-please-config.json" "$REPO_ROOT/release-please-config.json"
 install -m 0644 "$TEMPLATES/.release-please-manifest.json" "$REPO_ROOT/.release-please-manifest.json"
-install -m 0644 "$TEMPLATES/CHANGELOG.md" "$REPO_ROOT/CHANGELOG.md"
-install -m 0644 "$TEMPLATES/repository-standards.md" "$REPO_ROOT/docs/repository-standards.md"
+
+install_if_missing "$TEMPLATES/PULL_REQUEST_TEMPLATE.md" "$REPO_ROOT/.github/PULL_REQUEST_TEMPLATE.md"
+install_if_missing "$TEMPLATES/CHANGELOG.md" "$REPO_ROOT/CHANGELOG.md"
+install_if_missing "$TEMPLATES/repository-standards.md" "$REPO_ROOT/docs/repository-standards.md"
 
 python3 - <<PY
 from pathlib import Path
@@ -179,5 +202,6 @@ merge_gitignore
 
 printf '\n✅ Repo bootstrap aplicado en %s\n' "$REPO_ROOT"
 printf 'Revisa docs/repository-standards.md para confirmar el flujo operativo.\n'
+printf 'Para reinstalar el hook pre-push a proposito: %s --reinstall-hook\n' "$0"
 printf 'Si el repo es publico, puedes correr tambien:\n'
 printf 'bash "%s/configure-public-branch-protection.sh"\n' "$SKILL_DIR"

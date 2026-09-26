@@ -28,13 +28,22 @@
 *.jks
 *.keystore
 
-# Archivos con nombre sospechoso, sin importar la extension.
+# Archivos con nombre sospechoso, en ingles.
 credentials*
 secrets*
 *_rsa
 *_ed25519
 id_rsa*
 id_ed25519*
+
+# Los mismos nombres en espanol. Sin esto, un archivo llamado
+# "credenciales.json" se versiona sin que nadie lo note.
+credenciales*
+secretos*
+contrasenas*
+contraseñas*
+passwords*
+claves-de-acceso*
 
 # Estado de infraestructura: puede contener datos sensibles de la nube.
 *.tfstate

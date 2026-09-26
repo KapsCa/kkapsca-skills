@@ -40,6 +40,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      # Sin codigo, CodeQL no falla por falta de que analizar: falla con
+      # "configuration error" y exit code 32. Un repo recien creado no tiene
+      # nada, y todavia no hay ninguna senal de que lenguaje va a usar, asi que
+      # el analisis se saltea en vez de romper el CI.
+      # Comprobado en el banco de pruebas: sin este paso, el workflow falla.
+      - name: Check for analyzable code
+        id: guard
+        run: |
+          set -euo pipefail
+          if git ls-files | grep -qE '\.(c|cc|cpp|cxx|h|hpp|cs|go|java|kt|kts|js|jsx|mjs|cjs|ts|tsx|mts|cts|py|rb|rs|swift)$'; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "Todavia no hay codigo en un lenguaje que CodeQL entienda: se saltea el analisis."
+          fi
+
       # Sin el input "languages", CodeQL detecta solo los idiomas del repo y los
       # analiza uno despues del otro. Es lo mas robusto para una plantilla: no
       # falla si un idioma declarado no existe en el repo.
@@ -50,7 +66,9 @@ jobs:
       #       language: [go, python, javascript-typescript, actions]
       #   ...y pasar  with: languages: ${{ matrix.language }}
       - name: Initialize CodeQL
+        if: steps.guard.outputs.run == 'true'
         uses: github/codeql-action/init@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
 
       - name: Perform CodeQL Analysis
+        if: steps.guard.outputs.run == 'true'
         uses: github/codeql-action/analyze@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
