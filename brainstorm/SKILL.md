@@ -5,7 +5,6 @@ license: MIT
 metadata:
   author: KkapsCa
   version: "4.0"
-  pipeline: "project-kickstart/01"
   next: "product-discovery"
   prev: ""
 ---
