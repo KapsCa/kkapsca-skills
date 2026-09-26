@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.8.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.7.1...kkapsca-skills-v0.8.0) (2026-09-26)
+
+
+### Features
+
+* **scripts:** instalador de una línea para cualquier agente, sin clonar ([f60d55f](https://github.com/KapsCa/kkapsca-skills/commit/f60d55f92ce2253e20fcc5a6ed277a8c4efcd0b4))
+* **scripts:** one-line installer for any agent, without cloning ([c54460d](https://github.com/KapsCa/kkapsca-skills/commit/c54460db6a32a709bbe2a6ecb026741a74dbb682))
+
+
+### Bug Fixes
+
+* **skills:** repair the relative links broken when content moved into references ([c66ae0c](https://github.com/KapsCa/kkapsca-skills/commit/c66ae0cb6b4c08c667cfa745f4e908e792a96326))
+* **skills:** reparar enlaces relativos rotos al mover contenido a references/ ([691f209](https://github.com/KapsCa/kkapsca-skills/commit/691f209d13a54b203fd39f8f66007cdeaa80ee4d))
+
 ## [0.7.1](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.7.0...kkapsca-skills-v0.7.1) (2026-09-26)
 
 
