@@ -100,6 +100,15 @@ jobs:
 
   check-conventional-commits:
     name: Validate Conventional Commits
+    # Idem: una rama de release arrastra commits que no escribio un humano, como
+    # los merge commits ("Merge pull request #N from ..."), y ninguno matchea
+    # Conventional Commits. Medido: el release PR real #51 fallaba en este job
+    # mientras los otros tres se salteaban, y nadie lo noto porque este check no
+    # era requerido. Los commits de un PR de release ya se validaron en su propio
+    # PR, cuando los escribio un humano.
+    if: ${{ github.actor != 'dependabot[bot]'
+         && !startsWith(github.event.pull_request.head.ref, 'dependabot/')
+         && !startsWith(github.event.pull_request.head.ref, 'release-please--') }}
     runs-on: ubuntu-latest
     steps:
       - name: Get PR commits
