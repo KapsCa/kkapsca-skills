@@ -127,14 +127,16 @@ Se cargan cuando el trabajo ya está en marcha. **Ninguna es obligatoria**: si s
 
 ## El flujo: ODD por defecto, SDD opcional
 
-Este repositorio sigue **ODD** (*Organic Driven Development*), un método de **[Alan Buscaglia](https://gentlemanprogramming.com/)** — *Gentleman Programming*, el autor de **Gentle-AI**. Su documentación autoritativa vive en el proyecto de Gentle-AI:
+**Este repositorio se desarrolla con ODD** (*Organic Driven Development*), un método de **[Alan Buscaglia](https://gentlemanprogramming.com/)** — *Gentleman Programming*, el autor de **Gentle-AI**. Su documentación autoritativa vive en el proyecto de Gentle-AI:
 
 - **[ODD, explicado por su autor →](https://github.com/Gentleman-Programming/gentle-ai/blob/main/docs/usage.md#organic-driven-development-odd)**
 - **[gentlemanprogramming.com →](https://gentlemanprogramming.com/)**
 
-El trabajo entra por ODD: un pedido chico se resuelve liviano, y uno sustancial deja **un documento de feature** en `odd/tasks/<feature>.md` que permite retomarlo sin reconstruir el plan.
+**Y estas skills rinden más en un entorno que lo siga**: cuando hay un flujo que rastrea el trabajo, las skills saben dónde vive el plan (`odd/tasks/<feature>.md`) y en qué fase está, sin que se lo expliques cada vez.
 
-**SDD** (*Spec-Driven Development*) es una **rama opcional**, y se entra solo por pedido explícito (`/sdd-*`) o por propuesta aceptada. Tiene su propio pipeline documentado, y las skills de este repositorio conviven con él sin reemplazarlo: donde una skill necesita saber en qué fase está el trabajo, nombra ODD por defecto y las fases SDD como alternativa.
+**Pero no lo requieren.** Son archivos Markdown: funcionan con el flujo que uses. Donde una skill dice "entrada por defecto: `odd/tasks/<feature>.md`", leelo como *"si seguís ODD, el plan está ahí; si no, es tu plan, donde lo tengas"*. Lo único que cambia sin ODD es que esa ruta la ponés vos.
+
+**SDD** (*Spec-Driven Development*) es una **rama opcional** dentro de ODD: se entra solo por pedido explícito (`/sdd-*`) o por propuesta aceptada, y las skills conviven con él sin reemplazarlo.
 
 **[ODD y SDD →](docs/sdd.md)**
 
@@ -229,7 +231,7 @@ Este repositorio fue creado con **[Gentle-AI](https://github.com/Gentleman-Progr
 
 </div>
 
-Estas habilidades dan su mejor resultado cuando el agente opera con contexto consistente: **[Gentle AI Repository →](https://github.com/Gentleman-Programming/gentle-ai)** · **[gentlemanprogramming.com →](https://gentlemanprogramming.com/)**
+Estas habilidades dan su mejor resultado cuando el agente opera con contexto consistente: el badge de arriba lleva al proyecto, y los enlaces están en [el flujo](#el-flujo-odd-por-defecto-sdd-opcional).
 
 ---
 
@@ -237,7 +239,7 @@ Estas habilidades dan su mejor resultado cuando el agente opera con contexto con
 
 Este proyecto existe gracias al trabajo de otros:
 
-- **[Alan Buscaglia](https://gentlemanprogramming.com/) — [Gentleman Programming](https://github.com/Gentleman-Programming)**: creó **ODD**, el método de trabajo que este repositorio sigue, y **[Gentle-AI](https://github.com/Gentleman-Programming/gentle-ai)**, el entorno con el que se revisó, corrigió y refinó este repositorio. Su sitio: **[gentlemanprogramming.com](https://gentlemanprogramming.com/)**.
+- **Alan Buscaglia (Gentleman Programming)**: creó **ODD**, el método que este repositorio sigue, y **Gentle-AI**, el entorno con el que se revisó, corrigió y refinó este repositorio. Sus enlaces están más arriba, en [el flujo](#el-flujo-odd-por-defecto-sdd-opcional) y en [la sección del badge](#built-with-gentle-ai).
 - **[mattpocock/skills](https://github.com/mattpocock/skills)**: por servir como referencia e inspiración para varias habilidades adaptadas a este ecosistema.
 - **Supabase** y **Firebase**: por sus habilidades oficiales que extienden las capacidades de este repositorio.
 
