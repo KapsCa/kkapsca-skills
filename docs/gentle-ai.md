@@ -15,7 +15,7 @@ Gentle AI es un stack diseñado para coordinar agentes IA en flujos de desarroll
 
 Las skills aquí reunidas:
 
-- **Son reutilizables fuera de Gentle AI** — cualquier persona puede usarlas con Cursor, Windsurf u opencode
+- **Son reutilizables fuera de Gentle AI** — cualquier persona puede usarlas con Pi u opencode
 - **Dan su mejor rendimiento dentro del stack de Gentle AI** — cuando hay un orquestador coordinando fases (ODD por defecto) y el entorno sigue las convenciones del stack
 
 En otras palabras: no son piezas mágicas aisladas, son un **potenciador del stack** para lograr mejor ejecución, menos ambigüedad y mejores resultados con agentes IA.

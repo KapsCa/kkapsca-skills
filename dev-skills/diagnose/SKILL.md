@@ -33,8 +33,7 @@ Cárgala al escuchar: "debug", "diagnosticar", "arreglar error", "fix bug", "por
 
 - para revisiones de arquitectura amplias (usa `improve-codebase-architecture`),
 - para planear features nuevas (usa el flujo por defecto, ODD; o `sdd-propose` si SDD fue seleccionado),
-- para editing de flujo normal sin un bug claro,
-- **no usar para review arquitectónico amplio; para eso usa `improve-codebase-architecture`**.
+- para editing de flujo normal sin un bug claro.
 
 ## Precedencia
 
@@ -43,7 +42,7 @@ Cárgala al escuchar: "debug", "diagnosticar", "arreglar error", "fix bug", "por
 
 ## Fallback
 
-- Si no hay error reproducible o el usuario está en fase de diseño/propuesta, no activar; usar el flujo SDD (`sdd-design` o `sdd-propose`) si fue seleccionado.
+- Si no hay error reproducible o el usuario está en fase de diseño/propuesta, no activar; seguir el flujo por defecto (ODD), y usar el formal SDD (`sdd-design` o `sdd-propose`) solo si fue seleccionado.
 - Si la skill requerida no está instalada en `~/.config/opencode/skills`, documentar la brecha y seguir con el flujo disponible (ODD o SDD).
 - Si el problema resulta ser arquitectónico y no un bug puntual, enrutar a `improve-codebase-architecture`.
 

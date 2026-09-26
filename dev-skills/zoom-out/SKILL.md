@@ -34,8 +34,7 @@ Cárgala al escuchar: "entender el sistema", "zoom out", "perspectiva global", "
 
 - para debugging puntual (usa `diagnose`),
 - para revisión de arquitectura amplia (usa `improve-codebase-architecture`),
-- cuando ya conoces bien el módulo y no hay riesgo de efectos colaterales,
-- **no usar para debugging (usa `diagnose`) ni para review profundo (usa `improve-codebase-architecture`)**.
+- cuando ya conoces bien el módulo y no hay riesgo de efectos colaterales.
 
 ## Precedencia
 
@@ -114,7 +113,7 @@ Efectos: [logs, DB, red]
 - [ ] Ya trazé el flujo de datos de entrada a salida
 - [ ] Ya listé los riesgos potenciales al editar
 - [ ] Ya entregué el resumen breve
-- [ ] Ya indicué si es seguro editar o requiere pasos previos
+- [ ] Ya indiqué si es seguro editar o requiere pasos previos
 
 ---
 
