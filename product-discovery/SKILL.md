@@ -5,7 +5,6 @@ license: MIT
 metadata:
   author: KkapsCa
   version: "3.0"
-  pipeline: "project-kickstart/02"
   prev: "brainstorm"
   next: "project-init"
 ---

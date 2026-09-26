@@ -5,7 +5,6 @@ license: MIT
 metadata:
   author: KkapsCa
   version: "1.1"
-  pipeline: "project-kickstart/dev-bootstrap"
 ---
 
 # Repo Bootstrap — Execution Skill (Hardened)

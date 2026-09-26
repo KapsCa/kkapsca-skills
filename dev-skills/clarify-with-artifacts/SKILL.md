@@ -5,7 +5,6 @@ license: MIT
 metadata:
   author: KkapsCa
   version: "1.0"
-  pipeline: "project-kickstart/core"
 ---
 
 # Clarify with Artifacts — Opt-in Context Helper

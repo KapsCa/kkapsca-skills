@@ -5,7 +5,6 @@ license: MIT
 metadata:
   author: KkapsCa
   version: "3.0"
-  pipeline: "project-kickstart/04"
   prev: "project-init"
   next: ""
   input_principal: "Project Framing Doc"
