@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.7.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.6.0...kkapsca-skills-v0.7.0) (2026-09-26)
+
+
+### Features
+
+* **repo-bootstrap:** add the security baseline templates ([03476f5](https://github.com/KapsCa/kkapsca-skills/commit/03476f5572692005dfcc0f58e8618a493f33db8b))
+* **repo-bootstrap:** baseline de seguridad instalable (plantillas + instalador + docs) ([29f5c9b](https://github.com/KapsCa/kkapsca-skills/commit/29f5c9b233cb18ce4dc55a335c68fd5d3654b0ad))
+* **repo-bootstrap:** install the security baseline from the installer ([8c0a6f8](https://github.com/KapsCa/kkapsca-skills/commit/8c0a6f856308bac1383c957f79fd715bfb5a386c))
+* **scripts:** install the product pipeline for Pi as well ([bb21e7f](https://github.com/KapsCa/kkapsca-skills/commit/bb21e7f54a1bd6be3c659a9e1c387e92230e51a0))
+
+
+### Bug Fixes
+
+* **repo-bootstrap:** address shellcheck findings in the installer ([1bd62ba](https://github.com/KapsCa/kkapsca-skills/commit/1bd62ba570509da0f9b2504596b066f4177eb9d6))
+* **repo-bootstrap:** only enable dependency ecosystems the repo has ([93ec2ff](https://github.com/KapsCa/kkapsca-skills/commit/93ec2ff15da12705e7e92ba8a8cbd779040cacc5))
+* **repo-bootstrap:** stop clobbering project content, cover empty repos ([e613900](https://github.com/KapsCa/kkapsca-skills/commit/e6139000802ec8c3a377a4cf6eb7808d40195f13))
+* **skills:** report conflicts instead of aborting the whole bootstrap ([b3954a6](https://github.com/KapsCa/kkapsca-skills/commit/b3954a68d3bc34289e8f496656a97a38db8e67b1))
+
 ## [0.6.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.5.0...kkapsca-skills-v0.6.0) (2026-09-19)
 
 
