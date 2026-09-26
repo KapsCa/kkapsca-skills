@@ -1,8 +1,10 @@
 ---
 name: sdd-to-issues
 description: >
-  Export-only skill que convierte artifacts SDD (spec, design, tasks) en issue drafts
-  o issues GitHub reales usando issue-creation. NO descompone trabajo; eso lo hace sdd-tasks.
+  Export-only skill que convierte un plan de trabajo ya aprobado en issue drafts
+  o issues GitHub reales usando issue-creation. Acepta el documento de feature de ODD
+  (`odd/tasks/<feature>.md`) por defecto, o artifacts SDD (spec, design, tasks) si SDD
+  fue seleccionado. NO descompone trabajo; eso es territorio de sdd-tasks.
 license: Apache-2.0
 metadata:
   author: KkapsCa
@@ -12,7 +14,12 @@ metadata:
 
 # SDD-to-Issues — Export-Only Wrapper
 
-> **Input:** `sdd/{change}/spec`, `design`, `tasks` desde Engram (o `openspec/` si aplica)
+> **Nota sobre el nombre:** la skill conserva el nombre `sdd-to-issues`, pero su entrada
+> por defecto ya no es SDD. El flujo por defecto es **ODD**, y su plan de trabajo vive en
+> `odd/tasks/<feature>.md`. Los artifacts SDD son la entrada **alternativa**, y aplican
+> solo cuando SDD fue seleccionado explícitamente.
+
+> **Input:** `odd/tasks/<feature>.md` (ODD, por defecto) o `sdd/{change}/spec`, `design`, `tasks` (rama SDD)
 > **Output:** issue drafts o issues GitHub vía `issue-creation`
 > **Modo:** Export-only; NO particiona trabajo
 
@@ -21,36 +28,35 @@ metadata:
 ## When to Use
 
 Usa esta skill cuando:
-- ya exista un cambio SDD con spec/design/tasks aprobados,
-- el usuario pida "exportar a issues" o "crear issues desde SDD",
-- necesites pasar el plan SDD al sistema de issues sin reescribir nada.
+- ya exista un plan de trabajo aprobado — el documento de feature de ODD (`odd/tasks/<feature>.md`) o, si SDD fue seleccionado, `sdd/{change}` con spec/design/tasks,
+- el usuario pida "exportar a issues" o "crear issues desde el plan",
+- necesites pasar el plan al sistema de issues sin reescribir nada.
 
 ## When NOT to Use
 
-- estés en fase de propuesta o diseño (usa `sdd-propose` / `sdd-design`),
-- busques partir el trabajo en tareas (usa `sdd-tasks` — eso es su territorio),
-- no existan artifacts SDD previos (sin artifacts → no genera nada),
+- estés todavía definiendo el plan (ODD: primero el documento de feature; SDD: `sdd-propose` / `sdd-design`),
+- busques partir el trabajo en tareas (eso es el territorio de la partición, no de esta skill),
+- no exista ningún plan previo (sin plan → no genera nada),
 - el usuario pida crear issues desde cero (usa `issue-creation` directamente).
 
 ---
 
 ## Principio Rector
 
-**Export-only.** Esta skill lee artifacts SDD ya aprobados y los traduce a issues; no decide qué hacer, no parte trabajo, no valida contenido. La partición de trabajo es responsabilidad exclusiva de `sdd-tasks`.
+**Export-only.** Esta skill lee un plan de trabajo ya aprobado y lo traduce a issues; no decide qué hacer, no parte trabajo, no valida contenido. La partición de trabajo es responsabilidad del flujo que la produjo: ODD (paso 5, documento de feature) por defecto, o `sdd-tasks` si SDD fue seleccionado.
 
 ---
 
 ## Flujo de Exportación
 
 ```
-1. Leer artifacts SDD
-   └── spec → contexto del cambio
-   └── design → decisiones técnicas
-   └── tasks → checklists de implementación
+1. Leer el plan de trabajo
+   └── ODD (por defecto): odd/tasks/<feature>.md → intención, alcance y tareas
+   └── SDD (si fue seleccionado): spec → contexto, design → decisiones, tasks → checklists
 
 2. Mapear a issue draft
-   └── Título: basado en proposal/spec
-   └── Body: resumen de design + tasks como checklist
+   └── Título: basado en el plan
+   └── Body: resumen del alcance + tareas como checklist
    └── Labels: según tipo de cambio (feat, fix, chore)
 
 3. Crear issue vía issue-creation
@@ -61,10 +67,10 @@ Usa esta skill cuando:
 
 ## Qué NO hace esta skill
 
-- NO descompone trabajo en tareas (eso es `sdd-tasks`)
+- NO descompone trabajo en tareas (eso lo hace el flujo que produjo el plan)
 - NO escribe artifacts canónicos nuevos
-- NO reemplaza `sdd-tasks`, `sdd-spec` ni `sdd-design`
-- NO corre cuando no hay artifacts SDD que leer
+- NO reemplaza al flujo formal: ni ODD ni `sdd-tasks` / `sdd-spec` / `sdd-design`
+- NO corre cuando no hay ningún plan que leer
 - NO compite con `issue-creation` / `branch-pr` para crear/aprobar issues y PRs
 
 ---
@@ -91,9 +97,9 @@ Usa esta skill cuando:
 
 ## Fallback
 
-Si no hay artifacts SDD disponibles (`sdd/{change}/*` no encontrado en Engram o `openspec/`):
+Si no hay ningún plan disponible (`odd/tasks/<feature>.md` no encontrado, y `sdd/{change}/*` tampoco):
 - NO inventes contenido,
-- responde: "No se encontraron artifacts SDD para este cambio. Usa SDD primero o `issue-creation` para crear el issue manualmente."
+- responde: "No se encontró un plan de trabajo para este cambio. Terminá el paso de planificación del flujo (ODD: documento de feature) o usá `issue-creation` para crear el issue manualmente."
 
 ---
 
@@ -101,23 +107,25 @@ Si no hay artifacts SDD disponibles (`sdd/{change}/*` no encontrado en Engram o 
 
 | Skill | Relación |
 |--------|----------|
-| `sdd-tasks` | Manda en partición de trabajo; `sdd-to-issues` solo exporta |
-| `issue-creation` | Canal de creación de issues; `sdd-to-issues` lo invoca |
-| `branch-pr` | NO se solapan; `sdd-to-issues` no abre PRs |
-| `sdd-propose` / `sdd-spec` | Upstream; `sdd-to-issues` vive downstream |
+| Flujo por defecto (ODD) | Produce el plan que esta skill exporta: `odd/tasks/<feature>.md` |
+| `sdd-tasks` | Manda en partición de trabajo cuando SDD fue seleccionado; esta skill solo exporta |
+| `issue-creation` | Canal de creación de issues; esta skill lo invoca |
+| `branch-pr` | NO se solapan; esta skill no abre PRs |
+| `sdd-propose` / `sdd-spec` | Upstream solo en la rama SDD; esta skill vive downstream |
 
 ---
 
 ## Comandos
 
-### Exportar un cambio SDD a issue
+### Exportar el plan de trabajo a issue
 
 ```
-Cargar sdd-to-issues → leer sdd/{change}/spec + design + tasks → generar issue draft → crear vía issue-creation
+Cargar sdd-to-issues → leer odd/tasks/<feature>.md (ODD) o sdd/{change}/* (rama SDD)
+→ generar issue draft → crear vía issue-creation
 ```
 
-### Si no hay artifacts
+### Si no hay plan
 
 ```
-Cargar sdd-to-issues → fallback: "No se encontraron artifacts SDD. Usa SDD primero."
+Cargar sdd-to-issues → fallback: "No se encontró un plan de trabajo. Terminá la planificación primero."
 ```

@@ -28,7 +28,7 @@ Usa esta skill cuando:
 ## When NOT to Use
 
 - ya estés ejecutando `repo-bootstrap` (esa skill manda en normas),
-- el usuario esté en flujo SDD (`/sdd-*`) — usa la fase correspondiente,
+- el usuario esté en la rama SDD (`/sdd-*`) — usa la fase correspondiente. ODD es el flujo por defecto, y en ODD esta capa sí aplica,
 - busques bloquear acciones: esta skill SOLO advierte, no bloquea.
 
 ---

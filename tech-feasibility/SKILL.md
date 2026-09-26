@@ -325,17 +325,17 @@ Cuando el stack elegido sea **Supabase**, se activarán las siguientes skills en
 ### `supabase`
 - **Cuándo activar**: Solo después de confirmar Supabase como backend en esta fase (`tech-feasibility`).
 - **Qué incluye**: Integración general (auth, realtime, storage, database).
-- **Fase de activación**: `sdd-design`, `sdd-apply`, desarrollo.
+- **Fase de activación**: implementación (ODD, paso 6), o `sdd-design` / `sdd-apply` si SDD fue seleccionado.
 - **⚠️ Disponibilidad**: external-bootstrappable vía `${AGENTS_DIR}/supabase/`. Requiere bootstrap (`bash scripts/bootstrap.sh`) o instalación manual. Sin instalación física en `~/.config/opencode/skills`, el routing es solo lógico.
 
 ### `supabase-postgres-best-practices`
-- **Cuándo activar**: En fases de diseño (`sdd-design`) o implementación (`sdd-apply`) cuando el trabajo entre en contexto SQL, RLS, migrations, performance o esquema Postgres.
+- **Cuándo activar**: Durante la implementación (ODD, paso 6) o, si SDD fue seleccionado, en `sdd-design` / `sdd-apply`, cuando el trabajo entre en contexto SQL, RLS, migrations, performance o esquema Postgres.
 - **Qué incluye**: Mejores prácticas de PostgreSQL, políticas RLS, índices, optimización de consultas.
 - **NO activar**: Solo por haber elegido Supabase; debe haber trabajo técnico específico de base de datos.
 - **⚠️ Disponibilidad**: external-bootstrappable vía `${AGENTS_DIR}/supabase-postgres-best-practices/`. Misma dependencia que `supabase`.
 
 ### Propagación de señal
-Al confirmar Supabase, la señal debe pasar a fases siguientes (`project-init` → `sdd-design` → `sdd-apply`) para que el orquestador active las skills correspondientes en su momento, según el contexto técnico específico.
+Al confirmar Supabase, la señal debe pasar a fases siguientes (`project-init` → implementación (ODD, paso 6); si SDD fue seleccionado, `sdd-design` → `sdd-apply`) para que el orquestador active las skills correspondientes en su momento, según el contexto técnico específico.
 
 ---
 
@@ -346,7 +346,7 @@ Cuando el stack elegido sea **Firebase**, se activarán las siguientes skills en
 ### `firebase-basics`
 - **Cuándo activar**: Solo después de confirmar Firebase como backend/BaaS en esta fase (`tech-feasibility`) o cuando la conversación pida inicialización/CLI/proyecto Firebase.
 - **Qué incluye**: Configuración general (auth, proyectos, CLI, reglas base).
-- **Fase de activación**: `sdd-design`, `sdd-apply`, desarrollo.
+- **Fase de activación**: implementación (ODD, paso 6), o `sdd-design` / `sdd-apply` si SDD fue seleccionado.
 - **⚠️ Disponibilidad**: external-bootstrappable vía `${AGENTS_DIR}/firebase-basics/`. Requiere bootstrap (`bash scripts/bootstrap.sh`) o instalación manual. Sin instalación física en `~/.config/opencode/skills`, el routing es solo lógico.
 
 ### `firebase-auth-basics`
@@ -396,7 +396,7 @@ Cuando el stack elegido sea **Firebase**, se activarán las siguientes skills en
 - **⚠️ Disponibilidad**: external-bootstrappable vía `${AGENTS_DIR}/developing-genkit-js/`. Ver [skill-registry](../.atl/skill-registry.md) para la matriz completa.
 
 ### Propagación de señal (Firebase)
-Al confirmar Firebase, la señal debe pasar a fases siguientes (`project-init` → `sdd-design` → `sdd-apply`) para que el orquestador active las skills correspondientes en su momento, según el contexto técnico específico y el registry (`.atl/skill-registry.md`).
+Al confirmar Firebase, la señal debe pasar a fases siguientes (`project-init` → implementación (ODD, paso 6); si SDD fue seleccionado, `sdd-design` → `sdd-apply`) para que el orquestador active las skills correspondientes en su momento, según el contexto técnico específico y el registry (`.atl/skill-registry.md`).
 
 ---
 

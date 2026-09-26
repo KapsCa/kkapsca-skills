@@ -3,7 +3,7 @@ name: zoom-out
 description: >
   Da una perspectiva de sistema antes de tocar código poco familiar.
   Mapea dependencias, flujos y riesgos para evitar romper cosas al editar.
-  Integra con SDD: úsalo antes de `sdd-apply` o `sdd-design` en código desconocido.
+  Integra con el trabajo formal: úsalo antes de implementar en código desconocido (ODD paso 6, o `sdd-design` / `sdd-apply` si SDD fue seleccionado).
   Trigger: Cuando el usuario diga "entender el sistema", "zoom out",
   "perspectiva global", "antes de editar esto", "entender flujo completo",
   "system map", "dependency check".
@@ -24,7 +24,7 @@ Usa esta skill cuando:
 - vayas a editar código que no conoces bien,
 - necesites entender cómo encaja una pieza en el sistema antes de proponer cambios,
 - el usuario pida "entender el sistema", "zoom out", "perspectiva global",
-- estés a punto de ejecutar `sdd-apply` en un módulo desconocido.
+- estés a punto de implementar en un módulo desconocido.
 
 ## Trigger
 
@@ -45,8 +45,8 @@ Cárgala al escuchar: "entender el sistema", "zoom out", "perspectiva global", "
 ## Fallback
 
 - Si no hay código suficiente o el usuario apenas inicia, no activar; usar fases upstream (`brainstorm`, `product-discovery`).
-- Si la skill no está instalada en `~/.config/opencode/skills`, documentar la brecha y seguir con SDD/skill disponible.
-- Si el módulo es conocido, omitir esta skill y proceder directo a `sdd-apply`.
+- Si la skill no está instalada en `~/.config/opencode/skills`, documentar la brecha y seguir con el flujo disponible (ODD o SDD).
+- Si el módulo es conocido, omitir esta skill y proceder directo a la implementación.
 
 ---
 
@@ -99,11 +99,11 @@ Efectos: [logs, DB, red]
 
 ---
 
-## Integración con SDD
+## Integración con el trabajo formal (ODD / SDD)
 
-- Esta skill es **companion** para `sdd-apply` y `sdd-design`.
+- Esta skill es **companion** de la implementación: ODD paso 6 por defecto, o `sdd-design` / `sdd-apply` si SDD fue seleccionado.
 - Úsala **antes** de escribir código en módulos que no dominas.
-- No reemplaza el análisis de `sdd-design`, solo da contexto previo.
+- No reemplaza el análisis de diseño (`sdd-design` si SDD fue seleccionado), solo da contexto previo.
 - Si el mapa revela que el módulo necesita refactor, considera `improve-codebase-architecture` primero.
 
 ---
