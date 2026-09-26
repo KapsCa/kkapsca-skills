@@ -16,6 +16,12 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    cooldown:
+      # GitHub already applies a 3-day default to version updates even when this
+      # key is absent; 7 gives more margin against a release that was published
+      # a few hours ago and may not have been reviewed by anyone yet. Cooldown
+      # never applies to security updates, so urgent fixes are not delayed.
+      default-days: 7
     commit-message:
       # Conventional Commits, so the repository's commit-lint job accepts the
       # bot's commits without an exemption. Without this, Dependabot's default

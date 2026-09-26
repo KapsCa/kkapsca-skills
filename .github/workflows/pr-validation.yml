@@ -18,8 +18,11 @@ permissions:
 jobs:
   check-issue-reference:
     name: Check Issue Reference
-    # Un PR de release-please no puede vincular un issue aprobado: lo genera un bot.
-    if: ${{ github.actor != 'dependabot[bot]' && !startsWith(github.event.pull_request.head.ref, 'release-please--') }}
+    # Un PR generado por un bot (release-please o dependabot) no puede vincular un
+    # issue aprobado: no lo crea un humano.
+    if: ${{ github.actor != 'dependabot[bot]'
+         && !startsWith(github.event.pull_request.head.ref, 'dependabot/')
+         && !startsWith(github.event.pull_request.head.ref, 'release-please--') }}
     runs-on: ubuntu-latest
     steps:
       - name: Validate linked issue in PR body
@@ -38,8 +41,10 @@ jobs:
 
   check-issue-approved:
     name: Check Issue Has status:approved
-    # Idem: sin issue vinculado no hay label que validar en un PR de release.
-    if: ${{ github.actor != 'dependabot[bot]' && !startsWith(github.event.pull_request.head.ref, 'release-please--') }}
+    # Idem: sin issue vinculado no hay label que validar en un PR de bot.
+    if: ${{ github.actor != 'dependabot[bot]'
+         && !startsWith(github.event.pull_request.head.ref, 'dependabot/')
+         && !startsWith(github.event.pull_request.head.ref, 'release-please--') }}
     runs-on: ubuntu-latest
     steps:
       - name: Validate approved issue label
@@ -72,8 +77,11 @@ jobs:
 
   check-pr-type-label:
     name: Check PR Has type:* Label
-    # Un PR de release lleva el label 'autorelease: pending', no un type:*.
-    if: ${{ github.actor != 'dependabot[bot]' && !startsWith(github.event.pull_request.head.ref, 'release-please--') }}
+    # Un PR de bot lleva 'autorelease: pending' (release-please) o
+    # 'dependencies' (dependabot), nunca un type:*.
+    if: ${{ github.actor != 'dependabot[bot]'
+         && !startsWith(github.event.pull_request.head.ref, 'dependabot/')
+         && !startsWith(github.event.pull_request.head.ref, 'release-please--') }}
     runs-on: ubuntu-latest
     steps:
       - name: Validate PR type label
