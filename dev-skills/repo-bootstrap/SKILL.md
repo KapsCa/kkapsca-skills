@@ -75,12 +75,21 @@ Usa esta skill cuando:
 | 7 | **Repos públicos: protección clásica** | Branch protection clásica SHALL be configured for `main`. | Verify branch protection rules are enforced (not "Not enforced") for public repos. |
 | 8 | **Repos privados personales Free** | GitHub enforcement MAY not apply; hook local es obligatorio como red de seguridad. | Verify hook exists and blocks pushes. Acknowledge GitHub UI may show "Not enforced". |
 | 9 | **Solo-dev: approvals en 0** | Solo-dev SHALL have `required approvals = 0`. GitHub no permite aprobar tu propio PR. | Verify branch protection shows "Required approving reviews: 0". |
+| 10 | **Ningún secreto se versiona** | Todo repo SHALL tener `.gitleaks.toml` y un workflow que FALLE el build al detectar un secreto. | Verify `.github/workflows/gitleaks.yml` exists and runs on PR and push to main. Introduce a fake secret in a branch and confirm the check fails. |
+| 11 | **Un secreto detectado se rota** | Un secreto que llegó a un commit MUST considerarse comprometido. Borrar la línea NO alcanza: hay que rotar la credencial. | Verify the secret was rotated in the provider, not just removed from the file. |
+| 12 | **Acciones pinneadas por SHA completo** | Toda acción de GitHub Actions SHALL referenciarse por SHA completo de 40 caracteres, con la versión como comentario. | Verify `grep -rn 'uses:.*@' .github/workflows | grep -vE '@[0-9a-f]{40}'` returns nothing. |
+| 13 | **Permisos mínimos del token** | Todo workflow SHALL declarar `permissions:` explícito, y el default del repo SHALL ser `read`. La escalada a `write` SHALL ser por job y justificada. | Verify `gh api repos/OWNER/REPO/actions/permissions/workflow` reports `read`, and that every workflow declares `permissions:`. |
+| 14 | **Actualizador de dependencias activo** | Todo repo SHALL tener `.github/dependabot.yml` con los ecosistemas que el repo realmente tiene. Un ecosistema declarado sin sus archivos HACE FALLAR su job. | Verify each declared ecosystem has its manifest committed, and that no Dependabot job is failing. |
+| 15 | **Análisis estático y auditoría** | Todo repo SHALL tener `audit.yml` (auditoría de dependencias) y, si es público, `codeql.yml`. | Verify both workflows exist and pass. In a repo with no code yet, `codeql.yml` SHALL skip instead of failing. |
+| 16 | **Fail-closed en seguridad** | Si un chequeo de seguridad no corrió, o corrió degradado, el PR MUST NOT mergearse. Un chequeo ausente NUNCA cuenta como aprobado. | Verify that removing a security workflow blocks the PR instead of letting it through. |
 
 ---
 
 ## Resultado Esperado
 
 Cuando esta skill se aplica bien, el repo debe quedar con:
+
+**Gobernanza:**
 
 - `PULL_REQUEST_TEMPLATE.md`
 - workflow de `release-please`
@@ -91,6 +100,64 @@ Cuando esta skill se aplica bien, el repo debe quedar con:
 - hook local `pre-push`
 - al menos un workflow funcional de validación del stack
 - branch protection clásica en públicos, si aplica
+
+**Seguridad:**
+
+- `.github/workflows/gitleaks.yml` y `.gitleaks.toml`
+- `.github/workflows/audit.yml`
+- `.github/workflows/codeql.yml` (solo si el repo es público)
+- `.github/dependabot.yml`
+- `SECURITY.md`
+- bloque de secretos fusionado dentro del `.gitignore`
+
+---
+
+## Seguridad: qué cubre cada herramienta
+
+Cada herramienta cubre una parte distinta. Ninguna cubre todo, y los huecos están declarados abajo a propósito: es mejor saber qué NO está cubierto que asumir cobertura que no existe.
+
+| Herramienta | Qué responde | Cómo se llama |
+|---|---|---|
+| `gitleaks` | ¿Alguien escribió una contraseña o una clave en el código? | `gitleaks.yml` |
+| `dependabot` | ¿Salió una versión nueva de algo que uso? | `dependabot.yml` |
+| `codeql` | ¿Hay formas conocidas de escribir código inseguro? | `codeql.yml` |
+| `audit` | ¿Algo que YA tengo tiene una falla conocida hoy? | `audit.yml` |
+
+### Matriz de cobertura por stack
+
+| Stack | Secretos | Versiones | Análisis estático | Auditoría de librerías |
+|---|---|---|---|---|
+| Go | ✅ | ✅ | ✅ CodeQL | ✅ `govulncheck` |
+| Python | ✅ | ✅ | ✅ CodeQL | ✅ `pip-audit` |
+| Node / TS | ✅ | ✅ | ✅ CodeQL | ✅ `npm audit` |
+| Rust | ✅ | ✅ | ✅ CodeQL | ❌ |
+| Dart / Flutter | ✅ | ✅ | ❌ **sin cobertura** | ❌ **sin cobertura** |
+| Shell (bash) | ✅ | n/a | ❌ **sin cobertura** | n/a |
+| PowerShell | ✅ | n/a | ❌ **sin cobertura** | n/a |
+| Workflows de Actions | ✅ | ✅ | ✅ CodeQL (`actions`) | n/a |
+
+### Huecos conocidos, declarados
+
+**CodeQL no entiende Dart/Flutter, shell ni PowerShell.** Sus lenguajes soportados son C/C++, C#, Go, Java/Kotlin, JavaScript/TypeScript, Python, Ruby, Rust, Swift y los propios workflows de Actions. En un repo de Flutter, `codeql.yml` corre y no encuentra nada: no es un error, es un hueco.
+
+**Dart/Flutter no tiene herramienta oficial de auditoría de librerías para CI.** Por eso `audit.yml` no lo cubre. Es el único stack del ecosistema sin ninguna capa de análisis ni auditoría automática.
+
+**Un repo sin código todavía no tiene ninguna señal de lenguaje.** Ese es el estado inicial normal de un proyecto nuevo. En ese caso: `codeql.yml` se saltea solo (tiene un guard), `audit.yml` saltea todos sus pasos sin fallar, y `dependabot.yml` queda solo con `github-actions`. Nada falla, y cada pieza se activa cuando aparece el código.
+
+### Límites de plan
+
+| Herramienta | Límite |
+|---|---|
+| CodeQL | Gratis en repos **públicos**. En privados necesita licencia de GitHub Code Security, así que el instalador solo lo copia en públicos |
+| gitleaks | Gratis con **cuenta personal**. Si el repo pasa a una **organización**, necesita una licencia gratuita de gitleaks.io |
+
+### Dónde vive cada regla
+
+| Nivel | Archivo | Rol |
+|---|---|---|
+| Normativo | este `SKILL.md` | Fuente de verdad. Si hay conflicto, este archivo gana |
+| Por repo | `docs/repository-standards.md` | Lo que aterriza en cada proyecto |
+| Operativo | [`docs/security-baseline.md`](../../docs/security-baseline.md) | Vista derivada, para leer sin abrir una skill |
 
 ---
 
@@ -278,6 +345,27 @@ Si el repo es privado personal Free:
 - **Protección pública**: [assets/configure-public-branch-protection.sh](assets/configure-public-branch-protection.sh)
 - **Templates**: [assets/templates/](assets/templates/)
 
+### Plantillas de seguridad
+
+| Plantilla | Destino en el repo |
+|---|---|
+| `gitleaks.yml` | `.github/workflows/gitleaks.yml` |
+| `gitleaks.toml` | `.gitleaks.toml` |
+| `audit.yml` | `.github/workflows/audit.yml` |
+| `codeql.yml` | `.github/workflows/codeql.yml` (solo público) |
+| `dependabot.yml` | `.github/dependabot.yml` (base: solo `github-actions`) |
+| `dependabot-ecosystems/*.yml` | se concatenan a `.github/dependabot.yml` según el stack detectado |
+| `SECURITY.md` | `SECURITY.md` |
+| `gitignore-security.txt` | se fusiona dentro del `.gitignore`, detrás de un marcador |
+
+### Política de instalación
+
+Los archivos de **contenido del proyecto** (`CHANGELOG.md`, `PULL_REQUEST_TEMPLATE.md`, `docs/repository-standards.md`) y todos los de **seguridad** se crean **solo si faltan**. Nunca se pisan: un `CHANGELOG.md` tiene el historial real y un `.gitleaks.toml` puede estar ajustado a mano.
+
+Los archivos de **configuración de release-please** sí se sobrescriben: los genera la herramienta y no deberían editarse a mano.
+
+El hook `pre-push` solo se reinstala si se pide explícitamente con `--reinstall-hook`.
+
 ---
 
 ## Commands
@@ -287,6 +375,16 @@ Si el repo es privado personal Free:
 ```bash
 bash dev-skills/repo-bootstrap/assets/install-repo-standards.sh
 ```
+
+Es idempotente: correrlo dos veces no cambia nada de lo que ya estaba. Para reinstalar el hook `pre-push` a propósito:
+
+```bash
+bash dev-skills/repo-bootstrap/assets/install-repo-standards.sh --reinstall-hook
+```
+
+### Probar las plantillas antes de publicarlas
+
+Las plantillas se prueban ejecutándose en [KapsCa/baseline-sandbox](https://github.com/KapsCa/baseline-sandbox), un repo público que existe solo para eso. Una plantilla que nunca se ejecutó no está verificada: el banco de pruebas ya encontró un defecto que la lectura no vio.
 
 ### Aplicar protección clásica en repo público
 

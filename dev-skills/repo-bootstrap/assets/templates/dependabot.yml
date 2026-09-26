@@ -1,0 +1,46 @@
+version: 2
+
+# Revisa si las herramientas y librerias que usa el proyecto tienen una version
+# nueva, y abre un pull request cuando corresponde.
+#
+# Esto NO es opcional si el repo pinnea sus acciones por version exacta: sin un
+# actualizador, la version exacta se congela y un arreglo de seguridad publicado
+# nunca llega.
+#
+# LIMITE CONOCIDO: GitHub NO genera alertas de seguridad para las acciones
+# pinneadas por version exacta. Estas actualizaciones semanales son el canal por
+# el que llegan los arreglos.
+#
+# ---------------------------------------------------------------------------
+# IMPORTANTE: un ecosistema declarado aca SIN archivos de dependencias en el
+# repo hace FALLAR su trabajo de Dependabot. No lo ignora en silencio.
+# Comprobado en el banco de pruebas: en un repo solo-Node, los ecosistemas pip,
+# gomod y pub fallaron con "dependency_file_not_found".
+#
+# Por eso este archivo solo declara github-actions, que aplica a todo repo.
+# El instalador agrega un bloque por cada ecosistema que detecta, leyendo de
+# templates/dependabot-ecosystems/. Si copiaste este archivo a mano, agrega
+# abajo los bloques que correspondan a tu stack.
+# ---------------------------------------------------------------------------
+updates:
+  # Las acciones de GitHub Actions. Aplica SIEMPRE: todo repo tiene workflows.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    cooldown:
+      # GitHub ya aplica 3 dias por defecto. 7 da mas margen contra una version
+      # publicada hace pocas horas que todavia nadie reviso.
+      # El cooldown NO aplica a actualizaciones de seguridad: esas no se demoran.
+      default-days: 7
+    commit-message:
+      # Conventional Commits, para que el chequeo de commits del repo acepte los
+      # commits del bot sin eximirlo. Verificado: el PR que abre Dependabot dice
+      # "chore(deps): bump ...".
+      prefix: "chore"
+      include: "scope"
+    groups:
+      github-actions:
+        patterns:
+          - "*"

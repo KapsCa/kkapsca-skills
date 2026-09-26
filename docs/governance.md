@@ -120,6 +120,41 @@ Antes de push / PR / merge, `repo-guardrails` revisa:
 
 ---
 
+## Seguridad
+
+> **Vista derivada.** Las reglas normativas de seguridad viven en [`dev-skills/repo-bootstrap/SKILL.md`](../dev-skills/repo-bootstrap/SKILL.md).
+> La explicación completa está en [`docs/security-baseline.md`](security-baseline.md).
+
+Todo repo nuevo nace con seis piezas de seguridad, y ninguna depende de que alguien se acuerde:
+
+| Pieza | Qué responde |
+|---|---|
+| `gitleaks` | ¿Alguien escribió una contraseña o una clave en el código? |
+| `dependabot` | ¿Salió una versión nueva de algo que uso? |
+| `codeql` | ¿Hay formas conocidas de escribir código inseguro? |
+| `audit` | ¿Algo que ya tengo tiene una falla conocida hoy? |
+| `SECURITY.md` | ¿A quién le aviso si encuentro un problema? |
+| Bloque en `.gitignore` | ¿Qué archivos no deben guardarse nunca? |
+
+### Reglas que se suman al flujo
+
+- **Un secreto que llegó a un commit se considera comprometido: se rota.** Borrar la línea no alcanza, porque en el historial sigue estando.
+- **Cada acción de GitHub se referencia por versión exacta**, nunca por "la última".
+- **Cada workflow declara sus permisos, y los mínimos.** El permiso por defecto del repo es de solo lectura.
+- **Si un chequeo de seguridad no corre, no se mergea.** Un chequeo ausente no es un chequeo aprobado.
+- **Un ecosistema de dependencias se declara solo si el repo lo tiene.** Dependabot no lo saltea: falla.
+
+### Lo que NO está cubierto
+
+Declarado a propósito, para no asumir cobertura que no existe:
+
+- **CodeQL no entiende Dart/Flutter, shell ni PowerShell.** En un repo de Flutter corre y no encuentra nada.
+- **Dart/Flutter no tiene auditoría de librerías en CI.** Es el único stack del ecosistema sin ninguna capa automática.
+- **CodeQL solo funciona en repos públicos.** En privados necesita licencia paga, así que el instalador no lo copia.
+- **gitleaks necesita licencia si el repo es de una organización** (no si es de una cuenta personal).
+
+---
+
 ## Conventional Commits
 
 Todos los commits deben seguir el estándar [Conventional Commits](https://www.conventionalcommits.org/):
