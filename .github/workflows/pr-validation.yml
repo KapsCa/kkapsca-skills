@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Validate linked issue in PR body
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             const body = context.payload.pull_request.body || "";
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Validate approved issue label
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             const body = context.payload.pull_request.body || "";
@@ -85,7 +85,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Validate PR type label
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             const labels = context.payload.pull_request.labels.map(label => label.name);
@@ -100,10 +100,19 @@ jobs:
 
   check-conventional-commits:
     name: Validate Conventional Commits
+    # Idem: una rama de release arrastra commits que no escribio un humano, como
+    # los merge commits ("Merge pull request #N from ..."), y ninguno matchea
+    # Conventional Commits. Medido: el release PR real #51 fallaba en este job
+    # mientras los otros tres se salteaban, y nadie lo noto porque este check no
+    # era requerido. Los commits de un PR de release ya se validaron en su propio
+    # PR, cuando los escribio un humano.
+    if: ${{ github.actor != 'dependabot[bot]'
+         && !startsWith(github.event.pull_request.head.ref, 'dependabot/')
+         && !startsWith(github.event.pull_request.head.ref, 'release-please--') }}
     runs-on: ubuntu-latest
     steps:
       - name: Get PR commits
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             const { data: commits } = await github.rest.pulls.listCommits({
@@ -117,6 +126,16 @@ jobs:
             const invalidCommits = [];
 
             for (const commit of commits) {
+              // Un merge commit no lo escribio un humano: lo genera GitHub al
+              // mergear una rama, o al actualizar la rama de un PR ("Update
+              // branch", que la proteccion con strict obliga a usar cuando main
+              // avanzo). Su mensaje nunca es Conventional, y contarlo como fallo
+              // deja el PR sin salida: hay que actualizar para poder mergear, y
+              // actualizar es justo lo que hace fallar el check.
+              if (commit.parents && commit.parents.length > 1) {
+                continue;
+              }
+
               const message = commit.commit.message.split('\n')[0];
               if (!conventionalPattern.test(message)) {
                 invalidCommits.push(message);
