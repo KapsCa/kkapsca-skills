@@ -1,11 +1,7 @@
 ---
 name: improve-codebase-architecture
-description: >
-  Revisión de arquitectura enfocada en detectar deuda, acoplamiento y violaciones
-  de responsabilidades. Integra con el trabajo formal como paso previo a propuestas o diseño (ODD por defecto; SDD si fue seleccionado).
-  Trigger: Cuando el usuario diga "revisar arquitectura", "architecture review",
-  "mejorar estructura", "codebase health", "tech debt check", "refactor review".
-license: Apache-2.0
+description: "Trigger: revisar arquitectura, architecture review, mejorar estructura, codebase health, tech debt check, refactor review. Detecta deuda, acoplamiento y responsabilidades mezcladas; input al trabajo formal."
+license: MIT
 metadata:
   author: KkapsCa
   version: "1.0"

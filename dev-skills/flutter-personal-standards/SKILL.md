@@ -1,11 +1,7 @@
 ---
 name: flutter-personal-standards
-description: >
-  Criterio personal para proyectos Flutter: simplicidad primero, arquitectura proporcional,
-  state management según el alcance real del estado y uso de las skills oficiales de Flutter
-  cuando el problema es específico. No la uses para imponer GetX como default.
-
-license: Apache-2.0
+description: "Trigger: dudas de estructura, estado, complejidad o arquitectura en Flutter/Dart, o decidir cuán simple o escalable debe ser. Criterio de simplicidad y arquitectura proporcional; enruta a skills oficiales."
+license: MIT
 metadata:
   author: KkapsCa
   version: "4.0"

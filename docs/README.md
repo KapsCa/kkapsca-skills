@@ -22,5 +22,6 @@
 - [Flujo de contribución](governance.md) — Protección de ramas, PR, Conventional Commits
 - [Baseline de seguridad](security-baseline.md) — Qué chequea cada herramienta, qué cubre por stack y qué queda afuera
 - [Registro de skills](skill-registry.md) — Índice de ruteo que usa el orquestador para decidir cuándo activar cada skill
+- [Contrato de estilo de skills](skill-style-guide.md) — La norma LLM-first a la que se migran las 12 skills
 - [Versionado semántico](release-please.md) — Release-please y tipos de commit
 - [Configuración WSL](wsl-setup.md) — Recomendaciones para Windows/WSL

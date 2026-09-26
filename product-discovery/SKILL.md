@@ -1,16 +1,7 @@
 ---
 name: product-discovery
-description: >
-  PASO 2 de un pipeline de definición de producto. Sirve para validar una idea o
-  Product Brief con análisis de usuario, problema, competencia, mercado, propuesta
-  de valor, monetización y métodos de validación. Incluye una ruta completa y una
-  ruta ligera para side projects, aprendizaje o microproductos.
-
-  Usa esta skill cuando ya exista una idea más aterrizada y haga falta responder si
-  realmente vale la pena construirla, para quién, contra qué compite y cómo validarla
-  antes de gastar tiempo fuerte en desarrollo.
-
-license: Apache-2.0
+description: "Trigger: responder si hay una necesidad real, quién la usaría, qué alternativas existen y cómo validarla sin construir de más. Valida necesidad, usuario, competencia y mercado de una idea o Brief."
+license: MIT
 metadata:
   author: KkapsCa
   version: "3.0"

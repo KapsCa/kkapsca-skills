@@ -1,13 +1,7 @@
 ---
 name: zoom-out
-description: >
-  Da una perspectiva de sistema antes de tocar código poco familiar.
-  Mapea dependencias, flujos y riesgos para evitar romper cosas al editar.
-  Integra con el trabajo formal: úsalo antes de implementar en código desconocido (ODD paso 6, o `sdd-design` / `sdd-apply` si SDD fue seleccionado).
-  Trigger: Cuando el usuario diga "entender el sistema", "zoom out",
-  "perspectiva global", "antes de editar esto", "entender flujo completo",
-  "system map", "dependency check".
-license: Apache-2.0
+description: "Trigger: entender el sistema, zoom out, perspectiva global, antes de editar esto, entender flujo completo, system map, dependency check, editar código desconocido. Mapea dependencias, flujos y riesgos del sistema."
+license: MIT
 metadata:
   author: KkapsCa
   version: "1.0"

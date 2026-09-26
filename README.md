@@ -1,17 +1,24 @@
+<div align="center">
+
 # KkapsCa Skills
 
-> Habilidades (**Skills**) públicas para pasar de una idea a un producto y de un producto a una implementación técnica con criterio en un servicio de edición **IA-first**.
+> **Habilidades para pasar de una idea a un producto, y de un producto a código con criterio.**
 
-[![GitHub repo](https://img.shields.io/badge/GitHub-KkapsCa%2Fkkapsca--skills-blue?logo=github)](https://github.com/KapsCa/kkapsca-skills)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-3C5387?style=flat-square)](LICENSE)
+[![Skills: 12](https://img.shields.io/badge/skills-12-7D70C1?style=flat-square)](docs/skill-registry.md)
+[![GitHub](https://img.shields.io/badge/GitHub-KapsCa%2Fkkapsca--skills-854472?style=flat-square&logo=github)](https://github.com/KapsCa/kkapsca-skills)
 
-Este repositorio reúne habilidades (**skills**) pensadas desde la experiencia personal de **KkapsCa**, optimizadas para flujos de trabajo asistidos por Inteligencia Artificial (como **Pi** u **opencode**) y redactadas para que **cualquier persona pueda reutilizarlas** en sus propios proyectos.
+**[Inicio rápido](#inicio-rápido)** · **[Las 12 skills](#las-12-skills)** · **[Seguridad](#seguridad-desde-el-primer-commit)** · **[Documentación](#documentación)**
+
+</div>
+
+Este repositorio reúne **habilidades (skills)** pensadas desde la experiencia personal de **KkapsCa**, redactadas para que **cualquier persona pueda reutilizarlas** en sus propios proyectos.
+
+Son skills de **texto plano**: un archivo `SKILL.md` con frontmatter. No dependen de una herramienta, no ejecutan nada por su cuenta y no reemplazan tu criterio. Lo que hacen es darle a un agente de IA el **contexto y el orden de pensamiento** que suele faltar: qué preguntar antes de construir, qué decidir antes de elegir tecnología, y qué verificar antes de decir que algo está listo.
 
 ---
 
 ## Inicio Rápido
-
-Si quieres usar estas habilidades en tu máquina local con **opencode**:
 
 ```bash
 git clone https://github.com/KapsCa/kkapsca-skills.git
@@ -19,55 +26,76 @@ cd kkapsca-skills
 bash scripts/bootstrap.sh
 ```
 
-> **Nota**: El proceso de inicialización (**bootstrap**) se corre desde **este repositorio de habilidades**, no desde la carpeta de tu proyecto futuro. Reinicia opencode después de ejecutarlo.
+El proceso de inicialización (**bootstrap**) se corre **desde este repositorio de habilidades**, no desde la carpeta de tu proyecto futuro.
 
-Para detalles operativos de instalación (opciones `--copy`, enlaces simbólicos), consulta la [guía de instalación](docs/installation.md).
+### Dos destinos
 
----
+| Destino | Qué recibe | Dónde queda |
+|---|---|---|
+| **opencode** | Las 12 skills | `~/.config/opencode/skills/` |
+| **Pi** | Las 6 de mayor uso: el pipeline de producto y los estándares del repo | `~/.agents/skills/` |
 
-## ¿Qué es esto y para quién es?
-
-Este repositorio es una colección de **habilidades (skills)** —conjuntos de instrucciones y flujos de trabajo— diseñadas para ayudarte a:
-
-- **Desarrolladores** que arrancan proyectos desde cero
-- **Creadores técnicos** que necesitan estructura sin burocracia
-- **Creadores independientes** que quieren validar antes de construir
-- **Estudiantes** que quieren aprender a pensar antes de programar
-- **Equipos pequeños** que necesitan flujos de trabajo consistentes
-
----
-
-## Pipeline Recomendado
-
-```text
-Idea → brainstorming → descubrimiento de producto → inicio de proyecto → factibilidad técnica → bootstrap del repo → Desarrollo
+```bash
+bash scripts/bootstrap.sh            # ambos destinos
+bash scripts/bootstrap.sh --pi-only  # solo el destino de Pi, sin tocar opencode
 ```
 
-**Ruta ligera** (proyectos personales o proyectos paralelos):
-```text
-Idea → brainstorming → descubrimiento de producto → factibilidad técnica → bootstrap del repo → Desarrollo
-```
+> **Después de instalar, reiniciá el agente** (opencode, Pi o los dos): la lista de skills disponibles se refresca al arrancar.
 
-> El **bootstrap del repo** no solo deja las reglas de trabajo (PR, ramas, versionado). Deja también las **seis piezas de seguridad**, listas y corriendo. Ver [Seguridad desde el primer commit](#seguridad-desde-el-primer-commit).
+Si un directorio ya existe y no lo creó este repositorio, el bootstrap **no lo pisa**: lo reporta como conflicto y sigue. Detalle operativo en la [guía de instalación](docs/installation.md).
 
-### ¿Por dónde entrar?
-
-- Idea vaga → **brainstorming** (herramienta para aterrizar ideas)
-- Ya tienes problema + usuario + MVP → **descubrimiento de producto**
-- Tienes Discovery Report → **inicio de proyecto** o directo a **factibilidad técnica**
-- Ya tienes claridad técnica → usa una **habilidad de desarrollo**
-
-> La regla no es "seguir pasos porque sí". La regla es **no saltarte el pensamiento que todavía no has hecho**.
+**[Guía de instalación →](docs/installation.md)**
 
 ---
 
-## Filosofía
+## Las 12 skills
 
-- **Problema primero, tecnología después**
-- **La arquitectura debe ser proporcional al proyecto**
-- **La validación barata vale más que el código caro**
-- **Aprender fundamentos siempre gana a memorizar frameworks**
-- **La IA ayuda, pero no reemplaza criterio técnico**
+### Pipeline de producto
+
+De una idea vaga a un producto definido. Esta fase es **anterior** a cualquier flujo de implementación: acá todavía no hay código, hay decisiones.
+
+```text
+Idea → brainstorming → descubrimiento de producto → inicio de proyecto → factibilidad técnica → Desarrollo
+```
+
+**Ruta ligera** (proyectos personales o paralelos): `Idea → brainstorming → descubrimiento de producto → factibilidad técnica → Desarrollo`
+
+### Estándares del repo
+
+Preparan un repositorio y verifican que el trabajo lo respete.
+
+### Companions
+
+Se cargan por situación, cuando el trabajo ya está en marcha.
+
+| Grupo | Skill | Se activa cuando… | Destino |
+|---|---|---|---|
+| **Pipeline** | [brainstorm](brainstorm/SKILL.md) | tenés una idea y no sabés por dónde empezar | Pi · opencode |
+| **Pipeline** | [product-discovery](product-discovery/SKILL.md) | querés saber si la necesidad es real, quién la usaría y cómo validarla | Pi · opencode |
+| **Pipeline** | [project-init](project-init/SKILL.md) | hay que decidir enfoque, secuencia de trabajo y alcance inicial | Pi · opencode |
+| **Pipeline** | [tech-feasibility](tech-feasibility/SKILL.md) | hay que medir dificultad, riesgos, esfuerzo y elegir stack | Pi · opencode |
+| **Estándares** | [repo-bootstrap](dev-skills/repo-bootstrap/SKILL.md) | vas a crear un repositorio nuevo | Pi · opencode |
+| **Estándares** | [repo-guardrails](dev-skills/repo-guardrails/SKILL.md) | estás por hacer push, abrir un PR o mergear | Pi · opencode |
+| **Companion** | [clarify-with-artifacts](dev-skills/clarify-with-artifacts/SKILL.md) | hay una idea vaga y ya existen artifacts que la aterrizan | opencode |
+| **Companion** | [diagnose](dev-skills/diagnose/SKILL.md) | hay un bug que no entendés y querés ir de la reproducción a la causa | opencode |
+| **Companion** | [zoom-out](dev-skills/zoom-out/SKILL.md) | vas a editar código que no conocés bien | opencode |
+| **Companion** | [improve-codebase-architecture](dev-skills/improve-codebase-architecture/SKILL.md) | sospechás deuda técnica, acoplamiento o responsabilidades mezcladas | opencode |
+| **Companion** | [tasks-to-issues](dev-skills/tasks-to-issues/SKILL.md) | hay un plan aprobado y querés convertirlo en issues | opencode |
+| **Companion** | [flutter-personal-standards](dev-skills/flutter-personal-standards/SKILL.md) | hay dudas de estructura o arquitectura en Flutter/Dart | opencode |
+
+> La regla no es "seguir pasos porque sí". La regla es **no saltarte el pensamiento que todavía no hiciste**.
+
+**[Registro de skills →](docs/skill-registry.md)**
+
+---
+
+## El flujo: ODD por defecto, SDD opcional
+
+El trabajo entra por **ODD** (*Organic Driven Development*): un pedido chico se resuelve liviano, y uno sustancial deja **un documento de feature** en `odd/tasks/<feature>.md` que permite retomarlo sin reconstruir el plan.
+
+**SDD** (*Spec-Driven Development*) es una **rama opcional**, y se entra solo por pedido explícito (`/sdd-*`) o por propuesta aceptada. Tiene su propio pipeline documentado, y las skills de este repositorio conviven con él sin reemplazarlo: donde una skill necesita saber en qué fase está el trabajo, nombra ODD por defecto y las fases SDD como alternativa.
+
+**[ODD y SDD →](docs/sdd.md)**
 
 ---
 
@@ -102,25 +130,63 @@ Se declara a propósito, para no asumir defensas que no existen:
 - El detector de secretos **necesita una licencia si el repo es de una organización** (no si es de una cuenta personal).
 - **Un repo sin código todavía no tiene lenguaje.** Ese es el estado inicial normal de un proyecto nuevo, y está contemplado: nada falla, y cada pieza se activa cuando aparece el código.
 
-Detalle completo en [Baseline de seguridad](docs/security-baseline.md).
+**[Baseline de seguridad →](docs/security-baseline.md)**
+
+---
+
+## Cómo se escriben las skills
+
+Cada skill de este repositorio es un **contrato de instrucciones para un agente**, no documentación para humanos: dice cuándo activarse, qué reglas no puede violar, cómo decidir, qué hacer y qué devolver.
+
+El contrato está escrito en [el contrato de estilo](docs/skill-style-guide.md) y las 12 skills se migran a él **de forma progresiva**.
+
+**[Contrato de estilo →](docs/skill-style-guide.md)**
 
 ---
 
 ## Documentación
 
-Para detalles operativos, consulta:
+| Documento | Qué encontrás |
+|---|---|
+| [Guía de instalación](docs/installation.md) | Bootstrap, destinos, opciones `--copy` y `--pi-only`, desinstalación |
+| [Instalación en Windows nativo](docs/windows-native-setup.md) | Reconstruir el ecosistema completo sin WSL |
+| [Registro de skills](docs/skill-registry.md) | Qué skill se activa en qué situación, y quién manda cuando dos se solapan |
+| [Contrato de estilo](docs/skill-style-guide.md) | La norma LLM-first a la que se migran las skills |
+| [ODD y SDD](docs/sdd.md) | El flujo por defecto y la rama opcional |
+| [Baseline de seguridad](docs/security-baseline.md) | Qué chequea cada herramienta, qué cubre por stack y qué queda afuera |
+| [Flujo de contribución](docs/governance.md) | Ramas, PR, Conventional Commits, protección de `main` |
+| [Versionado](docs/release-please.md) | Versiones y changelog automáticos |
 
-- [Guía de instalación](docs/installation.md) — instalación detallada, bootstrap y opciones
-- [Baseline de seguridad](docs/security-baseline.md) — qué chequea cada herramienta, qué cubre por stack y qué queda afuera
-- [Índice de documentación](docs/README.md) — dónde encontrar contexto adicional (Gentle AI, ODD, SDD, Engram, contribución)
+**[Índice completo de documentación →](docs/README.md)**
 
 ---
 
-## Mejor Experiencia de Uso
+<!--
+  RESERVADO — sección de marca.
 
-Estas habilidades dan mejores resultados cuando el agente opera con contexto consistente y el entorno ya sigue las convenciones de Gentle AI.
+  Esta posición queda libre para la sección de identidad visual (wordmark, paleta,
+  tokens) que está construyendo el brand kit en `brand/`, con su propio
+  `GUIDELINES.md`. Se deja el lugar y el orden para que la sección entre acá sin
+  reescribir el resto del README.
 
-Si quieres la mejor experiencia: [Gentle AI Repository](https://github.com/Gentleman-Programming/gentle-ai)
+  Nota para quien la escriba: los colores de los badges de arriba son provisorios,
+  medidos del logo, y NO están aprobados como sistema. Cuando exista la paleta
+  oficial, se restylean desde acá.
+-->
+
+## Built with Gentle-AI
+
+Este repositorio fue creado con **[Gentle-AI](https://github.com/Gentleman-Programming/gentle-ai)**.
+
+<div align="center">
+
+<a href="https://github.com/Gentleman-Programming/gentle-ai">
+  <img width="220" src="https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/main/docs/assets/brand/built-with-gentle-ai.png" alt="Built with Gentle-AI" />
+</a>
+
+</div>
+
+Estas habilidades dan su mejor resultado cuando el agente opera con contexto consistente: **[Gentle AI Repository →](https://github.com/Gentleman-Programming/gentle-ai)**
 
 ---
 
@@ -131,8 +197,13 @@ Este proyecto utiliza herramientas y referentes que han contribuido a su desarro
 - **[Gentleman-Programming/gentle-ai](https://github.com/Gentleman-Programming/gentle-ai)**: Por el entorno de trabajo, la filosofía de desarrollo y las herramientas que permitieron revisar, corregir y refinar este repositorio.
 - **[mattpocock/skills](https://github.com/mattpocock/skills)**: Por servir como referencia e inspiración para varias habilidades adaptadas a este ecosistema.
 - **Supabase** y **Firebase**: Por sus habilidades oficiales que extienden las capacidades de este repositorio.
-- **Equipo de opencode**: Por la plataforma que hace posible la ejecución de estas habilidades.
 
 ---
 
-**Autor**: [KkapsCa](https://github.com/KapsCa)
+## Filosofía
+
+- **Problema primero, tecnología después**
+- **La arquitectura debe ser proporcional al proyecto**
+- **La validación barata vale más que el código caro**
+- **Aprender fundamentos siempre gana a memorizar frameworks**
+- **La IA ayuda, pero no reemplaza criterio técnico**
