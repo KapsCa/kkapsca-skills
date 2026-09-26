@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.7.1](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.7.0...kkapsca-skills-v0.7.1) (2026-09-26)
+
+
+### Bug Fixes
+
+* **skills:** higiene y coherencia tras la auditoría de las 12 skills ([1e06ef1](https://github.com/KapsCa/kkapsca-skills/commit/1e06ef1c9b22d4673880decac583dcc84b1c5ff2))
+* **skills:** hygiene and coherence after the audit of the 12 skills ([36c5c66](https://github.com/KapsCa/kkapsca-skills/commit/36c5c66054ec4a7f6d8b8e2fc28412b2ba2f6f7f))
+
 ## [0.7.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.6.0...kkapsca-skills-v0.7.0) (2026-09-26)
 
 
