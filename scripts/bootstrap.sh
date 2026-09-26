@@ -13,12 +13,8 @@ if [[ ! -f "${INSTALLER}" ]]; then
   exit 1
 fi
 
-# Pass --copy if requested
-if [[ "${1:-}" == "--copy" ]]; then
-  bash "${INSTALLER}" --copy
-else
-  bash "${INSTALLER}"
-fi
+# Pasa todos los argumentos al instalador, para que --copy y --pi-only lleguen.
+bash "${INSTALLER}" "$@"
 
 printf '\n✅ Bootstrap completado.\n'
 printf '👉 Reinicia opencode para que refresque la lista de skills disponibles.\n'

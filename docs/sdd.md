@@ -35,16 +35,15 @@ Exploración → Propuesta → Especificaciones → Diseño → Tareas → Imple
 Estas skills son **opt-in** y no reemplazan el flujo SDD principal. Viven como capa lateral:
 
 ```text
-request → request-triage? → clarify-with-artifacts? → sdd-propose/spec/design/tasks → sdd-to-issues? → issue-creation / branch-pr
+request → clarify-with-artifacts? → sdd-propose/spec/design/tasks → sdd-to-issues? → issue-creation / branch-pr
 ```
 
 | Skill | Rol | Relación con SDD |
 |-------|-----|-------------------|
-| `request-triage` | Enrutador ultra-delgado que decide si el request va a SDD, a una skill existente o a issue/discussion | Solo decide destino; NO aclara contenido ni parte trabajo |
 | `clarify-with-artifacts` | Estructura contexto usando artifacts existentes (docs, Engram, proposal, spec) | Output mínimo inline; NO sustituye `sdd-propose`/`sdd-spec` |
 | `sdd-to-issues` | Exporta artifacts SDD (spec/design/tasks) a issue drafts o issues GitHub | Export-only; NO descompone trabajo (eso es `sdd-tasks`) |
 
-**Precedencia**: Comando `/sdd-*` explícito siempre gana sobre `request-triage` y `clarify-with-artifacts`. `sdd-tasks` gana sobre `sdd-to-issues` para partición de trabajo.
+**Precedencia**: Comando `/sdd-*` explícito siempre gana sobre `clarify-with-artifacts`. `sdd-tasks` gana sobre `sdd-to-issues` para partición de trabajo.
 
 ## El Orquestador sdd-orchestrator
 

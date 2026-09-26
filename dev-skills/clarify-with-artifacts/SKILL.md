@@ -102,6 +102,5 @@ Esta skill puede leer y resumir, pero **NUNCA** debe:
 | Skill | Relación |
 |--------|----------|
 | `sdd-propose` / `sdd-spec` | Aguas abajo; `clarify` alimenta, no reemplaza |
-| `request-triage` | `triage` decide destino; `clarify` estructura contenido |
 | `brainstorm` | Upstream; si no hay nada claro, usa `brainstorm` primero |
 | `explore` (SDD) | `explore` es fase SDD; `clarify` es helper opt-in previo |

@@ -34,7 +34,6 @@
 | Genkit en Python | developing-genkit-python | ${AGENTS_DIR}/developing-genkit-python/SKILL.md | external-bootstrappable |
 | Advisory/warning-first sobre ramas, PRs y commits | repo-guardrails | ./dev-skills/repo-guardrails/SKILL.md | repo-local |
 | Export-only de artifacts SDD a GitHub issues | sdd-to-issues | ./dev-skills/sdd-to-issues/SKILL.md | repo-local |
-| Enrutador opt-in de requests a SDD/skills/issues | request-triage | ./dev-skills/request-triage/SKILL.md | repo-local |
 | Clarificación opt-in usando artifacts existentes | clarify-with-artifacts | ./dev-skills/clarify-with-artifacts/SKILL.md | repo-local |
 | Crear nuevas AI skills | skill-creator | ${AGENTS_DIR}/skill-creator/SKILL.md | logical-only |
 
@@ -213,12 +212,6 @@
 - Fallback: sin artifacts SDD → no genera nada, sugiere usar SDD primero.
 - `issue-creation` / `branch-pr` ganan para crear/aprobar issues y PRs.
 
-### request-triage
-- Enrutador opt-in y ultra-delgado; solo decide destino (SDD/skill/issue).
-- NO aclara contenido (usa `clarify-with-artifacts` para eso).
-- NO parte trabajo; solo da recomendación inline.
-- Comando `/sdd-*` explícito gana siempre; `request-triage` cede.
-
 ### clarify-with-artifacts
 - Helper opt-in que estructura contexto usando docs/artifacts existentes.
 - NO sustituye `sdd-propose` ni `sdd-spec`; output mínimo inline.
@@ -247,7 +240,6 @@
 | Crear/aprobar issues y PRs | `issue-creation` / `branch-pr` | `sdd-to-issues` es canal de salida, no dueño |
 | Normas del repo | `repo-bootstrap` | `repo-guardrails` es capa advisory lateral |
 | Aclaración de contenido profundo | `sdd-propose` / `sdd-spec` | `clarify-with-artifacts` es helper opt-in |
-| Request ambiguo | `request-triage` decide; si hay `/sdd-*` gana SDD | `request-triage` es solo router |
 
 **Ownership claro**:
 - SDD planea y escribe artifacts canónicos.
