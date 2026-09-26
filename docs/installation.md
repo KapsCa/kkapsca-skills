@@ -12,9 +12,25 @@ bash scripts/bootstrap.sh
 
 > **Nota**: El proceso de inicialización (**bootstrap**) se corre desde **este repositorio de habilidades**, no desde la carpeta de tu proyecto futuro.
 
+### Si no usás opencode ni Pi
+
+**No necesitás este repositorio clonado ni ningún instalador.** Cada skill es un archivo `SKILL.md` de texto plano: copiá el que quieras —o la carpeta entera— al directorio donde **tu** agente lee skills.
+
+| Agente | Dónde lee sus skills |
+|---|---|
+| Agentes que siguen la convención compartida (incluye Pi) | `~/.agents/skills/` |
+| opencode | `~/.config/opencode/skills/` |
+| Claude Code | `~/.claude/skills/` |
+| Codex | `~/.codex/skills/` |
+| Gemini CLI | `~/.gemini/skills/` |
+| Copilot | `~/.copilot/skills/` |
+| Kilo Code | `~/.config/kilo/skills/` |
+
+Si tu agente no está en esa tabla, copiá la carpeta donde lea skills: **el formato es el mismo** y no hay nada que adaptar. Después, reinicialo para que refresque la lista.
+
 ### Después del bootstrap
 
-1. Reinicia opencode para refrescar la lista de habilidades disponibles.
+1. Reiniciá tu agente (opencode, Pi u otro) para que refresque la lista de habilidades disponibles.
 2. Prueba una habilidad explícita, por ejemplo: `Usa la habilidad brainstorm`.
 3. Si todavía no tienes carpeta de proyecto, no pasa nada: puedes empezar con `brainstorm` o `product-discovery` antes de crearla.
 
