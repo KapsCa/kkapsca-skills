@@ -1,0 +1,56 @@
+name: CodeQL
+
+# Lee el codigo buscando formas conocidas de escribir cosas inseguras.
+#
+# LIMITE IMPORTANTE: CodeQL solo entiende algunos idiomas.
+#   SI entiende: Go, Python, JavaScript/TypeScript, Rust, C/C++, C#, Java,
+#                Kotlin, Ruby, Swift, y los propios workflows de GitHub Actions.
+#   NO entiende: Dart/Flutter, scripts de shell (bash), PowerShell.
+# En un repo cuyo stack sea solo Flutter, shell o PowerShell, este workflow
+# corre pero NO va a encontrar nada. No es un error: es un hueco conocido.
+# La matriz completa de cobertura esta en docs/repository-standards.md.
+#
+# LIMITE DE PLAN: funciona gratis en repos PUBLICOS. En repos PRIVADOS necesita
+# una licencia de GitHub Code Security. En un repo privado sin licencia, este
+# workflow falla. El instalador solo lo copia en repos publicos.
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    # Corrida semanal: cubre cambios en las reglas de deteccion, aunque el
+    # codigo del repo no haya cambiado.
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  # Necesario para subir los resultados del analisis.
+  security-events: write
+  contents: read
+  actions: read
+
+jobs:
+  analyze:
+    name: Analyze code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Sin el input "languages", CodeQL detecta solo los idiomas del repo y los
+      # analiza uno despues del otro. Es lo mas robusto para una plantilla: no
+      # falla si un idioma declarado no existe en el repo.
+      # Si el repo crece y el analisis tarda demasiado, se pueden declarar los
+      # idiomas con una matriz para correrlos en paralelo:
+      #   strategy:
+      #     matrix:
+      #       language: [go, python, javascript-typescript, actions]
+      #   ...y pasar  with: languages: ${{ matrix.language }}
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2

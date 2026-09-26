@@ -1,0 +1,100 @@
+version: 2
+
+# Revisa si las herramientas y librerias que usa el proyecto tienen una version
+# nueva, y abre un pull request cuando corresponde.
+#
+# Esto NO es opcional si el repo pinnea sus acciones por version exacta: sin un
+# actualizador, la version exacta se congela y un arreglo de seguridad publicado
+# nunca llega.
+#
+# LIMITE CONOCIDO: GitHub NO genera alertas de seguridad para las acciones
+# pinneadas por version exacta. Estas actualizaciones semanales son el canal por
+# el que llegan los arreglos.
+#
+# LIMITE CONOCIDO: los ecosistemas que no tengan archivos de dependencias en el
+# repo no generan nada. Borrar los que no apliquen, para no dejar ruido.
+updates:
+  # Las acciones de GitHub Actions. Aplica SIEMPRE: todo repo tiene workflows.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    cooldown:
+      # GitHub ya aplica 3 dias por defecto. 7 da mas margen contra una version
+      # publicada hace pocas horas que todavia nadie reviso.
+      # El cooldown NO aplica a actualizaciones de seguridad: esas no se demoran.
+      default-days: 7
+    commit-message:
+      # Conventional Commits, para que el chequeo de commits del repo acepte los
+      # commits del bot sin eximirlo.
+      prefix: "chore"
+      include: "scope"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+  # Librerias de Node / JavaScript / TypeScript.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    groups:
+      npm:
+        patterns:
+          - "*"
+
+  # Librerias de Go.
+  - package-ecosystem: gomod
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    groups:
+      gomod:
+        patterns:
+          - "*"
+
+  # Librerias de Python.
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    groups:
+      pip:
+        patterns:
+          - "*"
+
+  # Librerias de Dart / Flutter.
+  - package-ecosystem: pub
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    groups:
+      pub:
+        patterns:
+          - "*"

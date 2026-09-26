@@ -1,0 +1,51 @@
+name: Secret Scan
+
+# Busca contrasenas, claves y tokens escritos por accidente en el codigo.
+# Si encuentra uno, FRENA el cambio.
+#
+# Por que frena y no solo avisa: un secreto que llego a un commit queda en el
+# historial para siempre. Borrarlo despues no lo saca de los commits viejos, y
+# en un repo publico ya lo vio cualquiera. Por eso un secreto detectado se
+# considera comprometido y hay que ROTARLO (cambiar la credencial), no solo
+# borrar la linea.
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  schedule:
+    # Corrida semanal: agarra secretos que entraron por una rama que no paso
+    # por pull request, o por un commit viejo anterior a este workflow.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  # gitleaks comenta el hallazgo dentro del pull request. Si preferis no darle
+  # permiso de escritura, borra esta linea: el workflow igual FALLA cuando
+  # encuentra un secreto, que es la senal que importa.
+  pull-requests: write
+
+jobs:
+  scan:
+    name: Scan for secrets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # gitleaks necesita el historial completo para revisar los commits.
+          # Con el default (profundidad 1) solo ve el ultimo commit.
+          fetch-depth: 0
+
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # GITLEAKS_LICENSE solo hace falta si el repo pertenece a una
+          # ORGANIZACION. Con una cuenta personal NO se necesita.
+          # Si este repo pasa a una organizacion: sacar una licencia gratuita
+          # en https://gitleaks.io, crear el secreto y descomentar:
+          # GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}

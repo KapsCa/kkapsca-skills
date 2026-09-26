@@ -1,0 +1,33 @@
+# Configuracion de gitleaks.
+#
+# Este archivo es el "manual de instrucciones" del detector de secretos.
+# Su unica razon de existir es agregar EXCEPCIONES: valores que parecen
+# secretos pero son de prueba, para que no fallen el workflow.
+#
+# REGLA: aca solo van valores FALSOS. Si un secreto real fue detectado, no se
+# agrega a la lista de excepciones: se rota la credencial y se borra del codigo.
+
+title = "gitleaks config"
+
+# useDefault = true toma la lista oficial de deteccion de gitleaks y le suma lo
+# de abajo, en vez de reemplazarla. Asi el repo sigue recibiendo las reglas
+# nuevas de cada version de gitleaks.
+[extend]
+useDefault = true
+
+# Excepciones conocidas. Sin entradas, todo lo que detecte gitleaks falla.
+[allowlist]
+description = "Valores de prueba, nunca secretos reales"
+
+# Rutas completas que se saltean. Util para fixtures con claves inventadas.
+# Descomentar y ajustar cuando haga falta:
+paths = [
+  # '''tests/fixtures/.*''',
+  # '''.*\.example$''',
+]
+
+# Cadenas exactas que se ignoran en cualquier archivo. Evitar usarlo: es mas
+# facil equivocarse y dejar pasar un secreto real.
+# regexes = [
+#   '''AKIAIOSFODNN7EXAMPLE''',
+# ]
