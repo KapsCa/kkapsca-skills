@@ -16,109 +16,64 @@ metadata:
 
 ---
 
-## When to Use
+## Activation Contract
 
 Usa esta skill cuando:
 - ya exista un plan de trabajo aprobado — el documento de feature de ODD (`odd/tasks/<feature>.md`) o, si SDD fue seleccionado, `sdd/{change}` con spec/design/tasks,
 - el usuario pida "exportar a issues" o "crear issues desde el plan",
 - necesites pasar el plan al sistema de issues sin reescribir nada.
 
-## When NOT to Use
-
-- estés todavía definiendo el plan (ODD: primero el documento de feature; SDD: `sdd-propose` / `sdd-design`),
-- busques partir el trabajo en tareas (eso es el territorio de la partición, no de esta skill),
+**NO la actives cuando:**
+- estés todavía definiendo el plan,
+- busques partir el trabajo en tareas,
 - no exista ningún plan previo (sin plan → no genera nada),
-- el usuario pida crear issues desde cero (usa `issue-creation` directamente).
+- el usuario pida crear issues desde cero.
+
+(rutas en **Decision Gates**)
 
 ---
 
-## Principio Rector
+## Hard Rules
 
 **Export-only.** Esta skill lee un plan de trabajo ya aprobado y lo traduce a issues; no decide qué hacer, no parte trabajo, no valida contenido. La partición de trabajo es responsabilidad del flujo que la produjo: ODD (paso 5, documento de feature) por defecto, o `sdd-tasks` si SDD fue seleccionado.
 
----
-
-## Flujo de Exportación
-
-```
-1. Leer el plan de trabajo
-   └── ODD (por defecto): odd/tasks/<feature>.md → intención, alcance y tareas
-   └── SDD (si fue seleccionado): spec → contexto, design → decisiones, tasks → checklists
-
-2. Mapear a issue draft
-   └── Título: basado en el plan
-   └── Body: resumen del alcance + tareas como checklist
-   └── Labels: según tipo de cambio (feat, fix, chore)
-
-3. Crear issue vía issue-creation
-   └── NO usa gh manualmente; delega a issue-creation
-```
+- NO corre cuando no hay ningún plan que leer.
+- NO usa `gh` manualmente; delega a `issue-creation`.
 
 ---
 
-## Qué NO hace esta skill
+## Decision Gates
 
-- NO descompone trabajo en tareas (eso lo hace el flujo que produjo el plan)
-- NO escribe artifacts canónicos nuevos
-- NO reemplaza al flujo formal: ni ODD ni `sdd-tasks` / `sdd-spec` / `sdd-design`
-- NO corre cuando no hay ningún plan que leer
-- NO compite con `issue-creation` / `branch-pr` para crear/aprobar issues y PRs
-
----
-
-## Formato de Issue Generado
-
-El mapeo depende del plan de entrada. Por defecto (ODD) el documento de feature aporta intención, alcance y tareas; los artifacts SDD (spec, design, tasks) son la alternativa cuando SDD fue seleccionado:
-
-```markdown
-## Summary
-{ODD: intención + alcance de `odd/tasks/<feature>.md`; SDD: basado en spec → qué se está haciendo y por qué}
-
-## Technical Approach
-{ODD: notas técnicas del documento de feature; SDD: basado en design → cómo se hará}
-
-## Tasks
-- [ ] {ODD: tarea del documento de feature; SDD: task 1.1}
-- [ ] {ODD: otra tarea; SDD: task 1.2}
-...
-
-## Acceptance Criteria
-{ODD: criterios implícitos en intención y alcance; SDD: basado en spec scenarios}
-```
+| Gate | Ruta |
+| --- | --- |
+| El usuario pida crear issues desde cero | Usar `issue-creation` directamente |
+| Estés todavía definiendo el plan | ODD: primero el documento de feature; SDD: `sdd-propose` / `sdd-design` |
+| Busques partir el trabajo en tareas | Partición de trabajo: territorio del flujo que produjo el plan |
+| No exista ningún plan previo | Fallback exacto: `references/fallback.md` |
 
 ---
 
-## Fallback
+## Execution Steps
 
-Si no hay ningún plan disponible (`odd/tasks/<feature>.md` no encontrado, y `sdd/{change}/*` tampoco):
-- NO inventes contenido,
-- responde: "No se encontró un plan de trabajo para este cambio. Terminá el paso de planificación del flujo (ODD: documento de feature) o usá `issue-creation` para crear el issue manualmente."
-
----
-
-## Relación con Otras Skills
-
-| Skill | Relación |
-|--------|----------|
-| Flujo por defecto (ODD) | Produce el plan que esta skill exporta: `odd/tasks/<feature>.md` |
-| `sdd-tasks` | Manda en partición de trabajo cuando SDD fue seleccionado; esta skill solo exporta |
-| `issue-creation` | Canal de creación de issues; esta skill lo invoca |
-| `branch-pr` | NO se solapan; esta skill no abre PRs |
-| `sdd-propose` / `sdd-spec` | Upstream solo en la rama SDD; esta skill vive downstream |
+1. Verifica que existe un plan aprobado: `odd/tasks/<feature>.md` (ODD, por defecto) o `sdd/{change}` con spec/design/tasks (rama SDD, si SDD fue seleccionado). Sin plan: aplica el fallback (`references/fallback.md`).
+2. **Leer el plan de trabajo** — ODD: intención, alcance y tareas; SDD: spec → contexto, design → decisiones, tasks → checklists.
+3. **Mapear a issue draft** — Título: basado en el plan · Body: resumen del alcance + tareas como checklist · Labels: según tipo de cambio (feat, fix, chore). Formato: `references/formato-issue.md`.
+4. **Crear issue via `issue-creation`** — NO usa `gh` manualmente; delega a `issue-creation`.
 
 ---
 
-## Comandos
+## Output Contract
 
-### Exportar el plan de trabajo a issue
+Issue draft en el formato canónico (Summary / Technical Approach / Tasks / Acceptance Criteria), mapeado desde el plan de entrada: ODD = intención/alcance/tareas del documento de feature; SDD = spec → Summary, design → Technical Approach, tasks → Tasks, spec scenarios → Acceptance Criteria. Plantilla y mapeo exacto: `references/formato-issue.md`.
 
-```
-Cargar tasks-to-issues → leer odd/tasks/<feature>.md (ODD) o sdd/{change}/* (rama SDD)
-→ generar issue draft → crear vía issue-creation
-```
+---
 
-### Si no hay plan
+## References
 
-```
-Cargar tasks-to-issues → fallback: "No se encontró un plan de trabajo. Terminá la planificación primero."
-```
+- `references/flujo-export.md` — flujo por pasos y mapeo ODD/SDD del plan de entrada.
+- `references/context-validation.md` — When to Use y When NOT to Use originales (verbatim).
+- `references/formato-issue.md` — plantilla exacta del issue draft (Summary / Technical Approach / Tasks / Acceptance Criteria).
+- `references/no-hace-limites.md` — Qué NO hace esta skill.
+- `references/fallback.md` — mensaje exacto cuando no hay plan de trabajo.
+- `references/relacion-skills.md` — relación con ODD, `sdd-tasks`, `issue-creation`, `branch-pr`, `sdd-propose` / `sdd-spec`.
+- `references/comandos.md` — bloques de comandos verbatim de exportación y fallback.
