@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.7.2](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.7.1...kkapsca-skills-v0.7.2) (2026-09-26)
+
+
+### Bug Fixes
+
+* **skills:** repair the relative links broken when content moved into references ([c66ae0c](https://github.com/KapsCa/kkapsca-skills/commit/c66ae0cb6b4c08c667cfa745f4e908e792a96326))
+* **skills:** reparar enlaces relativos rotos al mover contenido a references/ ([691f209](https://github.com/KapsCa/kkapsca-skills/commit/691f209d13a54b203fd39f8f66007cdeaa80ee4d))
+
 ## [0.7.1](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.7.0...kkapsca-skills-v0.7.1) (2026-09-26)
 
 
