@@ -15,6 +15,9 @@ on:
       - ci/**
       - build/**
 
+permissions:
+  contents: read
+
 jobs:
   parse:
     name: Parse PowerShell scripts
