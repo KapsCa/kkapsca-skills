@@ -46,6 +46,8 @@ install_if_missing() {
 # licencia de GitHub Code Security. Si no se puede determinar, se asume que no
 # corresponde instalarlo, porque un workflow que falla siempre es peor que no
 # tener el workflow.
+#
+# Se llama siempre dentro de $( ), asi que el cd no afecta al llamador.
 # ---------------------------------------------------------------------------
 repo_is_public() {
   if ! command -v gh >/dev/null 2>&1; then
@@ -53,8 +55,10 @@ repo_is_public() {
     return 0
   fi
 
-  local is_private
-  is_private="$(cd "$REPO_ROOT" && gh repo view --json isPrivate --jq '.isPrivate' 2>/dev/null || true)"
+  local is_private=''
+  if cd "$REPO_ROOT" 2>/dev/null; then
+    is_private="$(gh repo view --json isPrivate --jq '.isPrivate' 2>/dev/null)" || is_private=''
+  fi
 
   case "$is_private" in
     true)  printf 'false' ;;
@@ -114,10 +118,15 @@ merge_gitignore() {
     return 0
   fi
 
+  # El separador se decide ANTES de abrir el archivo para escritura, para no
+  # leer y escribir el mismo archivo en la misma operacion.
+  local separator=''
+  if [[ -s "$target" ]]; then
+    separator=$'\n'
+  fi
+
   {
-    if [[ -s "$target" ]]; then
-      printf '\n'
-    fi
+    printf '%s' "$separator"
     printf '%s\n' "$GITIGNORE_MARKER"
     cat "$TEMPLATES/gitignore-security.txt"
   } >> "$target"
