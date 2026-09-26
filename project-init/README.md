@@ -40,7 +40,7 @@ brainstorming → descubrimiento de producto → factibilidad técnica
 ## Output Esperado
 
 - **Project Framing Doc** (Project Charter como alias): Enfoque, fases, alcance inicial y gobernanza mínima
-- **Próximos pasos**: Tech Spec listo para `tech-feasibility`
+- **Próximos pasos**: Framing listo como input directo para `tech-feasibility`, que es quien produce el Tech Spec
 
 ## Notas
 

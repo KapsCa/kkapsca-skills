@@ -58,11 +58,11 @@ Una de estas dos opciones (la más ligera posible):
 **1. Resumen inline breve:**
 ```text
 📋 Clarify Summary:
-- Proyecto: KkapsCa-project-kickstart
-- Stack confirmado: Flutter + Supabase (ver tech-feasibility)
-- Intención: Adaptar 4 skills derivadas de matt
-- Artifacts previos: proposal ✅, spec ✅, design ✅, tasks ✅
-- Siguiente paso sugerido: implementación (ODD, paso 6)
+- Proyecto: {nombre del proyecto}
+- Stack confirmado: {stack elegido (ver tech-feasibility)}
+- Intención: {resumen de la intención del cambio}
+- Artifacts previos: {artifacts ya producidos, con su estado ✅/pendiente}
+- Siguiente paso sugerido: {implementación (ODD, paso 6) o fase correspondiente}
 ```
 
 **2. Checklist de entrada para el trabajo formal:**

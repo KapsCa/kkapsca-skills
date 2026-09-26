@@ -84,6 +84,10 @@
 - Ningún merge sin checks funcionales reales del stack.
 - Auto-merge solo después de PR validation + checks verdes.
 - En repos privados Free personales, el hook local `pre-push` es parte de la protección.
+- **Los secretos NUNCA se versionan** (`.gitleaks.toml` + workflow que falla al detectarlos); un secreto que llegó a un commit se considera comprometido y se rota.
+- **El actualizador de dependencias debe estar activo** (`.github/dependabot.yml` declarando solo los ecosistemas con manifest real).
+- **Análisis estático y auditoría de dependencias presentes** (`codeql.yml` si el repo es público, `audit.yml` siempre), aceptando sus huecos declarados por stack.
+- **Un chequeo de seguridad que no corrió no es un pass**: si falta o corre degradado, el PR no se mergea. Detalle operativo: [docs/security-baseline.md](../docs/security-baseline.md).
 
 ### improve-codebase-architecture
 - Revisión de arquitectura enfocada en deuda, acoplamiento y violaciones.
@@ -246,9 +250,9 @@
 **Ownership claro**:
 - El flujo formal planea y escribe artifacts canónicos: ODD por defecto, o SDD si fue seleccionado.
 - Engram persiste memoria y artifacts del flujo formal.
-- `issue-creation` / `branch-pr` gobiernan issues/PRs.
+- `issue-creation` / `branch-pr` gobiernan issues/PRs (son skills externas del ecosistema Gentle AI: viven en Pi, no en este repo, y por ende no son routables desde este registry ni figuran en `## User Skills`).
 - `repo-bootstrap` fija guardrails normativos del repo.
-- Las 4 skills derivadas son helpers/advisory/export-only y NO reemplazan a los anteriores.
+- Las 3 skills derivadas son helpers/advisory/export-only y NO reemplazan a los anteriores.
 
 **Principio**: Las 3 skills arquitectónicas son **herramientas tácticas transversales**. Si el problema tiene un stack definido, la skill de stack tiene prioridad porque conoce los patrones específicos.
 
@@ -256,7 +260,7 @@
 
 ## Project Conventions
 
-No se detectaron archivos de convención de proyecto en la raíz (`AGENTS.md`, `CLAUDE.md`, `.cursorrules`, `GEMINI.md`, `copilot-instructions.md`).
+No se detectaron archivos de convención de proyecto en la raíz (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `copilot-instructions.md`).
 
 ## Pipeline
 

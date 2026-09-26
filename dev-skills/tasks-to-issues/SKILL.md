@@ -68,20 +68,22 @@ Usa esta skill cuando:
 
 ## Formato de Issue Generado
 
+El mapeo depende del plan de entrada. Por defecto (ODD) el documento de feature aporta intención, alcance y tareas; los artifacts SDD (spec, design, tasks) son la alternativa cuando SDD fue seleccionado:
+
 ```markdown
 ## Summary
-{Basado en spec → qué se está haciendo y por qué}
+{ODD: intención + alcance de `odd/tasks/<feature>.md`; SDD: basado en spec → qué se está haciendo y por qué}
 
 ## Technical Approach
-{Basado en design → cómo se hará}
+{ODD: notas técnicas del documento de feature; SDD: basado en design → cómo se hará}
 
 ## Tasks
-- [ ] {task 1.1}
-- [ ] {task 1.2}
+- [ ] {ODD: tarea del documento de feature; SDD: task 1.1}
+- [ ] {ODD: otra tarea; SDD: task 1.2}
 ...
 
 ## Acceptance Criteria
-{Basado en spec scenarios}
+{ODD: criterios implícitos en intención y alcance; SDD: basado en spec scenarios}
 ```
 
 ---

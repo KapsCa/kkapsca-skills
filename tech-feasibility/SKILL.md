@@ -156,7 +156,7 @@ Solo puedes recomendar stack si ya sabes:
 3. ¿El equipo puede operar infraestructura propia?
 4. ¿El producto necesita salir rápido con bajo costo operativo?
 
-> **⚠️ Disponibilidad de skills externas**: Para cualquier skill externa (Supabase, Firebase, Genkit), consulta el [skill-registry](../docs/skill-registry.md) para ver el estado real de disponibilidad (repo-local, external-bootstrappable, logical-only). El bootstrap las procesa desde `${AGENTS_DIR}` (por defecto `$HOME/.agents/skills`). El pipeline y el registry definen orquestación lógica (cuándo activar), no disponibilidad real. Sin instalación física en `~/.config/opencode/skills`, opencode no detectará estas skills.
+> **⚠️ Disponibilidad de skills externas**: Para cualquier skill externa (Supabase, Firebase, Genkit), consulta el [skill-registry](../docs/skill-registry.md) para ver el estado real de disponibilidad (repo-local, external-bootstrappable, logical-only). El bootstrap las procesa desde `${AGENTS_DIR}` (por defecto `$HOME/.agents/skills`). El pipeline y el registry definen orquestación lógica (cuándo activar), no disponibilidad real. Sin instalación física en `~/.config/opencode/skills`, opencode no detectará estas skills. En Pi el destino físico es `~/.agents/skills` (ver docs/installation.md, sección "Segundo destino: Pi").
 
 ### Datos e infraestructura
 
@@ -171,13 +171,15 @@ Solo puedes recomendar stack si ya sabes:
 
 Presenta alternativas con contexto y tradeoffs.
 
-### Frontend mobile
+### Frontend
 
 | Opción | Cuándo considerar | Ventaja principal | Tradeoff principal |
 |---|---|---|---|
 | **Flutter** | Quieres una codebase fuerte para varias plataformas y buena consistencia UI | Productividad alta, tipado fuerte, UI controlada | Requiere aprender Dart/ecosistema Flutter |
 | **React Native** | El equipo domina React/JS y prioriza reaprovechar ese conocimiento | Menor fricción para equipos web | Integración nativa y performance dependen más del caso |
 | **Nativo** | El producto depende fuerte de plataforma, rendimiento extremo o integraciones profundas | Máximo control | Más costo de desarrollo y mantenimiento |
+| **Web (SPA/SSR)** | El producto vive en el navegador o se accede desde escritorio sin instalar nada | Distribución inmediata, sin builds por plataforma | Menos acceso a funciones nativas y offline |
+| **Desktop** | Se necesita app de escritorio (acceso a archivos, hardware o ejecución local) | Integración profunda con el sistema | Mantenimiento de builds por OS (Electron/Tauri/Flutter desktop) |
 
 ### Backend
 
@@ -342,12 +344,12 @@ Cuando el stack elegido sea **Firebase**, se activarán las siguientes skills en
 - **⚠️ Disponibilidad**: external-bootstrappable vía `${AGENTS_DIR}/firebase-basics/`. Requiere bootstrap (`bash scripts/bootstrap.sh`) o instalación manual. Sin instalación física en `~/.config/opencode/skills`, el routing es solo lógico.
 
 ### `firebase-auth-basics`
-- **Cuándo activar**: En fases de diseño/implementación cuando el trabajo sea específico de Auth (sign-in, providers, tokens, reglas con `request.auth`).
+- **Cuándo activar**: Durante la implementación (ODD, paso 6) o, si SDD fue seleccionado, en `sdd-design` / `sdd-apply`, cuando el trabajo sea específico de Auth (sign-in, providers, tokens, reglas con `request.auth`).
 - **Qué incluye**: Integración de autenticación, proveedores, manejo de tokens.
 - **NO activar**: Solo por haber elegido Firebase; debe haber trabajo técnico específico de autenticación.
 
 ### `firebase-firestore-standard`
-- **Cuándo activar**: En fases de diseño/implementación cuando el trabajo entre en contexto de Firestore Standard (modelo documento, queries, índices, SDK, reglas).
+- **Cuándo activar**: Durante la implementación (ODD, paso 6) o, si SDD fue seleccionado, en `sdd-design` / `sdd-apply`, cuando el trabajo entre en contexto de Firestore Standard (modelo documento, queries, índices, SDK, reglas).
 - **Qué incluye**: Guía completa de Firestore Standard Edition.
 - **NO activar**: Solo por mencionar Firebase; requiere contexto técnico de base de datos documental.
 
@@ -465,15 +467,3 @@ Cuando el producto requiera features de IA generativa con Genkit, la activación
 - Definir estructura del repo
 - Empezar implementación
 ```
-
----
-
-## Criterio de salida
-
-Esta fase está completa cuando ya existe:
-
-- una propuesta de stack justificada,
-- un mapa claro de riesgos,
-- una estimación razonable por rangos,
-- una arquitectura proporcional al tamaño del proyecto,
-- claridad suficiente para comenzar a desarrollar sin improvisar todo.

@@ -346,16 +346,3 @@ Esta skill está suficientemente bien resuelta cuando ya existe:
 ## 10. Siguiente paso
 - Pasar a project-init (o tech-feasibility por bypass)
 ```
-
----
-
-## Criterio de salida
-
-Esta fase está suficientemente bien resuelta cuando ya existe:
-
-- un usuario principal claro,
-- una necesidad entendible,
-- una alternativa actual identificada,
-- una propuesta de valor concreta,
-- un método realista de validación,
-- y contexto suficiente para tomar decisiones técnicas con sentido.
