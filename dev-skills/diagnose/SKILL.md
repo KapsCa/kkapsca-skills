@@ -9,123 +9,47 @@ metadata:
 
 # Diagnose — Debugging Canónico
 
-**Companion Skill** — Debugging puntual (usa `improve-codebase-architecture` para review amplio).
+**Companion Skill** — debugging puntual; review amplio: `improve-codebase-architecture`.
 
-## When to Use
+## Activation Contract
 
-Usa esta skill cuando:
+Carga esta skill ante: un bug concreto (crash o comportamiento inesperado); un pedido de "debug", "diagnosticar" o "arreglar este error"; aislar un bug antes de proponer un cambio formal (ODD, o SDD si fue seleccionado); o validar que un fix no rompió nada (regresión).
 
-- haya un error concreto, crash o comportamiento inesperado,
-- el usuario pida "debug", "diagnosticar", "arreglar este error",
-- necesites aislar un bug antes de proponer un cambio formal (ODD, o SDD si fue seleccionado),
-- quieras validar que un fix no rompió nada (regresión).
+NO la actives para: revisión de arquitectura amplia, features nuevas ni editing de flujo normal sin un bug claro (rutas en **Decision Gates**).
 
-## Trigger
+Precedencia: **companion** para debugging puntual, no compete con skills de stack. Bug puramente de framework (Flutter, Firebase, Supabase, Genkit): usa la skill oficial de stack.
 
-Cárgala al escuchar: "debug", "diagnosticar", "arreglar error", "fix bug", "por qué falla", "reproducir bug", "regression check" o cualquier variante que pida investigar un fallo específico.
+## Hard Rules
 
-## When NOT to Use
+- No refactors mientras debuggeas: solo lo necesario para que el caso pase.
+- Fix proporcional al problema.
+- No mezcles con arquitectura: anota la deuda técnica para después.
+- Output conciso: entrega el reporte.
+- Usa la observabilidad del stack (tabla en `references/commands.md`).
 
-- para revisiones de arquitectura amplias (usa `improve-codebase-architecture`),
-- para planear features nuevas (usa el flujo por defecto, ODD; o `sdd-propose` si SDD fue seleccionado),
-- para editing de flujo normal sin un bug claro.
+## Decision Gates
 
-## Precedencia
+| Gate | Ruta |
+| --- | --- |
+| Sin error reproducible, o el usuario está en diseño/propuesta | No activar: seguir ODD (flujo por defecto); `sdd-design`/`sdd-propose` solo si SDD fue seleccionado. |
+| Bug puramente de framework (Flutter, Firebase, Supabase, Genkit) | Usar la skill oficial de stack en su lugar. |
+| Arquitectónico, no bug puntual | Enrutar a `improve-codebase-architecture`. |
+| El fix requiere feature o refactor amplio | No aquí: documentarlo y proponerlo por el flujo formal (ODD, o SDD si fue seleccionado). |
+| Skill requerida no instalada en `~/.config/opencode/skills` | Documentar la brecha y seguir con el flujo disponible (ODD o SDD). |
 
-- Si el bug es puramente de framework (Flutter, Firebase, Supabase, Genkit), usar la skill oficial de stack en su lugar.
-- Esta skill es **companion** para debugging puntual; no compite con skills de stack específico.
+## Execution Steps
 
-## Fallback
+1. **REPRO** — reproducir el error de forma consistente: registra los pasos exactos y el entorno (OS, versión, stack).
+2. **MINIMIZE** — reducir al escenario mínimo viable: elimina variables (¿sin estado previo? ¿con datos mínimos?) y aísla el componente/archivo sospechoso.
+3. **INSTRUMENT** — agrega logs, prints, debugger o tests que fallen: captura el estado exacto en el punto de falla.
+4. **FIX** — aplicar la corrección mínima.
+5. **REGRESSION** — correr los tests existentes; si no hay, crear un caso mínimo que valide el fix. Comandos por stack: `references/commands.md`.
 
-- Si no hay error reproducible o el usuario está en fase de diseño/propuesta, no activar; seguir el flujo por defecto (ODD), y usar el formal SDD (`sdd-design` o `sdd-propose`) solo si fue seleccionado.
-- Si la skill requerida no está instalada en `~/.config/opencode/skills`, documentar la brecha y seguir con el flujo disponible (ODD o SDD).
-- Si el problema resulta ser arquitectónico y no un bug puntual, enrutar a `improve-codebase-architecture`.
+## Output Contract
 
----
+Devuelve el reporte `# Diagnóstico — [breve descripción del error]` con: Reproducción (pasos + entorno), Causa raíz, Fix aplicado (archivo + qué cambió) y Regresión. Plantilla exacta, pre-flight checklist e integración con el trabajo formal (ODD por defecto; SDD solo si fue seleccionado): `references/report-template.md`.
 
-## Ciclo de Debugging (Canónico)
+## References
 
-```
-1. REPRO: reproducir el error de forma consistente.
-   - Anotar pasos exactos.
-   - Identificar entorno (OS, versión, stack).
-
-2. MINIMIZE: reducir el escenario al mínimo viable.
-   - Eliminar variables: ¿ocurre sin estado previo? ¿con datos mínimos?
-   - Aislar el componente/archivo sospechoso.
-
-3. INSTRUMENT: agregar observabilidad.
-   - Logs, prints, debugger, tests que fallen.
-   - Capturar el estado exacto en el punto de falla.
-
-4. FIX: aplicar la corrección mínima.
-   - No refactors grandes, solo lo necesario para que pase el caso.
-   - Mantener el fix proporcional al problema.
-
-5. REGRESSION: verificar que no rompió nada.
-   - Correr tests existentes.
-   - Si no hay tests, crear un caso mínimo que valide el fix.
-```
-
----
-
-## Output Esperado
-
-Al terminar, entrega un reporte breve:
-
-```markdown
-# Diagnóstico — [Breve descripción del error]
-
-## Reproducción
-Pasos: [1, 2, 3]
-Entorno: [stack/versión]
-
-## Causa raíz
-[Qué lo provocó]
-
-## Fix aplicado
-[Archivo + qué cambió]
-
-## Regresión
-- [x] Tests existentes pasan
-- [x] Nuevo caso de validación agregado (o justificación de por qué no)
-```
-
----
-
-## Integración con el trabajo formal (ODD / SDD)
-
-- Esta skill es un **companion** del trabajo formal, no un proceso paralelo. ODD es el flujo por defecto; las fases SDD aplican si SDD fue seleccionado.
-- Si el bug revela una necesidad de cambio estructural, luego enruta al trabajo formal con este diagnóstico como base: ODD (documento de feature + tareas), o `sdd-propose` si SDD fue seleccionado.
-- Si el fix requiere una feature o refactor amplio, no lo hagas aquí: documéntalo y propón el cambio por el flujo formal (ODD, o SDD si fue seleccionado).
-
----
-
-## PRE-FLIGHT CHECKLIST
-
-- [ ] Ya reproduje el error de forma consistente
-- [ ] Ya minimicé el escenario
-- [ ] Ya instrumenté para ver el estado interno
-- [ ] Ya apliqué el fix mínimo
-- [ ] Ya verifiqué regresión
-
----
-
-## Reglas Operativas
-
-- **No refactors mientras debuggeas**: enfócate en arreglar el bug.
-- **No mixes con arquitectura**: si descubres deuda técnica, anótala para después.
-- **Output conciso**: no escribas un tratado, entrega el reporte y ya.
-- **Usa las herramientas de observabilidad del stack**: `print` en Dart, `log` en Go, `console.log` en JS, etc.
-
----
-
-## Commands (reference)
-
-```bash
-# Correr tests rápidos (según stack)
-flutter test
-go test ./...
-npm test
-pytest
-```
+- `references/report-template.md` — reporte y checklist (ver Output Contract).
+- `references/commands.md` — detalle de comandos y observabilidad por stack.
