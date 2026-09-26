@@ -48,6 +48,8 @@ Idea → brainstorming → descubrimiento de producto → inicio de proyecto →
 Idea → brainstorming → descubrimiento de producto → factibilidad técnica → bootstrap del repo → Desarrollo
 ```
 
+> El **bootstrap del repo** no solo deja las reglas de trabajo (PR, ramas, versionado). Deja también las **seis piezas de seguridad**, listas y corriendo. Ver [Seguridad desde el primer commit](#seguridad-desde-el-primer-commit).
+
 ### ¿Por dónde entrar?
 
 - Idea vaga → **brainstorming** (herramienta para aterrizar ideas)
@@ -69,11 +71,47 @@ Idea → brainstorming → descubrimiento de producto → factibilidad técnica 
 
 ---
 
+## Seguridad desde el primer commit
+
+Un proyecto nuevo **no debería nacer sin defensas**. Por eso el bootstrap del repo no solo deja las reglas de trabajo: deja también las seis piezas de seguridad, y ninguna depende de que alguien se acuerde de correrlas.
+
+| Pieza | Qué responde |
+|---|---|
+| **Detector de secretos** (`gitleaks`) | ¿Alguien escribió una contraseña o una clave en el código? Si la encuentra, **frena el cambio** |
+| **Actualizador de dependencias** (`dependabot`) | ¿Salió una versión nueva de algo que uso? Abre un PR con la propuesta |
+| **Análisis estático** (`codeql`) | ¿Hay formas conocidas de escribir código inseguro? |
+| **Auditoría de dependencias** (`audit`) | ¿Algo que **ya tengo** tiene una falla conocida **hoy**? |
+| **Canal de reporte** (`SECURITY.md`) | ¿A quién le aviso si encuentro un problema, y por dónde, sin publicarlo? |
+| **Lista de lo que no se guarda** (`.gitignore`) | ¿Qué archivos nunca deben entrar al historial? |
+
+### Tres ideas que sostienen esto
+
+**Un secreto que llegó a un commit está comprometido.** No alcanza con borrar la línea: en el historial sigue estando, y en un repo público ya lo vio cualquiera. La única salida real es **rotar la credencial**.
+
+**Cada herramienta se referencia por versión exacta, no por "la última".** Si alguien toma el control de una herramienta de terceros, puede cambiar qué significa "la última" y meter código sin que nadie lo revise. Con la versión exacta, se usa lo que se revisó.
+
+**Si un chequeo de seguridad no corre, no se mergea.** Un chequeo ausente no es un chequeo aprobado.
+
+### Lo que no está cubierto
+
+Se declara a propósito, para no asumir defensas que no existen:
+
+- El análisis estático **no entiende Dart/Flutter, shell ni PowerShell**. En un proyecto de Flutter corre y no encuentra nada.
+- **Flutter no tiene auditoría de librerías en integración continua**: es el único stack del ecosistema sin ninguna capa automática.
+- El análisis estático **solo funciona en repos públicos**.
+- El detector de secretos **necesita una licencia si el repo es de una organización** (no si es de una cuenta personal).
+- **Un repo sin código todavía no tiene lenguaje.** Ese es el estado inicial normal de un proyecto nuevo, y está contemplado: nada falla, y cada pieza se activa cuando aparece el código.
+
+Detalle completo en [Baseline de seguridad](docs/security-baseline.md).
+
+---
+
 ## Documentación
 
 Para detalles operativos, consulta:
 
 - [Guía de instalación](docs/installation.md) — instalación detallada, bootstrap y opciones
+- [Baseline de seguridad](docs/security-baseline.md) — qué chequea cada herramienta, qué cubre por stack y qué queda afuera
 - [Índice de documentación](docs/README.md) — dónde encontrar contexto adicional (Gentle AI, SDD, Engram, contribución)
 
 ---
