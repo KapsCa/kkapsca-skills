@@ -21,7 +21,7 @@ Es común confundir el papel de **Engram** con el registro de habilidades en ope
 |----------|------------|-------------------------------|
 | **Engram** | Guarda memoria persistente del proyecto, contexto, decisiones y flujos de trabajo entre sesiones. | ❌ No |
 | **Bootstrap / Instalador** | Crea enlaces simbólicos o copias de las skills en `~/.config/opencode/skills` para que opencode las detecte. | ✅ Sí |
-| **`.atl/skill-registry.md`** | Catálogo de skills del proyecto para que el `sdd-orchestrator` resuelva estándares y reglas de proyecto. | ❌ No |
+| **`docs/skill-registry.md`** | Catálogo de skills del proyecto para que el `sdd-orchestrator` resuelva estándares y reglas de proyecto. | ❌ No |
 
 ## Engram — Memoria persistente
 
@@ -67,7 +67,7 @@ Después de ejecutar el bootstrap, **reinicia opencode** para que refresque la l
 
 El bootstrap se ejecuta desde la **carpeta de este repo de skills**, no desde la carpeta de tu proyecto futuro.
 
-## `.atl/skill-registry.md` — Catálogo para orquestación
+## `docs/skill-registry.md` — Catálogo para orquestación
 
 Este archivo es usado únicamente por el orquestador para:
 
@@ -79,7 +79,7 @@ No afecta la detección local de skills en opencode.
 
 ### Importante: Registry resuelve orquestación, NO instala ni garantiza disponibilidad
 
-El `.atl/skill-registry.md` define **cuándo activar** una skill (ej. "activar `supabase` tras decidir el stack en tech-feasibility"). Pero esto es solo **lógica de orquestación**. Para que opencode realmente detecte y use una skill, esta debe estar físicamente presente en `~/.config/opencode/skills/`.
+El `docs/skill-registry.md` define **cuándo activar** una skill (ej. "activar `supabase` tras decidir el stack en tech-feasibility"). Pero esto es solo **lógica de orquestación**. Para que opencode realmente detecte y use una skill, esta debe estar físicamente presente en `~/.config/opencode/skills/`.
 
 **Ejemplo con Supabase**:
 - Registry dice: "activa `supabase` tras stack confirmado" → esto es orquestación lógica
@@ -98,7 +98,7 @@ Es fundamental entender que:
 
 | Concepto | Rol | Afecta detección en opencode |
 |----------|-----|------------------------------|
-| **Pipeline/Registry** (`.atl/skill-registry.md`) | Define **cuándo activar** skills según contexto y fase | ❌ No |
+| **Pipeline/Registry** (`docs/skill-registry.md`) | Define **cuándo activar** skills según contexto y fase | ❌ No |
 | **Bootstrap/Scripts** (`scripts/install-opencode-skills.sh`) | Hace que opencode **detecte** las skills físicamente | ✅ Sí |
 
 ### Por qué importa esta distinción
@@ -114,7 +114,7 @@ Si la skill no está físicamente instalada, el enrutamiento (routing) fallará 
 
 1. **Engram** → memoria y contexto que sobrevive entre sesiones
 2. **Bootstrap (`bash scripts/bootstrap.sh`)** → hace que opencode vea las skills del repo localmente
-3. **`.atl/skill-registry.md`** → solo lo usa la orquestación; incluye columna `State` (repo-local, external-bootstrappable, logical-only) para distinguir disponibilidad real de routing lógico. No afecta la detección local de skills.
+3. **`docs/skill-registry.md`** → solo lo usa la orquestación; incluye columna `State` (repo-local, external-bootstrappable, logical-only) para distinguir disponibilidad real de routing lógico. No afecta la detección local de skills.
 4. **Skills externas** (Supabase, Firebase, Genkit) → el bootstrap las procesa por defecto desde `${AGENTS_DIR}` (equivale a `$HOME/.agents/skills`). Usa `EXTERNAL_SKILLS_DIR` solo si quieres otra fuente.
 5. **Firebase skills** → no activar solo por mencionar Firebase; requieren contexto técnico específico o confirmación de stack.
 
@@ -138,7 +138,7 @@ El registry ahora usa una convención portable (`${AGENTS_DIR}`) en lugar de rut
 
 Para cualquier skill externa (Supabase, Firebase, Genkit), aplica el mismo principio:
 
-- El `.atl/skill-registry.md` define orquestación lógica (cuándo activar), pero sin instalación física opencode no las detectará.
+- El `docs/skill-registry.md` define orquestación lógica (cuándo activar), pero sin instalación física opencode no las detectará.
 - **No se promete autoactivación real**: cualquier documentación debe indicar que requiere paso previo de instalación o bootstrap con skills externas.
 - **No activar skills Firebase solo por mencionar Firebase**: requieren contexto técnico específico o confirmación de stack.
 - **Genkit**: cada lenguaje tiene su propia skill (`developing-genkit-{js,dart,go,python}`) con trigger específico. Consultar la matriz en el registry para el routing correcto.

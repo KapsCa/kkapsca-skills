@@ -49,7 +49,7 @@ Este repositorio distingue tres conceptos que a menudo se confunden:
 
 | Concepto | Qué hace | Afecta detección en opencode |
 |----------|----------|-------------------------------|
-| **Routing lógico** (`.atl/skill-registry.md`) | Define **cuándo activar** cada skill según contexto y fase del proyecto | ❌ No |
+| **Routing lógico** (`docs/skill-registry.md`) | Define **cuándo activar** cada skill según contexto y fase del proyecto | ❌ No |
 | **Bootstrap** (`scripts/bootstrap.sh`) | Instala skills en `~/.config/opencode/skills` vía enlaces simbólicos o copia | ✅ Sí |
 | **Instalación real** (`~/.config/opencode/skills/`) | Hace que opencode detecte y cargue la skill | ✅ Sí |
 
@@ -68,7 +68,7 @@ Si el registry dice «activa `supabase` tras stack confirmado», eso es solo **r
 1. La skill debe estar en `~/.config/opencode/skills/` (vía bootstrap o instalación manual)
 2. opencode debe estar reiniciado para refrescar la lista de skills
 
-Sin instalación física, el routing falla silenciosamente: el orquestador pedirá la skill pero opencode no la tendrá disponible. Consulta el [skill-registry](../.atl/skill-registry.md) para ver el estado actual de cada skill.
+Sin instalación física, el routing falla silenciosamente: el orquestador pedirá la skill pero opencode no la tendrá disponible. Consulta el [skill-registry](skill-registry.md) para ver el estado actual de cada skill.
 
 ---
 

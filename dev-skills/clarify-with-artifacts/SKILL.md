@@ -50,7 +50,7 @@ Usa esta skill cuando:
 | `odd/tasks/<feature>.md` | Documento de feature de ODD: intención, alcance y tareas |
 | `sdd/{change}/explore` | Hallazgos de exploración previa (rama SDD) |
 | `sdd/{change}/proposal` | Intención y scope ya delineados |
-| `.atl/skill-registry.md` | Triggers y reglas de routing actuales |
+| `docs/skill-registry.md` | Triggers y reglas de routing actuales |
 
 ---
 

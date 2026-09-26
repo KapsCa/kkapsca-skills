@@ -475,7 +475,7 @@ Viven en `%USERPROFILE%\.agents\skills\` y se instalan desde sus propios reposit
 
 Corré el bootstrap de 7.b **después** de instalarlas, así quedan enlazadas junto con las del repo.
 
-> Sin este paso, el enrutamiento del [skill registry](../.atl/skill-registry.md) falla en silencio: el orquestador pide una skill que pi no tiene cargada.
+> Sin este paso, el enrutamiento del [skill registry](skill-registry.md) falla en silencio: el orquestador pide una skill que pi no tiene cargada.
 
 ### Verificar
 

@@ -128,7 +128,7 @@ Si el stack elegido en `tech-feasibility` es **Supabase**, esta señal debe prop
 - **tech-feasibility** confirma Supabase → señal de stack guardada
 - **implementación**: activar `supabase` para integración general
 - **implementación** (con SQL/RLS/Postgres): activar `supabase-postgres-best-practices`
-- El orquestador resuelve estas activaciones vía `.atl/skill-registry.md`
+- El orquestador resuelve estas activaciones vía `docs/skill-registry.md`
 
 > **Nota**: Las skills de Supabase requieren instalación previa en `~/.config/opencode/skills/` para estar disponibles realmente. El registry define orquestación, no instala.
 
@@ -147,7 +147,7 @@ Si el stack elegido en `tech-feasibility` es **Firebase**, esta señal debe prop
 - **implementación** (con Data Connect/SQL/GraphQL): activar `firebase-data-connect`
 - **implementación** (con Firebase AI Logic/Gemini): activar `firebase-ai-logic-basics`
 - **implementación** (con Genkit JS/TS): activar `developing-genkit-js`
-- El orquestador resuelve estas activaciones vía `.atl/skill-registry.md` y sus compact rules.
+- El orquestador resuelve estas activaciones vía `docs/skill-registry.md` y sus compact rules.
 
 > **Nota**: Las skills de Firebase requieren instalación previa en `~/.config/opencode/skills/` para estar disponibles realmente. El registry define orquestación lógica (cuándo activar), no garantiza disponibilidad real. No activar skills Firebase solo por mencionar Firebase genéricamente.
 
