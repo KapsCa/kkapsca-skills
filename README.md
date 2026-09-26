@@ -22,7 +22,28 @@ No hace falta usar el mismo entorno que el autor ni ninguna herramienta en parti
 
 ## Inicio Rápido
 
-### La vía corta (opencode o Pi)
+### La vía corta: sin clonar, para cualquier agente
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/KapsCa/kkapsca-skills/main/scripts/install.sh | bash
+```
+
+Instala en `~/.agents/skills` (la convención compartida entre agentes). Para elegir otro destino:
+
+```bash
+# Ver los agentes conocidos y cuáles existen en tu máquina
+curl -fsSL https://raw.githubusercontent.com/KapsCa/kkapsca-skills/main/scripts/install.sh | bash -s -- --list
+
+# Un agente conocido: agents · opencode · claude · codex · gemini · copilot · kilo · pi
+curl -fsSL https://raw.githubusercontent.com/KapsCa/kkapsca-skills/main/scripts/install.sh | bash -s -- --agent claude
+
+# Cualquier otro agente: la ruta donde lee sus skills
+curl -fsSL https://raw.githubusercontent.com/KapsCa/kkapsca-skills/main/scripts/install.sh | bash -s -- --dir ~/mi-agente/skills
+```
+
+> El instalador **baja el repo por su cuenta** (no hace falta `git` ni clonar nada), **no pisa** directorios que no creó este repositorio, y **nunca lee de la entrada estándar**, así que el `| bash` es seguro.
+
+### Si ya clonaste el repo (opencode o Pi)
 
 ```bash
 git clone https://github.com/KapsCa/kkapsca-skills.git
@@ -40,9 +61,9 @@ bash scripts/bootstrap.sh            # ambos destinos
 bash scripts/bootstrap.sh --pi-only  # solo el destino de Pi, sin tocar opencode
 ```
 
-### Cualquier otro agente
+### Cualquier otro agente, a mano
 
-**No hace falta ningún instalador.** Una skill es un archivo Markdown: copiá el `SKILL.md` —o la carpeta entera— de la skill que quieras al directorio donde tu agente lee skills. Nada que compilar, nada que ejecutar.
+También podés hacerlo sin ningún instalador: una skill es un archivo Markdown. Copiá el `SKILL.md` —o la carpeta entera— de la skill que quieras al directorio donde tu agente lee skills.
 
 Si tu agente lee de un directorio conocido, es el mismo que ya usás para tus otras skills:
 

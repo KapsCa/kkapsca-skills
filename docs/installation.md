@@ -4,6 +4,36 @@ Este documento cubre el detalle operativo de instalación de las habilidades (**
 
 ## Inicio Rápido
 
+### Sin clonar el repositorio, para cualquier agente
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/KapsCa/kkapsca-skills/main/scripts/install.sh | bash
+```
+
+El instalador **baja el repositorio por su cuenta** (tarball: no requiere `git` ni un clon previo), lo deja en caché y enlaza las skills en el destino elegido.
+
+| Flag | Qué hace |
+|---|---|
+| *(sin flags)* | Instala en `~/.agents/skills`, la convención compartida entre agentes |
+| `--list` | Lista los agentes conocidos, sus rutas, y cuáles existen en tu máquina. No toca el disco |
+| `--agent <nombre>` | `agents` · `opencode` · `claude` · `codex` · `gemini` · `copilot` · `kilo` · `pi` |
+| `--all` | Todos los directorios conocidos que **ya existan** (no crea ninguno) |
+| `--dir <ruta>` | **Cualquier agente**: la ruta donde lee sus skills |
+| `--copy` | Copias físicas en vez de enlaces simbólicos |
+| `--update` | Vuelve a bajar el repositorio |
+| `--ref <rama\|tag>` | Otra rama o versión |
+
+```bash
+# Ejemplos
+curl -fsSL https://raw.githubusercontent.com/KapsCa/kkapsca-skills/main/scripts/install.sh | bash -s -- --list
+curl -fsSL https://raw.githubusercontent.com/KapsCa/kkapsca-skills/main/scripts/install.sh | bash -s -- --agent claude
+curl -fsSL https://raw.githubusercontent.com/KapsCa/kkapsca-skills/main/scripts/install.sh | bash -s -- --all --copy
+```
+
+> **Es seguro pasarlo por un pipe**: el instalador **nunca lee de la entrada estándar** (con `curl | bash`, la entrada *es* el script), y **no pisa** ningún directorio que no haya creado este repositorio: lo reporta como conflicto y sigue.
+
+### Clonando el repositorio (opencode o Pi)
+
 ```bash
 git clone https://github.com/KapsCa/kkapsca-skills.git
 cd kkapsca-skills
