@@ -1,15 +1,7 @@
 ---
 name: tech-feasibility
-description: >
-  PASO 4 de un pipeline de definición de producto. Evalúa factibilidad técnica,
-  aterriza requisitos, identifica riesgos, propone una arquitectura proporcional
-  al alcance y ayuda a elegir stack con un framework de decisión, no con recetas.
-
-  Usa esta skill cuando ya exista claridad suficiente del problema, usuario y MVP,
-  y haga falta decidir cómo construirlo, cuánto esfuerzo implica y qué riesgos técnicos
-  existen antes de arrancar el desarrollo. Recibe input de project-init (o Discovery Report por bypass).
-
-license: Apache-2.0
+description: "Trigger: qué tan difícil es construir esto, qué stack tiene más sentido, riesgos del MVP, cuánto esfuerzo y arquitectura mínima. Evalúa factibilidad técnica y elige stack con framework de decisión."
+license: MIT
 metadata:
   author: KkapsCa
   version: "3.0"

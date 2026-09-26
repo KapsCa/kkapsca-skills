@@ -1,23 +1,10 @@
 ---
 name: repo-bootstrap
-description: >
-  Skill ejecutiva para preparar un repositorio desde el arranque con estándares sanos de trabajo:
-  ramas por feature, PR obligatorio, bloqueo local de push directo a main, checks funcionales
-  obligatorios antes de merge, auto-merge cuando todo pase, documentación operativa y
-  release-please como mecanismo base de releases.
-
-  --- DELEGATION GUIDANCE ---
-  Delegation of GitHub Actions is handled through the orchestrator.
-  This skill file is DEAD data for the orchestrator; no direct execution here.
-  The orchestrator loads this file and extracts configuration for delegation.
-  For existing repos, the orchestrator preserves existing workflows and appends only what's missing.
-  For new repos, the orchestrator creates all required assets from templates.
-  --- END DELEGATION GUIDANCE ---
-
-license: Apache-2.0
+description: "Trigger: crear un proyecto nuevo, bootstrapear un repo, evitar push directo a main, usar release-please desde el día 1. Prepara el repo con ramas por feature, PR obligatorio, checks y docs operativos."
+license: MIT
 metadata:
   author: KkapsCa
-  version: "1.0"
+  version: "1.1"
   pipeline: "project-kickstart/dev-bootstrap"
 ---
 

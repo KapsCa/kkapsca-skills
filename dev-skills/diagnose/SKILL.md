@@ -1,12 +1,7 @@
 ---
 name: diagnose
-description: >
-  Debugging sistemático para errores concretos. Usa el ciclo canónico
-  repro → minimiza → instrumenta → arregla → regresión.
-  Integra con el trabajo formal: úsalo antes de proponer cambios (ODD por defecto, o SDD si fue seleccionado).
-  Trigger: Cuando el usuario diga "debug", "diagnosticar", "arreglar error",
-  "fix bug", "por qué falla", "reproducir bug", "regression check".
-license: Apache-2.0
+description: "Trigger: debug, diagnosticar, arreglar error, fix bug, por qué falla, reproducir bug, regression check; crash o fallo inesperado. Debugging sistemático: repro → minimiza → instrumenta → arregla → regresión."
+license: MIT
 metadata:
   author: KkapsCa
   version: "1.0"
