@@ -2,7 +2,7 @@
 name: improve-codebase-architecture
 description: >
   Revisión de arquitectura enfocada en detectar deuda, acoplamiento y violaciones
-  de responsabilidades. Integra con SDD como paso previo a propuestas o diseño.
+  de responsabilidades. Integra con el trabajo formal como paso previo a propuestas o diseño (ODD por defecto; SDD si fue seleccionado).
   Trigger: Cuando el usuario diga "revisar arquitectura", "architecture review",
   "mejorar estructura", "codebase health", "tech debt check", "refactor review".
 license: Apache-2.0
@@ -21,8 +21,8 @@ Usa esta skill cuando:
 
 - el usuario pida revisar la arquitectura de un proyecto o módulo,
 - haya sospecha de deuda técnica, acoplamiento excesivo o responsabilidades mezcladas,
-- se vaya a iniciar una propuesta (`sdd-propose`) o diseño (`sdd-design`) y necesites un diagnóstico previo,
-- quieras justificar un refactor antes de proponer cambios formales en SDD.
+- se vaya a iniciar trabajo formal — ODD, o `sdd-propose` / `sdd-design` si SDD fue seleccionado — y necesites un diagnóstico previo,
+- quieras justificar un refactor antes de proponer cambios formales.
 
 ## Trigger
 
@@ -43,7 +43,7 @@ Cárgala cuando escuches: "revisar arquitectura", "architecture review", "mejora
 ## Fallback
 
 - Si no hay código suficiente para revisar (proyecto en fase `brainstorm`/`discovery`), no activar; usar la fase upstream correspondiente.
-- Si la skill requerida no está instalada en `~/.config/opencode/skills`, documentar la brecha y seguir con SDD/skill disponible.
+- Si la skill requerida no está instalada en `~/.config/opencode/skills`, documentar la brecha y seguir con el flujo disponible (ODD o SDD).
 - Si el módulo ya es conocido y el cambio es mecánico, omitir esta skill.
 
 ---
@@ -76,14 +76,14 @@ La revisión debe producir un resumen ejecutivo conciso:
 ## Recomendaciones
 - [Acción concreta, archivos sugeridos, prioridad]
 
-## Input para SDD
+## Input para el trabajo formal
 - [Si aplica: qué propuesta/diseño debería hacerse tras este review]
 ```
 
-### 4. Integración con SDD
-- Esta skill NO reemplaza `sdd-propose` ni `sdd-design`.
+### 4. Integración con el trabajo formal (ODD / SDD)
+- Esta skill NO reemplaza el trabajo formal: ni ODD ni `sdd-propose` / `sdd-design`.
 - Es un paso previo que alimenta esas fases con contexto estructural.
-- Si el usuario quiere cambios formales después del review, enruta a `sdd-propose` con este output como base.
+- Si el usuario quiere cambios formales después del review, enruta al trabajo formal (ODD, o `sdd-propose` si SDD fue seleccionado) con este output como base.
 
 ---
 
@@ -95,7 +95,7 @@ La revisión debe producir un resumen ejecutivo conciso:
 3. Detectar anti-patrones y deuda técnica
 4. Evaluar si la arquitectura es proporcional al alcance
 5. Producir el resumen ejecutivo (ver formato arriba)
-6. Sugerir próximos pasos (SDD propose/design o fixes puntuales)
+6. Sugerir próximos pasos (trabajo formal o fixes puntuales)
 ```
 
 ---
@@ -124,7 +124,7 @@ Si durante la revisión encuentras un bug o comportamiento incorrecto, NO intent
 - [ ] Ya detecté si hay capas separadas o todo está mezclado
 - [ ] Ya confirmé si la arquitectura es proporcional al alcance
 - [ ] Ya produje el resumen ejecutivo
-- [ ] Ya indiqué próximos pasos (SDD o fixes)
+- [ ] Ya indiqué próximos pasos (trabajo formal o fixes)
 
 ---
 

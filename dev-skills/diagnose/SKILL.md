@@ -3,7 +3,7 @@ name: diagnose
 description: >
   Debugging sistemático para errores concretos. Usa el ciclo canónico
   repro → minimiza → instrumenta → arregla → regresión.
-  Integra con SDD: úsalo antes de proponer cambios formales.
+  Integra con el trabajo formal: úsalo antes de proponer cambios (ODD por defecto, o SDD si fue seleccionado).
   Trigger: Cuando el usuario diga "debug", "diagnosticar", "arreglar error",
   "fix bug", "por qué falla", "reproducir bug", "regression check".
 license: Apache-2.0
@@ -22,7 +22,7 @@ Usa esta skill cuando:
 
 - haya un error concreto, crash o comportamiento inesperado,
 - el usuario pida "debug", "diagnosticar", "arreglar este error",
-- necesites aislar un bug antes de proponer un cambio en SDD,
+- necesites aislar un bug antes de proponer un cambio formal (ODD, o SDD si fue seleccionado),
 - quieras validar que un fix no rompió nada (regresión).
 
 ## Trigger
@@ -32,7 +32,7 @@ Cárgala al escuchar: "debug", "diagnosticar", "arreglar error", "fix bug", "por
 ## When NOT to Use
 
 - para revisiones de arquitectura amplias (usa `improve-codebase-architecture`),
-- para planear features nuevas (usa `sdd-propose`),
+- para planear features nuevas (usa el flujo por defecto, ODD; o `sdd-propose` si SDD fue seleccionado),
 - para editing de flujo normal sin un bug claro,
 - **no usar para review arquitectónico amplio; para eso usa `improve-codebase-architecture`**.
 
@@ -43,8 +43,8 @@ Cárgala al escuchar: "debug", "diagnosticar", "arreglar error", "fix bug", "por
 
 ## Fallback
 
-- Si no hay error reproducible o el usuario está en fase de diseño/propuesta, no activar; usar `sdd-design` o `sdd-propose`.
-- Si la skill requerida no está instalada en `~/.config/opencode/skills`, documentar la brecha y seguir con SDD/skill disponible.
+- Si no hay error reproducible o el usuario está en fase de diseño/propuesta, no activar; usar el flujo SDD (`sdd-design` o `sdd-propose`) si fue seleccionado.
+- Si la skill requerida no está instalada en `~/.config/opencode/skills`, documentar la brecha y seguir con el flujo disponible (ODD o SDD).
 - Si el problema resulta ser arquitectónico y no un bug puntual, enrutar a `improve-codebase-architecture`.
 
 ---
@@ -99,11 +99,11 @@ Entorno: [stack/versión]
 
 ---
 
-## Integración con SDD
+## Integración con el trabajo formal (ODD / SDD)
 
-- Esta skill es un **companion** para fases de SDD, no un proceso paralelo.
-- Si el bug revela una necesidad de cambio estructural, luego enruta a `sdd-propose` con este diagnóstico como base.
-- Si el fix requiere una feature o refactor amplio, no lo hagas aquí: documéntalo y propón el cambio vía SDD.
+- Esta skill es un **companion** del trabajo formal, no un proceso paralelo. ODD es el flujo por defecto; las fases SDD aplican si SDD fue seleccionado.
+- Si el bug revela una necesidad de cambio estructural, luego enruta al trabajo formal con este diagnóstico como base: ODD (documento de feature + tareas), o `sdd-propose` si SDD fue seleccionado.
+- Si el fix requiere una feature o refactor amplio, no lo hagas aquí: documéntalo y propón el cambio por el flujo formal (ODD, o SDD si fue seleccionado).
 
 ---
 

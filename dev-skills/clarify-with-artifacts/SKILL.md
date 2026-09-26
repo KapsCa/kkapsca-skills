@@ -2,8 +2,8 @@
 name: clarify-with-artifacts
 description: >
   Helper opt-in que estructura la intención del usuario usando artifacts existentes
-  (docs, Engram, proposal, spec, explore). NO sustituye sdd-propose ni sdd-spec;
-  output mínimo inline o checklist para alimentar SDD.
+  (docs, Engram, proposal, spec, explore). NO sustituye el trabajo formal (ODD, ni `sdd-propose` / `sdd-spec` si SDD fue seleccionado);
+  output mínimo inline o checklist para alimentar el trabajo formal.
 license: Apache-2.0
 metadata:
   author: KkapsCa
@@ -15,7 +15,7 @@ metadata:
 
 > **Input:** prompt del usuario + docs/Engram/proposal/spec/explore existentes
 > **Output:** resumen inline o checklist para alimentar proposal/spec
-> **Modo:** opt-in, output mínimo, NO reemplaza SDD
+> **Modo:** opt-in, output mínimo, NO reemplaza el trabajo formal
 
 ---
 
@@ -23,7 +23,7 @@ metadata:
 
 Usa esta skill cuando:
 - el usuario tenga una idea vaga y ya existan docs/artifacts relevantes,
-- quieras estructurar contexto rápidamente antes de `sdd-propose` o `sdd-spec`,
+- quieras estructurar contexto rápidamente antes de empezar el trabajo formal (ODD), o de `sdd-propose` / `sdd-spec` si SDD fue seleccionado,
 - necesites un resumen breve que recoja lo que ya se sabe del proyecto.
 
 ## When NOT to Use
@@ -37,7 +37,7 @@ Usa esta skill cuando:
 
 ## Principio Rector
 
-**No reemplaza SDD.** Esta skill es un puente ligero que junta lo que ya se sabe (docs, Engram, explore) para que el usuario entre a `sdd-propose` o `sdd-spec` con más contexto. Nunca genera artifacts fuente de verdad.
+**No reemplaza el trabajo formal.** Esta skill es un puente ligero que junta lo que ya se sabe (docs, Engram, explore) para que el usuario entre a `sdd-propose` o `sdd-spec` con más contexto. Nunca genera artifacts fuente de verdad.
 
 ---
 
@@ -45,11 +45,12 @@ Usa esta skill cuando:
 
 | Fuente | Qué aporta |
 |--------|------------|
-| `docs/` | Estándares, governance, SDD docs |
+| `docs/` | Estándares, governance, docs de ODD y SDD |
 | Engram (`mem_search`) | Decisiones, discoveries, session summaries previos |
-| `sdd/{change}/explore` | Hallazgos de exploración previa |
+| `odd/tasks/<feature>.md` | Documento de feature de ODD: intención, alcance y tareas |
+| `sdd/{change}/explore` | Hallazgos de exploración previa (rama SDD) |
 | `sdd/{change}/proposal` | Intención y scope ya delineados |
-| `.atl/skill-registry.md` | Triggers y reglas de routing actuales |
+| `docs/skill-registry.md` | Triggers y reglas de routing actuales |
 
 ---
 
@@ -64,12 +65,12 @@ Una de estas dos opciones (la más ligera posible):
 - Stack confirmado: Flutter + Supabase (ver tech-feasibility)
 - Intención: Adaptar 4 skills derivadas de matt
 - Artifacts previos: proposal ✅, spec ✅, design ✅, tasks ✅
-- Siguiente paso sugerido: sdd-apply
+- Siguiente paso sugerido: implementación (ODD, paso 6)
 ```
 
-**2. Checklist de entrada para SDD:**
+**2. Checklist de entrada para el trabajo formal:**
 ```markdown
-## Checklist para sdd-propose
+## Checklist de entrada (ODD, o `sdd-propose` si SDD fue seleccionado)
 - [ ] Problema claro: {resumen}
 - [ ] Usuario identificado: {quién}
 - [ ] Propuesta de valor: {qué aporta}
@@ -80,9 +81,9 @@ Una de estas dos opciones (la más ligera posible):
 
 ## Qué NO hace esta skill
 
-- NO escribe artifacts canónicos (SDD manda en eso),
-- NO reemplaza `sdd-propose` ni `sdd-spec`,
-- NO aclara contenido profundo (para eso están las fases SDD),
+- NO escribe artifacts canónicos (el trabajo formal manda en eso),
+- NO reemplaza el trabajo formal: ni ODD ni `sdd-propose` / `sdd-spec`,
+- NO aclara contenido profundo (para eso está el flujo formal),
 - NO es obligatoria: es opt-in y vive como helper lateral,
 - NO compite con `brainstorm` (ese es para ideas muy tempranas sin artifacts).
 
@@ -91,7 +92,7 @@ Una de estas dos opciones (la más ligera posible):
 ## Límite Estricto
 
 Esta skill puede leer y resumir, pero **NUNCA** debe:
-1. Crear un artifact con topic_key en Engram (eso es SDD),
+1. Crear un artifact con topic_key en Engram (eso es del flujo formal),
 2. Sobrescribir proposal o spec existentes,
 3. Convertirse en un paso obligatorio del pipeline.
 
@@ -101,7 +102,6 @@ Esta skill puede leer y resumir, pero **NUNCA** debe:
 
 | Skill | Relación |
 |--------|----------|
-| `sdd-propose` / `sdd-spec` | Aguas abajo; `clarify` alimenta, no reemplaza |
-| `request-triage` | `triage` decide destino; `clarify` estructura contenido |
+| `sdd-propose` / `sdd-spec` | Aguas abajo solo si SDD fue seleccionado; `clarify` alimenta, no reemplaza |
 | `brainstorm` | Upstream; si no hay nada claro, usa `brainstorm` primero |
 | `explore` (SDD) | `explore` es fase SDD; `clarify` es helper opt-in previo |

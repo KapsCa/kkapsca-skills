@@ -15,11 +15,12 @@
 
 - [Contexto Gentle AI](gentle-ai.md) — Stack Gentle AI y relación con este repo
 - [Memoria Persistente (Engram)](engram.md) — Diferencia entre Engram, bootstrap y skill-registry
-- [Desarrollo Estructurado (SDD)](sdd.md) — SDD y sdd-orchestrator
+- [Desarrollo Estructurado (ODD y SDD)](sdd.md) — ODD por defecto; SDD como rama opcional
 
 ## ⚙️ Operación del Repositorio
 
 - [Flujo de contribución](governance.md) — Protección de ramas, PR, Conventional Commits
 - [Baseline de seguridad](security-baseline.md) — Qué chequea cada herramienta, qué cubre por stack y qué queda afuera
+- [Registro de skills](skill-registry.md) — Índice de ruteo que usa el orquestador para decidir cuándo activar cada skill
 - [Versionado semántico](release-please.md) — Release-please y tipos de commit
 - [Configuración WSL](wsl-setup.md) — Recomendaciones para Windows/WSL

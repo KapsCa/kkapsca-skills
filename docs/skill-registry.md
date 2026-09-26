@@ -2,6 +2,8 @@
 
 **Delegator use only.** Any agent that launches sub-agents reads this registry to resolve compact rules, then injects them directly into sub-agent prompts. Sub-agents do NOT read this registry or individual SKILL.md files.
 
+> **Modelo de flujo:** el flujo por defecto es **ODD** (*Organic Driven Development*). Todo pedido entra ahí, y el trabajo se rastrea en `odd/tasks/<feature>.md` más su espejo en Engram. **SDD** es una rama opcional, que se activa solo por pedido explícito (`/sdd-*`) o propuesta aceptada. Las señales de fase de abajo nombran ODD por defecto y las fases SDD como camino alternativo.
+
 > **External Skills Availability**: Este registry define **orquestación lógica** (cuándo activar cada skill según contexto y fase). No garantiza disponibilidad física en el entorno. Las skills marcadas como `external-bootstrappable` residen fuera del repo en `${AGENTS_DIR}` (por defecto `$HOME/.agents/skills`, configurable vía `EXTERNAL_SKILLS_DIR` en el bootstrap) y requieren instalación manual o ejecución del bootstrap (`bash scripts/bootstrap.sh`) para estar disponibles en `~/.config/opencode/skills`. Sin instalación física, opencode no las detectará y el enrutamiento será solo lógico. Skills marcadas como `logical-only` existen como reglas de routing/candidato sin instalación garantizada.
 
 ## User Skills
@@ -33,8 +35,7 @@
 | Genkit en Go | developing-genkit-go | ${AGENTS_DIR}/developing-genkit-go/SKILL.md | external-bootstrappable |
 | Genkit en Python | developing-genkit-python | ${AGENTS_DIR}/developing-genkit-python/SKILL.md | external-bootstrappable |
 | Advisory/warning-first sobre ramas, PRs y commits | repo-guardrails | ./dev-skills/repo-guardrails/SKILL.md | repo-local |
-| Export-only de artifacts SDD a GitHub issues | sdd-to-issues | ./dev-skills/sdd-to-issues/SKILL.md | repo-local |
-| Enrutador opt-in de requests a SDD/skills/issues | request-triage | ./dev-skills/request-triage/SKILL.md | repo-local |
+| Export-only del plan de trabajo a GitHub issues (ODD por defecto) | tasks-to-issues | ./dev-skills/tasks-to-issues/SKILL.md | repo-local |
 | Clarificación opt-in usando artifacts existentes | clarify-with-artifacts | ./dev-skills/clarify-with-artifacts/SKILL.md | repo-local |
 | Crear nuevas AI skills | skill-creator | ${AGENTS_DIR}/skill-creator/SKILL.md | logical-only |
 
@@ -86,7 +87,7 @@
 
 ### improve-codebase-architecture
 - Revisión de arquitectura enfocada en deuda, acoplamiento y violaciones.
-- Integra con SDD: úsala antes de `sdd-propose` o `sdd-design`.
+- Integra con el trabajo formal: úsala antes de ODD, o de `sdd-propose` / `sdd-design` si SDD fue seleccionado.
 - No la uses para debugging puntual; para eso usa `diagnose`.
 - Produce un resumen ejecutivo breve, no un tratado.
 - Si el proyecto es pequeño, di "acoplado / sin estructura" y recomienda pasos mínimos.
@@ -99,7 +100,7 @@
 - Debugging canónico: repro → minimiza → instrumenta → fix → regresión.
 - Úsala para errores concretos, no para revisiones amplias de arquitectura.
 - No hagas refactors mientras debuggeas; enfócate en el fix mínimo.
-- Integra con SDD: si el bug revela necesidad de cambio estructural, luego enruta a `sdd-propose`.
+- Integra con el trabajo formal: si el bug revela necesidad de cambio estructural, luego enruta a ODD (documento de feature) o, si SDD fue seleccionado, a `sdd-propose`.
 - Output: reporte breve con reproducción, causa raíz, fix y regresión.
 - **Companion skill** para debugging puntual; no es reemplazo de `improve-codebase-architecture`.
 - **Precedencia**: si el bug es puramente de framework (Flutter/Firebase), usar skill oficial de stack en su lugar.
@@ -109,7 +110,7 @@
 ### zoom-out
 - Perspectiva de sistema antes de editar código desconocido.
 - Mapea dependencias, flujo de datos y riesgos de edición.
-- Úsala antes de `sdd-apply` o `sdd-design` en módulos que no dominas.
+- Úsala antes de implementar en módulos que no dominas (ODD paso 6; o `sdd-apply` / `sdd-design` si SDD fue seleccionado).
 - No hagas cambios aquí; solo mapa y diagnóstico de riesgos.
 - Output súper breve: dependencias, flujo, riesgos y recomendación.
 - **Companion skill** para contexto previo a edición; no es análisis arquitectónico profundo.
@@ -205,25 +206,19 @@
 - Capa advisory/warning-first; NO bloquea ni reemplaza `repo-bootstrap`.
 - Input: estado rama/PR/repo + reglas `repo-bootstrap` / `docs/governance.md`.
 - Output: warnings/checklist inline; referir a `repo-bootstrap` para normas.
-- Si hay comando `/sdd-*`, gana SDD; `repo-guardrails` cede.
+- Si hay comando `/sdd-*`, gana SDD; `repo-guardrails` cede. En ODD (el flujo por defecto) esta capa sí aplica.
 
-### sdd-to-issues
-- Export-only: convierte artifacts SDD (spec/design/tasks) en issues GitHub vía `issue-creation`.
-- NO descompone trabajo; eso es territorio exclusivo de `sdd-tasks`.
-- Fallback: sin artifacts SDD → no genera nada, sugiere usar SDD primero.
+### tasks-to-issues
+- Export-only: convierte el plan de trabajo en issues GitHub vía `issue-creation`. Entrada por defecto: `odd/tasks/<feature>.md` (ODD). Alternativa: artifacts SDD, si SDD fue seleccionado.
+- NO descompone trabajo; eso es territorio del flujo que produjo el plan (ODD paso 5, o `sdd-tasks` si SDD fue seleccionado).
+- Fallback: sin plan → no genera nada, sugiere terminar la planificación primero.
 - `issue-creation` / `branch-pr` ganan para crear/aprobar issues y PRs.
-
-### request-triage
-- Enrutador opt-in y ultra-delgado; solo decide destino (SDD/skill/issue).
-- NO aclara contenido (usa `clarify-with-artifacts` para eso).
-- NO parte trabajo; solo da recomendación inline.
-- Comando `/sdd-*` explícito gana siempre; `request-triage` cede.
 
 ### clarify-with-artifacts
 - Helper opt-in que estructura contexto usando docs/artifacts existentes.
-- NO sustituye `sdd-propose` ni `sdd-spec`; output mínimo inline.
-- NO escribe artifacts canónicos; SDD manda en eso.
-- Fallback: sin artifacts previos → sugerir `brainstorm` o `sdd-init`.
+- NO sustituye el trabajo formal; output mínimo inline.
+- NO escribe artifacts canónicos; el trabajo formal manda en eso.
+- Fallback: sin artifacts previos → sugerir `brainstorm` o iniciar el flujo por defecto (ODD).
 
 ## Anti-Solape
 
@@ -243,15 +238,14 @@
 | Escenario | Skill que gana | Razón |
 |-----------|----------------|-------|
 | Comando `/sdd-*` explícito | Fase SDD (`sdd-propose`, `sdd-spec`, etc.) | SDD es fuente de verdad para planificación |
-| Partición de trabajo | `sdd-tasks` | `sdd-to-issues` solo exporta, no descompone |
-| Crear/aprobar issues y PRs | `issue-creation` / `branch-pr` | `sdd-to-issues` es canal de salida, no dueño |
+| Partición de trabajo | `sdd-tasks` | `tasks-to-issues` solo exporta, no descompone |
+| Crear/aprobar issues y PRs | `issue-creation` / `branch-pr` | `tasks-to-issues` es canal de salida, no dueño |
 | Normas del repo | `repo-bootstrap` | `repo-guardrails` es capa advisory lateral |
 | Aclaración de contenido profundo | `sdd-propose` / `sdd-spec` | `clarify-with-artifacts` es helper opt-in |
-| Request ambiguo | `request-triage` decide; si hay `/sdd-*` gana SDD | `request-triage` es solo router |
 
 **Ownership claro**:
-- SDD planea y escribe artifacts canónicos.
-- Engram persiste memoria y artifacts SDD.
+- El flujo formal planea y escribe artifacts canónicos: ODD por defecto, o SDD si fue seleccionado.
+- Engram persiste memoria y artifacts del flujo formal.
 - `issue-creation` / `branch-pr` gobiernan issues/PRs.
 - `repo-bootstrap` fija guardrails normativos del repo.
 - Las 4 skills derivadas son helpers/advisory/export-only y NO reemplazan a los anteriores.
