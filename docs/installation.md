@@ -72,6 +72,54 @@ Sin instalación física, el routing falla silenciosamente: el orquestador pedir
 
 ---
 
+## Segundo destino: Pi (`--pi-only`)
+
+El bootstrap instala en **dos destinos**: el de opencode (todas las skills del repo) y el de **Pi**, que recibe solo un subconjunto. De las skills de usuario, Pi lee `~/.agents/skills` y nada más: lo que no esté ahí, Pi no lo ve. (Las que vienen dentro de un paquete o plugin se instalan aparte, con `pi install`.)
+
+### Qué se instala en Pi
+
+Seis skills, en dos grupos:
+
+| Grupo | Skills | Por qué |
+|---|---|---|
+| Estándares del repo | `repo-bootstrap`, `repo-guardrails` | Pi tiene que conocer y verificar los estándares antes de un push |
+| Pipeline de producto | `brainstorm`, `product-discovery`, `project-init`, `tech-feasibility` | Cubren la fase **anterior** a todo lo que Pi ya sabe hacer: de idea vaga a producto definido. Pi no tiene ninguna de las cuatro, y su `sdd-explore` explora una idea de *cambio*, no de producto |
+
+**Quedan afuera** `clarify-with-artifacts`, `diagnose`, `zoom-out`, `improve-codebase-architecture`, `flutter-personal-standards` y `sdd-to-issues`: no son parte del hueco detectado. Cada skill instalada agrega una línea de metadata al prompt de Pi en **todos** los proyectos, así que la lista se mantiene justificada, no acumulada.
+
+### Cómo se usa
+
+```bash
+# Instalar solo el destino Pi, sin tocar opencode
+bash scripts/bootstrap.sh --pi-only
+
+# Cambiar la lista sin editar el script
+PI_SKILLS="brainstorm product-discovery" bash scripts/bootstrap.sh --pi-only
+
+# Cambiar el directorio destino (por defecto ~/.agents/skills)
+PI_SKILLS_DIR="$HOME/otro/dir" bash scripts/bootstrap.sh --pi-only
+```
+
+> **Si más adelante corres `bash scripts/bootstrap.sh` sin `--pi-only`**, esa corrida vuelve a procesar como externas las skills que viven en `~/.agents/skills`, estas seis incluidas. No rompe nada y **no genera conflictos** (medido en una copia descartable: exit 0 y 0 conflictos): los enlaces del destino Pi resuelven al mismo directorio real que los del repositorio, así que el guard de "origen y destino son el mismo" las omite.
+
+Después de instalarlas, **reinicia Pi** para que refresque la lista de skills disponibles.
+
+### Cómo verificar que Pi las ve
+
+La prueba tiene que usar `--tools read`. **Con `--no-tools` la sección de skills no se inyecta en el prompt**, así que el modelo responde "no" a todas —incluso a las que existen— y la prueba miente:
+
+```bash
+pi --tools read -p "Sin usar herramientas: en tu lista de skills disponibles, para cada nombre decime SOLO SI o NO:
+issue-creation
+brainstorm
+una-skill-que-no-existe-xyz
+Formato exacto: <nombre>=<SI|NO>"
+```
+
+Siempre con **control positivo** (`issue-creation`, que siempre existe) y **control negativo** (`una-skill-que-no-existe-xyz`, que nunca existe). Sin los dos, el resultado no significa nada.
+
+---
+
 ## Desinstalación
 
 ```bash

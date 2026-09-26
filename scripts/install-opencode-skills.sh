@@ -18,11 +18,20 @@ EXTERNAL_SKILLS_DIR="${EXTERNAL_SKILLS_DIR:-${HOME}/.agents/skills}"
 # La unica con solape real era request-triage, porque el orquestador de gentle-ai
 # ya trae su propia escalera de ruteo en el prompt. Se elimino del repo.
 #
-# Estas dos son las que hacen falta para que Pi conozca los estandares del repo
-# y los verifique antes de un push.
+# Las seis que quedan son, entonces, dos grupos:
+#   - repo-bootstrap y repo-guardrails: los estandares del repo, que Pi consulta
+#     antes de un push.
+#   - las cuatro del pipeline de producto: Pi no tiene brainstorm, ni discovery,
+#     ni project-init, ni factibilidad tecnica; gentle-ai arranca desde un cambio
+#     ya definido. Sin estas cuatro, Pi no puede arrancar desde una idea vaga,
+#     que es la fase ANTERIOR a todo lo que Pi ya sabe hacer.
+#
+# Quedan afuera las companions (clarify-with-artifacts, diagnose, zoom-out,
+# improve-codebase-architecture, flutter-personal-standards, sdd-to-issues): no
+# son parte del hueco detectado, y cada linea de mas en el prompt se justifica.
 #
 # Se puede cambiar sin editar el script: PI_SKILLS="otra-skill otra-mas"
-PI_SKILL_NAMES=(repo-bootstrap repo-guardrails)
+PI_SKILL_NAMES=(repo-bootstrap repo-guardrails brainstorm product-discovery project-init tech-feasibility)
 if [[ -n "${PI_SKILLS:-}" ]]; then
   read -r -a PI_SKILL_NAMES <<< "${PI_SKILLS}"
 fi
