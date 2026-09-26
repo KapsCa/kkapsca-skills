@@ -27,7 +27,7 @@ EXTERNAL_SKILLS_DIR="${EXTERNAL_SKILLS_DIR:-${HOME}/.agents/skills}"
 #     que es la fase ANTERIOR a todo lo que Pi ya sabe hacer.
 #
 # Quedan afuera las companions (clarify-with-artifacts, diagnose, zoom-out,
-# improve-codebase-architecture, flutter-personal-standards, sdd-to-issues): no
+# improve-codebase-architecture, flutter-personal-standards, tasks-to-issues): no
 # son parte del hueco detectado, y cada linea de mas en el prompt se justifica.
 #
 # Se puede cambiar sin editar el script: PI_SKILLS="otra-skill otra-mas"

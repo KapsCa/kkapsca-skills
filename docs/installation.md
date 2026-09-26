@@ -85,7 +85,7 @@ Seis skills, en dos grupos:
 | Estándares del repo | `repo-bootstrap`, `repo-guardrails` | Pi tiene que conocer y verificar los estándares antes de un push |
 | Pipeline de producto | `brainstorm`, `product-discovery`, `project-init`, `tech-feasibility` | Cubren la fase **anterior** a todo lo que Pi ya sabe hacer: de idea vaga a producto definido. Pi no tiene ninguna de las cuatro, y su `sdd-explore` explora una idea de *cambio*, no de producto |
 
-**Quedan afuera** `clarify-with-artifacts`, `diagnose`, `zoom-out`, `improve-codebase-architecture`, `flutter-personal-standards` y `sdd-to-issues`: no son parte del hueco detectado. Cada skill instalada agrega una línea de metadata al prompt de Pi en **todos** los proyectos, así que la lista se mantiene justificada, no acumulada.
+**Quedan afuera** `clarify-with-artifacts`, `diagnose`, `zoom-out`, `improve-codebase-architecture`, `flutter-personal-standards` y `tasks-to-issues`: no son parte del hueco detectado. Cada skill instalada agrega una línea de metadata al prompt de Pi en **todos** los proyectos, así que la lista se mantiene justificada, no acumulada.
 
 ### Cómo se usa
 

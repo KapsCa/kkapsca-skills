@@ -41,15 +41,15 @@ Exploración → Propuesta → Especificaciones → Diseño → Tareas → Imple
 Estas skills son **opt-in** y no reemplazan el flujo SDD principal. Viven como capa lateral:
 
 ```text
-request → clarify-with-artifacts? → sdd-propose/spec/design/tasks → sdd-to-issues? → issue-creation / branch-pr
+request → clarify-with-artifacts? → sdd-propose/spec/design/tasks → tasks-to-issues? → issue-creation / branch-pr
 ```
 
 | Skill | Rol | Relación con SDD |
 |-------|-----|-------------------|
 | `clarify-with-artifacts` | Estructura contexto usando artifacts existentes (docs, Engram, proposal, spec) | Output mínimo inline; NO sustituye `sdd-propose`/`sdd-spec` |
-| `sdd-to-issues` | Exporta artifacts SDD (spec/design/tasks) a issue drafts o issues GitHub | Export-only; NO descompone trabajo (eso es `sdd-tasks`) |
+| `tasks-to-issues` | Exporta el plan de trabajo (documento de feature de ODD por defecto; artifacts SDD si SDD fue seleccionado) a issue drafts o issues GitHub | Export-only; NO descompone trabajo (eso es `sdd-tasks`) |
 
-**Precedencia**: Comando `/sdd-*` explícito siempre gana sobre `clarify-with-artifacts`. `sdd-tasks` gana sobre `sdd-to-issues` para partición de trabajo.
+**Precedencia**: Comando `/sdd-*` explícito siempre gana sobre `clarify-with-artifacts`. `sdd-tasks` gana sobre `tasks-to-issues` para partición de trabajo.
 
 ## El Orquestador sdd-orchestrator
 

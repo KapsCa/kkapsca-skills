@@ -1,5 +1,5 @@
 ---
-name: sdd-to-issues
+name: tasks-to-issues
 description: >
   Export-only skill que convierte un plan de trabajo ya aprobado en issue drafts
   o issues GitHub reales usando issue-creation. Acepta el documento de feature de ODD
@@ -12,14 +12,9 @@ metadata:
   pipeline: "project-kickstart/sdd"
 ---
 
-# SDD-to-Issues — Export-Only Wrapper
+# Tasks-to-Issues — Export-Only Wrapper
 
-> **Nota sobre el nombre:** la skill conserva el nombre `sdd-to-issues`, pero su entrada
-> por defecto ya no es SDD. El flujo por defecto es **ODD**, y su plan de trabajo vive en
-> `odd/tasks/<feature>.md`. Los artifacts SDD son la entrada **alternativa**, y aplican
-> solo cuando SDD fue seleccionado explícitamente.
-
-> **Input:** `odd/tasks/<feature>.md` (ODD, por defecto) o `sdd/{change}/spec`, `design`, `tasks` (rama SDD)
+> **Input:** `odd/tasks/<feature>.md` (ODD, por defecto) o `sdd/{change}/spec`, `design`, `tasks` (rama SDD, solo cuando SDD fue seleccionado explícitamente)
 > **Output:** issue drafts o issues GitHub vía `issue-creation`
 > **Modo:** Export-only; NO particiona trabajo
 
@@ -120,12 +115,12 @@ Si no hay ningún plan disponible (`odd/tasks/<feature>.md` no encontrado, y `sd
 ### Exportar el plan de trabajo a issue
 
 ```
-Cargar sdd-to-issues → leer odd/tasks/<feature>.md (ODD) o sdd/{change}/* (rama SDD)
+Cargar tasks-to-issues → leer odd/tasks/<feature>.md (ODD) o sdd/{change}/* (rama SDD)
 → generar issue draft → crear vía issue-creation
 ```
 
 ### Si no hay plan
 
 ```
-Cargar sdd-to-issues → fallback: "No se encontró un plan de trabajo. Terminá la planificación primero."
+Cargar tasks-to-issues → fallback: "No se encontró un plan de trabajo. Terminá la planificación primero."
 ```

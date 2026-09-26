@@ -35,7 +35,7 @@
 | Genkit en Go | developing-genkit-go | ${AGENTS_DIR}/developing-genkit-go/SKILL.md | external-bootstrappable |
 | Genkit en Python | developing-genkit-python | ${AGENTS_DIR}/developing-genkit-python/SKILL.md | external-bootstrappable |
 | Advisory/warning-first sobre ramas, PRs y commits | repo-guardrails | ./dev-skills/repo-guardrails/SKILL.md | repo-local |
-| Export-only del plan de trabajo a GitHub issues (ODD por defecto) | sdd-to-issues | ./dev-skills/sdd-to-issues/SKILL.md | repo-local |
+| Export-only del plan de trabajo a GitHub issues (ODD por defecto) | tasks-to-issues | ./dev-skills/tasks-to-issues/SKILL.md | repo-local |
 | Clarificación opt-in usando artifacts existentes | clarify-with-artifacts | ./dev-skills/clarify-with-artifacts/SKILL.md | repo-local |
 | Crear nuevas AI skills | skill-creator | ${AGENTS_DIR}/skill-creator/SKILL.md | logical-only |
 
@@ -208,7 +208,7 @@
 - Output: warnings/checklist inline; referir a `repo-bootstrap` para normas.
 - Si hay comando `/sdd-*`, gana SDD; `repo-guardrails` cede. En ODD (el flujo por defecto) esta capa sí aplica.
 
-### sdd-to-issues
+### tasks-to-issues
 - Export-only: convierte el plan de trabajo en issues GitHub vía `issue-creation`. Entrada por defecto: `odd/tasks/<feature>.md` (ODD). Alternativa: artifacts SDD, si SDD fue seleccionado.
 - NO descompone trabajo; eso es territorio del flujo que produjo el plan (ODD paso 5, o `sdd-tasks` si SDD fue seleccionado).
 - Fallback: sin plan → no genera nada, sugiere terminar la planificación primero.
@@ -238,8 +238,8 @@
 | Escenario | Skill que gana | Razón |
 |-----------|----------------|-------|
 | Comando `/sdd-*` explícito | Fase SDD (`sdd-propose`, `sdd-spec`, etc.) | SDD es fuente de verdad para planificación |
-| Partición de trabajo | `sdd-tasks` | `sdd-to-issues` solo exporta, no descompone |
-| Crear/aprobar issues y PRs | `issue-creation` / `branch-pr` | `sdd-to-issues` es canal de salida, no dueño |
+| Partición de trabajo | `sdd-tasks` | `tasks-to-issues` solo exporta, no descompone |
+| Crear/aprobar issues y PRs | `issue-creation` / `branch-pr` | `tasks-to-issues` es canal de salida, no dueño |
 | Normas del repo | `repo-bootstrap` | `repo-guardrails` es capa advisory lateral |
 | Aclaración de contenido profundo | `sdd-propose` / `sdd-spec` | `clarify-with-artifacts` es helper opt-in |
 
