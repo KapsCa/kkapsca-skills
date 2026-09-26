@@ -16,9 +16,13 @@ Este repositorio reúne **habilidades (skills)** pensadas desde la experiencia p
 
 Son skills de **texto plano**: un archivo `SKILL.md` con frontmatter. No dependen de una herramienta, no ejecutan nada por su cuenta y no reemplazan tu criterio. Lo que hacen es darle a un agente de IA el **contexto y el orden de pensamiento** que suele faltar: qué preguntar antes de construir, qué decidir antes de elegir tecnología, y qué verificar antes de decir que algo está listo.
 
+No hace falta usar el mismo entorno que el autor ni ninguna herramienta en particular: **si tu agente lee skills, podés usar estas**.
+
 ---
 
 ## Inicio Rápido
+
+### La vía corta (opencode o Pi)
 
 ```bash
 git clone https://github.com/KapsCa/kkapsca-skills.git
@@ -26,23 +30,37 @@ cd kkapsca-skills
 bash scripts/bootstrap.sh
 ```
 
-El proceso de inicialización (**bootstrap**) se corre **desde este repositorio de habilidades**, no desde la carpeta de tu proyecto futuro.
-
-### Dos destinos
-
 | Destino | Qué recibe | Dónde queda |
 |---|---|---|
 | **opencode** | Las 12 skills | `~/.config/opencode/skills/` |
-| **Pi** | Las 6 de mayor uso: el pipeline de producto y los estándares del repo | `~/.agents/skills/` |
+| **Pi** | Las 6 de mayor uso: el pipeline y los estándares | `~/.agents/skills/` |
 
 ```bash
 bash scripts/bootstrap.sh            # ambos destinos
 bash scripts/bootstrap.sh --pi-only  # solo el destino de Pi, sin tocar opencode
 ```
 
-> **Después de instalar, reiniciá el agente** (opencode, Pi o los dos): la lista de skills disponibles se refresca al arrancar.
+### Cualquier otro agente
 
-Si un directorio ya existe y no lo creó este repositorio, el bootstrap **no lo pisa**: lo reporta como conflicto y sigue. Detalle operativo en la [guía de instalación](docs/installation.md).
+**No hace falta ningún instalador.** Una skill es un archivo Markdown: copiá el `SKILL.md` —o la carpeta entera— de la skill que quieras al directorio donde tu agente lee skills. Nada que compilar, nada que ejecutar.
+
+Si tu agente lee de un directorio conocido, es el mismo que ya usás para tus otras skills:
+
+| Agente | Directorio |
+|---|---|
+| Agentes que siguen la convención compartida (incluye Pi) | `~/.agents/skills/` |
+| opencode | `~/.config/opencode/skills/` |
+| Claude Code | `~/.claude/skills/` |
+| Codex | `~/.codex/skills/` |
+| Gemini CLI | `~/.gemini/skills/` |
+| Copilot | `~/.copilot/skills/` |
+| Kilo Code | `~/.config/kilo/skills/` |
+
+> Si tu agente no está en la lista, copiá la carpeta donde lea sus skills: funciona igual, porque el archivo es texto plano.
+
+> **Después de instalar, reiniciá el agente** para que refresque la lista de skills disponibles.
+
+Si un directorio ya existe y no lo creó este repositorio, el bootstrap **no lo pisa**: lo reporta como conflicto y sigue.
 
 **[Guía de instalación →](docs/installation.md)**
 
@@ -50,9 +68,18 @@ Si un directorio ya existe y no lo creó este repositorio, el bootstrap **no lo 
 
 ## Las 12 skills
 
-### Pipeline de producto
+### El núcleo: el pipeline de producto y los estándares
 
-De una idea vaga a un producto definido. Esta fase es **anterior** a cualquier flujo de implementación: acá todavía no hay código, hay decisiones.
+| Skill | Se activa cuando… |
+|---|---|
+| [brainstorm](brainstorm/SKILL.md) | tenés una idea y no sabés por dónde empezar |
+| [product-discovery](product-discovery/SKILL.md) | querés saber si la necesidad es real, quién la usaría y cómo validarla |
+| [project-init](project-init/SKILL.md) | hay que decidir enfoque, secuencia de trabajo y alcance inicial |
+| [tech-feasibility](tech-feasibility/SKILL.md) | hay que medir dificultad, riesgos, esfuerzo y elegir stack |
+| [repo-bootstrap](dev-skills/repo-bootstrap/SKILL.md) | vas a crear un repositorio nuevo |
+| [repo-guardrails](dev-skills/repo-guardrails/SKILL.md) | estás por hacer push, abrir un PR o mergear |
+
+El pipeline de producto va de una idea vaga a un producto definido, **antes** de cualquier decisión de implementación:
 
 ```text
 Idea → brainstorming → descubrimiento de producto → inicio de proyecto → factibilidad técnica → Desarrollo
@@ -60,28 +87,16 @@ Idea → brainstorming → descubrimiento de producto → inicio de proyecto →
 
 **Ruta ligera** (proyectos personales o paralelos): `Idea → brainstorming → descubrimiento de producto → factibilidad técnica → Desarrollo`
 
-### Estándares del repo
+### Companions: apoyo, por situación
 
-Preparan un repositorio y verifican que el trabajo lo respete.
+Se cargan cuando el trabajo ya está en marcha. **Ninguna es obligatoria**: si solo querés el pipeline y los estándares, podés ignorarlas todas.
 
-### Companions
-
-Se cargan por situación, cuando el trabajo ya está en marcha.
-
-| Grupo | Skill | Se activa cuando… | Destino |
-|---|---|---|---|
-| **Pipeline** | [brainstorm](brainstorm/SKILL.md) | tenés una idea y no sabés por dónde empezar | Pi · opencode |
-| **Pipeline** | [product-discovery](product-discovery/SKILL.md) | querés saber si la necesidad es real, quién la usaría y cómo validarla | Pi · opencode |
-| **Pipeline** | [project-init](project-init/SKILL.md) | hay que decidir enfoque, secuencia de trabajo y alcance inicial | Pi · opencode |
-| **Pipeline** | [tech-feasibility](tech-feasibility/SKILL.md) | hay que medir dificultad, riesgos, esfuerzo y elegir stack | Pi · opencode |
-| **Estándares** | [repo-bootstrap](dev-skills/repo-bootstrap/SKILL.md) | vas a crear un repositorio nuevo | Pi · opencode |
-| **Estándares** | [repo-guardrails](dev-skills/repo-guardrails/SKILL.md) | estás por hacer push, abrir un PR o mergear | Pi · opencode |
-| **Companion** | [clarify-with-artifacts](dev-skills/clarify-with-artifacts/SKILL.md) | hay una idea vaga y ya existen artifacts que la aterrizan | opencode |
-| **Companion** | [diagnose](dev-skills/diagnose/SKILL.md) | hay un bug que no entendés y querés ir de la reproducción a la causa | opencode |
-| **Companion** | [zoom-out](dev-skills/zoom-out/SKILL.md) | vas a editar código que no conocés bien | opencode |
-| **Companion** | [improve-codebase-architecture](dev-skills/improve-codebase-architecture/SKILL.md) | sospechás deuda técnica, acoplamiento o responsabilidades mezcladas | opencode |
-| **Companion** | [tasks-to-issues](dev-skills/tasks-to-issues/SKILL.md) | hay un plan aprobado y querés convertirlo en issues | opencode |
-| **Companion** | [flutter-personal-standards](dev-skills/flutter-personal-standards/SKILL.md) | hay dudas de estructura o arquitectura en Flutter/Dart | opencode |
+- [clarify-with-artifacts](dev-skills/clarify-with-artifacts/SKILL.md) — hay una idea vaga y ya existen artifacts que la aterrizan
+- [diagnose](dev-skills/diagnose/SKILL.md) — hay un bug que no entendés y querés ir de la reproducción a la causa
+- [zoom-out](dev-skills/zoom-out/SKILL.md) — vas a editar código que no conocés bien
+- [improve-codebase-architecture](dev-skills/improve-codebase-architecture/SKILL.md) — sospechás deuda técnica, acoplamiento o responsabilidades mezcladas
+- [tasks-to-issues](dev-skills/tasks-to-issues/SKILL.md) — hay un plan aprobado y querés convertirlo en issues
+- [flutter-personal-standards](dev-skills/flutter-personal-standards/SKILL.md) — hay dudas de estructura o arquitectura en Flutter/Dart
 
 > La regla no es "seguir pasos porque sí". La regla es **no saltarte el pensamiento que todavía no hiciste**.
 
@@ -91,7 +106,12 @@ Se cargan por situación, cuando el trabajo ya está en marcha.
 
 ## El flujo: ODD por defecto, SDD opcional
 
-El trabajo entra por **ODD** (*Organic Driven Development*): un pedido chico se resuelve liviano, y uno sustancial deja **un documento de feature** en `odd/tasks/<feature>.md` que permite retomarlo sin reconstruir el plan.
+Este repositorio sigue **ODD** (*Organic Driven Development*), un método de **[Alan Buscaglia](https://gentlemanprogramming.com/)** — *Gentleman Programming*, el autor de **Gentle-AI**. Su documentación autoritativa vive en el proyecto de Gentle-AI:
+
+- **[ODD, explicado por su autor →](https://github.com/Gentleman-Programming/gentle-ai/blob/main/docs/usage.md#organic-driven-development-odd)**
+- **[gentlemanprogramming.com →](https://gentlemanprogramming.com/)**
+
+El trabajo entra por ODD: un pedido chico se resuelve liviano, y uno sustancial deja **un documento de feature** en `odd/tasks/<feature>.md` que permite retomarlo sin reconstruir el plan.
 
 **SDD** (*Spec-Driven Development*) es una **rama opcional**, y se entra solo por pedido explícito (`/sdd-*`) o por propuesta aceptada. Tiene su propio pipeline documentado, y las skills de este repositorio conviven con él sin reemplazarlo: donde una skill necesita saber en qué fase está el trabajo, nombra ODD por defecto y las fases SDD como alternativa.
 
@@ -120,15 +140,17 @@ Un proyecto nuevo **no debería nacer sin defensas**. Por eso el bootstrap del r
 
 **Si un chequeo de seguridad no corre, no se mergea.** Un chequeo ausente no es un chequeo aprobado.
 
-### Lo que no está cubierto
+### Lenguajes soportados
 
-Se declara a propósito, para no asumir defensas que no existen:
+El análisis estático entiende estos lenguajes:
 
-- El análisis estático **no entiende Dart/Flutter, shell ni PowerShell**. En un proyecto de Flutter corre y no encuentra nada.
-- **Flutter no tiene auditoría de librerías en integración continua**: es el único stack del ecosistema sin ninguna capa automática.
-- El análisis estático **solo funciona en repos públicos**.
-- El detector de secretos **necesita una licencia si el repo es de una organización** (no si es de una cuenta personal).
-- **Un repo sin código todavía no tiene lenguaje.** Ese es el estado inicial normal de un proyecto nuevo, y está contemplado: nada falla, y cada pieza se activa cuando aparece el código.
+```text
+C/C++ · C# · Go · Java/Kotlin · JavaScript/TypeScript · Python · Ruby · Rust · Swift · GitHub Actions
+```
+
+**Todo lo que quede fuera de esa lista es un hueco conocido** — incluidos **Dart/Flutter, shell y PowerShell**, donde el análisis corre y no encuentra nada.
+
+Hay más límites además de los lenguajes: la licencia que el detector de secretos necesita en cuentas de organización, que el análisis estático solo funcione en repos públicos, y qué pasa en un repositorio que todavía no tiene código. **Están todos declarados, con su detalle, en el baseline.**
 
 **[Baseline de seguridad →](docs/security-baseline.md)**
 
@@ -148,11 +170,11 @@ El contrato está escrito en [el contrato de estilo](docs/skill-style-guide.md) 
 
 | Documento | Qué encontrás |
 |---|---|
-| [Guía de instalación](docs/installation.md) | Bootstrap, destinos, opciones `--copy` y `--pi-only`, desinstalación |
+| [Guía de instalación](docs/installation.md) | Bootstrap, destinos, cualquier agente, desinstalación |
 | [Instalación en Windows nativo](docs/windows-native-setup.md) | Reconstruir el ecosistema completo sin WSL |
 | [Registro de skills](docs/skill-registry.md) | Qué skill se activa en qué situación, y quién manda cuando dos se solapan |
 | [Contrato de estilo](docs/skill-style-guide.md) | La norma LLM-first a la que se migran las skills |
-| [ODD y SDD](docs/sdd.md) | El flujo por defecto y la rama opcional |
+| [ODD y SDD](docs/sdd.md) | El método que sigue el repo y la rama opcional |
 | [Baseline de seguridad](docs/security-baseline.md) | Qué chequea cada herramienta, qué cubre por stack y qué queda afuera |
 | [Flujo de contribución](docs/governance.md) | Ramas, PR, Conventional Commits, protección de `main` |
 | [Versionado](docs/release-please.md) | Versiones y changelog automáticos |
@@ -186,17 +208,17 @@ Este repositorio fue creado con **[Gentle-AI](https://github.com/Gentleman-Progr
 
 </div>
 
-Estas habilidades dan su mejor resultado cuando el agente opera con contexto consistente: **[Gentle AI Repository →](https://github.com/Gentleman-Programming/gentle-ai)**
+Estas habilidades dan su mejor resultado cuando el agente opera con contexto consistente: **[Gentle AI Repository →](https://github.com/Gentleman-Programming/gentle-ai)** · **[gentlemanprogramming.com →](https://gentlemanprogramming.com/)**
 
 ---
 
 ## Agradecimientos
 
-Este proyecto utiliza herramientas y referentes que han contribuido a su desarrollo:
+Este proyecto existe gracias al trabajo de otros:
 
-- **[Gentleman-Programming/gentle-ai](https://github.com/Gentleman-Programming/gentle-ai)**: Por el entorno de trabajo, la filosofía de desarrollo y las herramientas que permitieron revisar, corregir y refinar este repositorio.
-- **[mattpocock/skills](https://github.com/mattpocock/skills)**: Por servir como referencia e inspiración para varias habilidades adaptadas a este ecosistema.
-- **Supabase** y **Firebase**: Por sus habilidades oficiales que extienden las capacidades de este repositorio.
+- **[Alan Buscaglia](https://gentlemanprogramming.com/) — [Gentleman Programming](https://github.com/Gentleman-Programming)**: creó **ODD**, el método de trabajo que este repositorio sigue, y **[Gentle-AI](https://github.com/Gentleman-Programming/gentle-ai)**, el entorno con el que se revisó, corrigió y refinó este repositorio. Su sitio: **[gentlemanprogramming.com](https://gentlemanprogramming.com/)**.
+- **[mattpocock/skills](https://github.com/mattpocock/skills)**: por servir como referencia e inspiración para varias habilidades adaptadas a este ecosistema.
+- **Supabase** y **Firebase**: por sus habilidades oficiales que extienden las capacidades de este repositorio.
 
 ---
 

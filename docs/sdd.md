@@ -6,6 +6,8 @@ que pedirlo. SDD se activa **solo** por pedido explícito (`/sdd-*`) o por propu
 > Este documento describe esa rama: qué es, cómo se usa y cuándo conviene. Para el flujo por
 defecto, ver [el README principal](../README.md).
 
+> **ODD es un método de [Alan Buscaglia](https://gentlemanprogramming.com/)** (*Gentleman Programming*, el autor de Gentle-AI), y su documentación autoritativa está en ese proyecto: **[ODD, explicado por su autor →](https://github.com/Gentleman-Programming/gentle-ai/blob/main/docs/usage.md#organic-driven-development-odd)**.
+
 Este documento explica qué es el Desarrollo Guiado por Especificaciones (**SDD**, por sus siglas en inglés: *Spec-Driven Development*) y cómo se utiliza el **orquestador sdd-orchestrator** en esta rama.
 
 ## ¿Qué es SDD?

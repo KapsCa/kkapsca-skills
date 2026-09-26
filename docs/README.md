@@ -8,14 +8,16 @@
 
 ## 📦 Instalar
 
-- [Guía de instalación](installation.md) — Bootstrap, opciones `--copy`, enlaces simbólicos, desinstalación
+- [Guía de instalación](installation.md) — Bootstrap, **cualquier agente**, opciones `--copy`, enlaces simbólicos, desinstalación
 - [Instalación en Windows nativo](windows-native-setup.md) — Runbook para reconstruir el ecosistema completo sin WSL
 
 ## 📖 Contexto Adicional (Opcional)
 
-- [Contexto Gentle AI](gentle-ai.md) — Stack Gentle AI y relación con este repo
+> Todo lo de esta sección es **contexto**: las skills funcionan igual sin leerlo.
+
+- [Contexto Gentle AI](gentle-ai.md) — El stack de Gentle AI, del que sale ODD, y su relación con este repo
 - [Memoria Persistente (Engram)](engram.md) — Diferencia entre Engram, bootstrap y skill-registry
-- [Desarrollo Estructurado (ODD y SDD)](sdd.md) — ODD por defecto; SDD como rama opcional
+- [Desarrollo Estructurado (ODD y SDD)](sdd.md) — ODD (método de Alan Buscaglia) por defecto; SDD como rama opcional
 
 ## ⚙️ Operación del Repositorio
 
