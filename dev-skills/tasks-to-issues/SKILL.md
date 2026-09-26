@@ -10,7 +10,7 @@ metadata:
 
 # Tasks-to-Issues — Export-Only Wrapper
 
-> **Input:** `odd/tasks/<feature>.md` (ODD, por defecto) o `sdd/{change}/spec`, `design`, `tasks` (rama SDD, solo cuando SDD fue seleccionado explícitamente)
+> **Input:** un plan de trabajo aprobado — con ODD vive en `odd/tasks/<feature>.md`; con SDD, en `sdd/{change}/spec`, `design`, `tasks` (solo si SDD fue seleccionado); con cualquier otro flujo, donde lo tengas
 > **Output:** issue drafts o issues GitHub vía `issue-creation`
 > **Modo:** Export-only; NO particiona trabajo
 
@@ -19,7 +19,7 @@ metadata:
 ## Activation Contract
 
 Usa esta skill cuando:
-- ya exista un plan de trabajo aprobado — el documento de feature de ODD (`odd/tasks/<feature>.md`) o, si SDD fue seleccionado, `sdd/{change}` con spec/design/tasks,
+- ya exista un plan de trabajo aprobado — con ODD es el documento de feature (`odd/tasks/<feature>.md`); con SDD, `sdd/{change}` con spec/design/tasks; con cualquier otro flujo, tu plan,
 - el usuario pida "exportar a issues" o "crear issues desde el plan",
 - necesites pasar el plan al sistema de issues sin reescribir nada.
 
@@ -55,7 +55,7 @@ Usa esta skill cuando:
 
 ## Execution Steps
 
-1. Verifica que existe un plan aprobado: `odd/tasks/<feature>.md` (ODD, por defecto) o `sdd/{change}` con spec/design/tasks (rama SDD, si SDD fue seleccionado). Sin plan: aplica el fallback (`references/fallback.md`).
+1. Verifica que existe un plan aprobado — con ODD: `odd/tasks/<feature>.md`; con SDD: `sdd/{change}` con spec/design/tasks; con otro flujo: donde lo tengas. Sin plan: aplica el fallback (`references/fallback.md`).
 2. **Leer el plan de trabajo** — ODD: intención, alcance y tareas; SDD: spec → contexto, design → decisiones, tasks → checklists.
 3. **Mapear a issue draft** — Título: basado en el plan · Body: resumen del alcance + tareas como checklist · Labels: según tipo de cambio (feat, fix, chore). Formato: `references/formato-issue.md`.
 4. **Crear issue via `issue-creation`** — NO usa `gh` manualmente; delega a `issue-creation`.

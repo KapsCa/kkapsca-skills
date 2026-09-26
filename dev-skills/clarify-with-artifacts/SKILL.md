@@ -56,7 +56,7 @@ Usa esta skill cuando:
 
 ## Execution Steps
 
-1. Consulta las fuentes que ya existen del proyecto: docs, Engram, `odd/tasks/<feature>.md` y artifacts SDD si los hay.
+1. Consulta las fuentes que ya existen del proyecto: docs, memoria del proyecto (Engram, si la usás), el plan de trabajo (`odd/tasks/<feature>.md` si seguís ODD) y artifacts SDD si los hay.
 2. Entrega la salida más ligera posible según el **Output Contract**.
 
 ---

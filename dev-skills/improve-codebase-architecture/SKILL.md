@@ -45,7 +45,7 @@ Precedencia: main skill para revisión arquitectónica transversal. Si el proble
 
 ## Output Contract
 
-La skill termina cuando se entregó el resumen ejecutivo y se indicó claramente si el siguiente paso es: iniciar el trabajo formal ODD con un documento de feature (`odd/tasks/<feature>.md`; esto es lo que corresponde por defecto), `sdd-propose` (cambio formal, solo si SDD fue seleccionado), fix puntual (usa `diagnose`), o mantener y monitorear (si el estado es bueno). Plantilla exacta y checklist: `references/report-template.md`.
+La skill termina cuando se entregó el resumen ejecutivo y se indicó claramente si el siguiente paso es: iniciar el trabajo formal con un documento de feature (`odd/tasks/<feature>.md` si seguís ODD), `sdd-propose` (cambio formal, solo si SDD fue seleccionado), fix puntual (usa `diagnose`), o mantener y monitorear (si el estado es bueno). Plantilla exacta y checklist: `references/report-template.md`.
 
 ## References
 
