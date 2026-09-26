@@ -126,6 +126,16 @@ jobs:
             const invalidCommits = [];
 
             for (const commit of commits) {
+              // Un merge commit no lo escribio un humano: lo genera GitHub al
+              // mergear una rama, o al actualizar la rama de un PR ("Update
+              // branch", que la proteccion con strict obliga a usar cuando main
+              // avanzo). Su mensaje nunca es Conventional, y contarlo como fallo
+              // deja el PR sin salida: hay que actualizar para poder mergear, y
+              // actualizar es justo lo que hace fallar el check.
+              if (commit.parents && commit.parents.length > 1) {
+                continue;
+              }
+
               const message = commit.commit.message.split('\n')[0];
               if (!conventionalPattern.test(message)) {
                 invalidCommits.push(message);
