@@ -1,0 +1,34 @@
+version: 2
+
+updates:
+  # Actions are pinned to full commit SHAs in every workflow. Without this
+  # updater the pins would freeze, and a security fix released upstream would
+  # never arrive. Dependabot understands the SHA+version-comment format and
+  # rewrites both parts together.
+  #
+  # Note: GitHub's own docs warn that Dependabot does NOT create security
+  # alerts for actions pinned to a SHA ("Dependabot only creates alerts for
+  # vulnerable actions that use semantic versioning and will not create alerts
+  # for actions pinned to SHA values"), so these weekly version updates are the
+  # channel through which upstream fixes arrive.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    cooldown:
+      # GitHub already applies a 3-day default to version updates even when this
+      # key is absent; 7 gives more margin against a release that was published
+      # a few hours ago and may not have been reviewed by anyone yet. Cooldown
+      # never applies to security updates, so urgent fixes are not delayed.
+      default-days: 7
+    commit-message:
+      # Conventional Commits, so the repository's commit-lint job accepts the
+      # bot's commits without an exemption. Without this, Dependabot's default
+      # "Bump x from a to b" message fails .github/workflows/pr-validation.yml.
+      prefix: "chore"
+      include: "scope"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
