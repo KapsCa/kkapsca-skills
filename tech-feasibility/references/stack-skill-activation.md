@@ -77,7 +77,7 @@ Cuando el stack elegido sea **Firebase**, se activarán las siguientes skills en
 - **Cuándo activar**: Cuando haya trabajo Genkit en JS/TS (Node.js/TypeScript).
 - **Qué incluye**: Desarrollo de features con Genkit en JavaScript/TypeScript.
 - **NO activar**: Para otros lenguajes; usar la skill específica según la matriz Genkit multi-lenguaje (ver sección más abajo).
-- **⚠️ Disponibilidad**: external-bootstrappable vía `${AGENTS_DIR}/developing-genkit-js/`. Ver [skill-registry](../docs/skill-registry.md) para la matriz completa.
+- **⚠️ Disponibilidad**: external-bootstrappable vía `${AGENTS_DIR}/developing-genkit-js/`. Ver [skill-registry](../../docs/skill-registry.md) para la matriz completa.
 
 ### Propagación de señal (Firebase)
 Al confirmar Firebase, la señal debe pasar a fases siguientes (`project-init` → implementación (ODD, paso 6); si SDD fue seleccionado, `sdd-design` → `sdd-apply`) para que el orquestador active las skills correspondientes en su momento, según el contexto técnico específico y el registry (`docs/skill-registry.md`).
@@ -95,7 +95,7 @@ Cuando el producto requiera features de IA generativa con Genkit, la activación
 | `developing-genkit-go` | Trabajo Genkit en Go | external-bootstrappable |
 | `developing-genkit-python` | Trabajo Genkit en Python | external-bootstrappable |
 
-> **Routing lógico**: La matriz completa con triggers detallados y reglas anti-solape está en el [skill-registry](../docs/skill-registry.md). Todas las skills Genkit son external-bootstrappable: requieren bootstrap (`bash scripts/bootstrap.sh`) o instalación manual desde `${AGENTS_DIR}` para activación real en opencode.
+> **Routing lógico**: La matriz completa con triggers detallados y reglas anti-solape está en el [skill-registry](../../docs/skill-registry.md). Todas las skills Genkit son external-bootstrappable: requieren bootstrap (`bash scripts/bootstrap.sh`) o instalación manual desde `${AGENTS_DIR}` para activación real en opencode.
 >
 > Genkit NO se activa por defecto al elegir un stack. Requiere que el trabajo entre explícitamente en contexto de IA generativa con el lenguaje correspondiente.
 

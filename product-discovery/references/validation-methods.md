@@ -2,7 +2,7 @@
 
 Detalle local de `SKILL.md` (## Execution Steps, Fase 6): la tabla de métodos de validación y las reglas para no construir de más.
 
-## Siempre primero la validación más barata possible
+## Siempre primero la validación más barata posible
 
 | Método | Qué valida | Costo relativo |
 |---|---|---|

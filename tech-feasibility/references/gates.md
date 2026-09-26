@@ -56,7 +56,7 @@ Solo puedes recomendar stack si ya sabes:
 3. ¿El equipo puede operar infraestructura propia?
 4. ¿El producto necesita salir rápido con bajo costo operativo?
 
-> **⚠️ Disponibilidad de skills externas**: Para cualquier skill externa (Supabase, Firebase, Genkit), consulta el [skill-registry](../docs/skill-registry.md) para ver el estado real de disponibilidad (repo-local, external-bootstrappable, logical-only). El bootstrap las procesa desde `${AGENTS_DIR}` (por defecto `$HOME/.agents/skills`). El pipeline y el registry definen orquestación lógica (cuándo activar), no disponibilidad real. Sin instalación física en `~/.config/opencode/skills`, opencode no detectará estas skills. En Pi el destino físico es `~/.agents/skills` (ver docs/installation.md, sección "Segundo destino: Pi").
+> **⚠️ Disponibilidad de skills externas**: Para cualquier skill externa (Supabase, Firebase, Genkit), consulta el [skill-registry](../../docs/skill-registry.md) para ver el estado real de disponibilidad (repo-local, external-bootstrappable, logical-only). El bootstrap las procesa desde `${AGENTS_DIR}` (por defecto `$HOME/.agents/skills`). El pipeline y el registry definen orquestación lógica (cuándo activar), no disponibilidad real. Sin instalación física en `~/.config/opencode/skills`, opencode no detectará estas skills. En Pi el destino físico es `~/.agents/skills` (ver docs/installation.md, sección "Segundo destino: Pi").
 
 ### Datos e infraestructura
 
