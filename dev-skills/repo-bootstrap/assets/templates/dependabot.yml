@@ -11,8 +11,17 @@ version: 2
 # pinneadas por version exacta. Estas actualizaciones semanales son el canal por
 # el que llegan los arreglos.
 #
-# LIMITE CONOCIDO: los ecosistemas que no tengan archivos de dependencias en el
-# repo no generan nada. Borrar los que no apliquen, para no dejar ruido.
+# ---------------------------------------------------------------------------
+# IMPORTANTE: un ecosistema declarado aca SIN archivos de dependencias en el
+# repo hace FALLAR su trabajo de Dependabot. No lo ignora en silencio.
+# Comprobado en el banco de pruebas: en un repo solo-Node, los ecosistemas pip,
+# gomod y pub fallaron con "dependency_file_not_found".
+#
+# Por eso abajo queda activo solo github-actions, que aplica a todo repo, y los
+# demas van COMENTADOS. El instalador de repo-bootstrap descomenta los que
+# correspondan al stack detectado. Si copiaste este archivo a mano, descomenta
+# solo los que apliquen.
+# ---------------------------------------------------------------------------
 updates:
   # Las acciones de GitHub Actions. Aplica SIEMPRE: todo repo tiene workflows.
   - package-ecosystem: github-actions
@@ -27,7 +36,8 @@ updates:
       default-days: 7
     commit-message:
       # Conventional Commits, para que el chequeo de commits del repo acepte los
-      # commits del bot sin eximirlo.
+      # commits del bot sin eximirlo. Verificado: el PR que abre Dependabot dice
+      # "chore(deps): bump ...".
       prefix: "chore"
       include: "scope"
     groups:
@@ -35,66 +45,66 @@ updates:
         patterns:
           - "*"
 
-  # Librerias de Node / JavaScript / TypeScript.
-  - package-ecosystem: npm
-    directory: /
-    schedule:
-      interval: weekly
-    open-pull-requests-limit: 5
-    cooldown:
-      default-days: 7
-    commit-message:
-      prefix: "chore"
-      include: "scope"
-    groups:
-      npm:
-        patterns:
-          - "*"
+  # Librerias de Node / JavaScript / TypeScript. Requiere package-lock.json.
+  # - package-ecosystem: npm
+  #   directory: /
+  #   schedule:
+  #     interval: weekly
+  #   open-pull-requests-limit: 5
+  #   cooldown:
+  #     default-days: 7
+  #   commit-message:
+  #     prefix: "chore"
+  #     include: "scope"
+  #   groups:
+  #     npm:
+  #       patterns:
+  #         - "*"
 
-  # Librerias de Go.
-  - package-ecosystem: gomod
-    directory: /
-    schedule:
-      interval: weekly
-    open-pull-requests-limit: 5
-    cooldown:
-      default-days: 7
-    commit-message:
-      prefix: "chore"
-      include: "scope"
-    groups:
-      gomod:
-        patterns:
-          - "*"
+  # Librerias de Go. Requiere go.mod.
+  # - package-ecosystem: gomod
+  #   directory: /
+  #   schedule:
+  #     interval: weekly
+  #   open-pull-requests-limit: 5
+  #   cooldown:
+  #     default-days: 7
+  #   commit-message:
+  #     prefix: "chore"
+  #     include: "scope"
+  #   groups:
+  #     gomod:
+  #       patterns:
+  #         - "*"
 
-  # Librerias de Python.
-  - package-ecosystem: pip
-    directory: /
-    schedule:
-      interval: weekly
-    open-pull-requests-limit: 5
-    cooldown:
-      default-days: 7
-    commit-message:
-      prefix: "chore"
-      include: "scope"
-    groups:
-      pip:
-        patterns:
-          - "*"
+  # Librerias de Python. Requiere requirements.txt, poetry.lock o Pipfile.lock.
+  # - package-ecosystem: pip
+  #   directory: /
+  #   schedule:
+  #     interval: weekly
+  #   open-pull-requests-limit: 5
+  #   cooldown:
+  #     default-days: 7
+  #   commit-message:
+  #     prefix: "chore"
+  #     include: "scope"
+  #   groups:
+  #     pip:
+  #       patterns:
+  #         - "*"
 
-  # Librerias de Dart / Flutter.
-  - package-ecosystem: pub
-    directory: /
-    schedule:
-      interval: weekly
-    open-pull-requests-limit: 5
-    cooldown:
-      default-days: 7
-    commit-message:
-      prefix: "chore"
-      include: "scope"
-    groups:
-      pub:
-        patterns:
-          - "*"
+  # Librerias de Dart / Flutter. Requiere pubspec.yaml.
+  # - package-ecosystem: pub
+  #   directory: /
+  #   schedule:
+  #     interval: weekly
+  #   open-pull-requests-limit: 5
+  #   cooldown:
+  #     default-days: 7
+  #   commit-message:
+  #     prefix: "chore"
+  #     include: "scope"
+  #   groups:
+  #     pub:
+  #       patterns:
+  #         - "*"
