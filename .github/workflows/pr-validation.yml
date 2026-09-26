@@ -19,11 +19,11 @@ jobs:
   check-issue-reference:
     name: Check Issue Reference
     # Un PR de release-please no puede vincular un issue aprobado: lo genera un bot.
-    if: ${{ !startsWith(github.event.pull_request.head.ref, 'release-please--') }}
+    if: ${{ github.actor != 'dependabot[bot]' && !startsWith(github.event.pull_request.head.ref, 'release-please--') }}
     runs-on: ubuntu-latest
     steps:
       - name: Validate linked issue in PR body
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           script: |
             const body = context.payload.pull_request.body || "";
@@ -39,11 +39,11 @@ jobs:
   check-issue-approved:
     name: Check Issue Has status:approved
     # Idem: sin issue vinculado no hay label que validar en un PR de release.
-    if: ${{ !startsWith(github.event.pull_request.head.ref, 'release-please--') }}
+    if: ${{ github.actor != 'dependabot[bot]' && !startsWith(github.event.pull_request.head.ref, 'release-please--') }}
     runs-on: ubuntu-latest
     steps:
       - name: Validate approved issue label
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           script: |
             const body = context.payload.pull_request.body || "";
@@ -73,11 +73,11 @@ jobs:
   check-pr-type-label:
     name: Check PR Has type:* Label
     # Un PR de release lleva el label 'autorelease: pending', no un type:*.
-    if: ${{ !startsWith(github.event.pull_request.head.ref, 'release-please--') }}
+    if: ${{ github.actor != 'dependabot[bot]' && !startsWith(github.event.pull_request.head.ref, 'release-please--') }}
     runs-on: ubuntu-latest
     steps:
       - name: Validate PR type label
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           script: |
             const labels = context.payload.pull_request.labels.map(label => label.name);
@@ -95,7 +95,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get PR commits
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           script: |
             const { data: commits } = await github.rest.pulls.listCommits({
