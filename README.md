@@ -112,7 +112,7 @@ Para detalles operativos, consulta:
 
 - [Guía de instalación](docs/installation.md) — instalación detallada, bootstrap y opciones
 - [Baseline de seguridad](docs/security-baseline.md) — qué chequea cada herramienta, qué cubre por stack y qué queda afuera
-- [Índice de documentación](docs/README.md) — dónde encontrar contexto adicional (Gentle AI, SDD, Engram, contribución)
+- [Índice de documentación](docs/README.md) — dónde encontrar contexto adicional (Gentle AI, ODD, SDD, Engram, contribución)
 
 ---
 

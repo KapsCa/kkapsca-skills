@@ -7,7 +7,7 @@
 Este repositorio de habilidades (**skills**) utiliza Engram para:
 
 - **Recordar decisiones de arquitectura** tomadas durante el desarrollo de las habilidades
-- **Mantener contexto de proyecto** para que el orquestador SDD (**sdd-orchestrator**) tenga información histórica
+- **Mantener contexto de proyecto** para que el orquestador tenga información histórica
 - **Guardar patrones y convenciones** establecidos mientras se escriben las habilidades
 - **Recuperar trabajo previo** mediante búsqueda de texto completo (FTS5)
 
@@ -29,7 +29,7 @@ Engram es un sistema de memoria que sobrevive entre sesiones y compresiones de c
 
 - Guardar decisiones de arquitectura y diseño
 - Recordar errores corregidos y lecciones aprendidas
-- Mantener contexto de proyecto para el orquestador SDD
+- Mantener contexto de proyecto para el orquestador
 - Buscar trabajo previo mediante búsqueda de texto completo (FTS5)
 
 ### Cuándo usarlo
@@ -69,7 +69,7 @@ El bootstrap se ejecuta desde la **carpeta de este repo de skills**, no desde la
 
 ## `.atl/skill-registry.md` — Catálogo para orquestación
 
-Este archivo es usado únicamente por el `sdd-orchestrator` para:
+Este archivo es usado únicamente por el orquestador para:
 
 - Resolver estándares de proyecto (reglas compactas)
 - Inyectar reglas en sub-agentes
@@ -77,7 +77,7 @@ Este archivo es usado únicamente por el `sdd-orchestrator` para:
 
 No afecta la detección local de skills en opencode.
 
-### Importante: Registry resuelve orquestación SDD, NO instala ni garantiza disponibilidad
+### Importante: Registry resuelve orquestación, NO instala ni garantiza disponibilidad
 
 El `.atl/skill-registry.md` define **cuándo activar** una skill (ej. "activar `supabase` tras decidir el stack en tech-feasibility"). Pero esto es solo **lógica de orquestación**. Para que opencode realmente detecte y use una skill, esta debe estar físicamente presente en `~/.config/opencode/skills/`.
 
@@ -103,7 +103,7 @@ Es fundamental entender que:
 
 ### Por qué importa esta distinción
 
-Si el registry dice "activa `supabase` tras stack confirmado", eso es solo una **regla de orquestación lógica** para el `sdd-orchestrator`. Para que opencode realmente use esa skill, debes:
+Si el registry dice "activa `supabase` tras stack confirmado", eso es solo una **regla de orquestación lógica** para el orquestador. Para que opencode realmente use esa skill, debes:
 
 1. Tener la skill en `~/.config/opencode/skills/supabase/` (vía enlace simbólico o copia)
 2. Reiniciar opencode para refrescar la lista de skills
@@ -114,7 +114,7 @@ Si la skill no está físicamente instalada, el enrutamiento (routing) fallará 
 
 1. **Engram** → memoria y contexto que sobrevive entre sesiones
 2. **Bootstrap (`bash scripts/bootstrap.sh`)** → hace que opencode vea las skills del repo localmente
-3. **`.atl/skill-registry.md`** → solo lo usa la orquestación SDD; incluye columna `State` (repo-local, external-bootstrappable, logical-only) para distinguir disponibilidad real de routing lógico. No afecta la detección local de skills.
+3. **`.atl/skill-registry.md`** → solo lo usa la orquestación; incluye columna `State` (repo-local, external-bootstrappable, logical-only) para distinguir disponibilidad real de routing lógico. No afecta la detección local de skills.
 4. **Skills externas** (Supabase, Firebase, Genkit) → el bootstrap las procesa por defecto desde `${AGENTS_DIR}` (equivale a `$HOME/.agents/skills`). Usa `EXTERNAL_SKILLS_DIR` solo si quieres otra fuente.
 5. **Firebase skills** → no activar solo por mencionar Firebase; requieren contexto técnico específico o confirmación de stack.
 

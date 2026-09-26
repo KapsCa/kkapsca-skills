@@ -15,7 +15,7 @@
 
 - [Contexto Gentle AI](gentle-ai.md) — Stack Gentle AI y relación con este repo
 - [Memoria Persistente (Engram)](engram.md) — Diferencia entre Engram, bootstrap y skill-registry
-- [Desarrollo Estructurado (SDD)](sdd.md) — SDD y sdd-orchestrator
+- [Desarrollo Estructurado (ODD y SDD)](sdd.md) — ODD por defecto; SDD como rama opcional
 
 ## ⚙️ Operación del Repositorio
 

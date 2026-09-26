@@ -1,6 +1,12 @@
 # Desarrollo Guiado por Especificaciones (SDD)
 
-Este documento explica qué es el Desarrollo Guiado por Especificaciones (**SDD**, por sus siglas en inglés: *Spec-Driven Development*) y cómo se utiliza el **orquestador sdd-orchestrator** en este repositorio.
+> **SDD es una rama opcional, no el flujo por defecto.** El flujo por defecto de este
+ecosistema es **ODD** (*Organic Driven Development*), y todo pedido entra ahí sin que haya
+que pedirlo. SDD se activa **solo** por pedido explícito (`/sdd-*`) o por propuesta aceptada.
+> Este documento describe esa rama: qué es, cómo se usa y cuándo conviene. Para el flujo por
+defecto, ver [el README principal](../README.md).
+
+Este documento explica qué es el Desarrollo Guiado por Especificaciones (**SDD**, por sus siglas en inglés: *Spec-Driven Development*) y cómo se utiliza el **orquestador sdd-orchestrator** en esta rama.
 
 ## ¿Qué es SDD?
 
@@ -72,7 +78,9 @@ El **sdd-orchestrator** es el coordinador de flujos SDD. Es un agente que:
 
 ## Uso en Este Repositorio
 
-Este repositorio utiliza SDD para cambios sustanciales en la documentación y estructura. El flujo típico es:
+Este repositorio usa **ODD por defecto** para todo cambio sustancial: el trabajo se rastrea en un documento de feature (`odd/tasks/<feature>.md`) más su espejo en Engram, y se cierra con commits por unidad de trabajo.
+
+Cuando SDD se selecciona explícitamente, el flujo es:
 
 1. **Inicialización**: `/sdd-init` detecta el stack, convenciones y capacidades de prueba
 2. **Nuevo cambio**: `/sdd-new <cambio>` inicia exploración y propuesta
@@ -94,8 +102,11 @@ SDD complementa el pipeline de producto de este repositorio:
 ```text
 Idea → brainstorming → descubrimiento → inicio proyecto → factibilidad técnica
               ↓
-         (SDD inicia aquí para cambios de arquitectura/documentación)
+         (ODD arranca aquí, por defecto: documento de feature + tareas)
               ↓
+   implementación → verificación → repo-bootstrap → Desarrollo
+
+Si SDD fue seleccionado, en lugar de ese tramo:
          sdd-init → sdd-new → sdd-apply → sdd-verify → repo-bootstrap → Desarrollo
 ```
 
@@ -103,7 +114,8 @@ Idea → brainstorming → descubrimiento → inicio proyecto → factibilidad t
 
 ## Notas Importantes
 
-- **SDD es para cambios sustanciales**: No se requiere para ajustes menores de documentación
+- **ODD es el flujo por defecto**: todo pedido entra ahí. Rastrea el trabajo en `odd/tasks/<feature>.md` y no requiere que nadie lo pida
+- **SDD es la rama opcional**: se activa solo por pedido explícito (`/sdd-*`) o por propuesta aceptada. Conviene cuando el cambio necesita especificaciones formales y trazabilidad contra ellas
 - **Las especificaciones son el criterio de aceptación**: La implementación se valida contra ellas
 - **La memoria persistente (Engram) es clave**: Permite recuperar contexto entre sesiones de trabajo
 - **El orquestador no es un ejecutor**: Coordina, no escribe código directamente

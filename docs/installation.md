@@ -117,5 +117,5 @@ Si en cambio necesitás el ecosistema en **Windows nativo**, WSL2 no es una opci
 - [README principal](../README.md) — Qué es el repositorio, instalación rápida, flujo recomendado
 - [Contexto Gentle AI](gentle-ai.md) — Stack Gentle AI y relación con este repo
 - [Memoria Persistente (Engram)](engram.md) — Diferencia entre Engram, bootstrap y skill-registry
-- [Desarrollo Estructurado (SDD)](sdd.md) — SDD y sdd-orchestrator
+- [Desarrollo Estructurado (ODD y SDD)](sdd.md) — ODD por defecto; SDD como rama opcional
 - [Instalación en Windows nativo](windows-native-setup.md) — Runbook del ecosistema completo sin WSL

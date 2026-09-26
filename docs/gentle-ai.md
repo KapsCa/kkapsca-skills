@@ -6,7 +6,8 @@ Este repositorio de skills está diseñado para potenciar el flujo de trabajo as
 
 Gentle AI es un stack diseñado para coordinar agentes IA en flujos de desarrollo estructurados. Proporciona:
 
-- **`sdd-orchestrator`**: Coordinador de fases SDD (Spec-Driven Development)
+- **Orquestador ODD**: el flujo por defecto (*Organic Driven Development*). Todo pedido entra ahí, sin que haya que pedirlo
+- **`sdd-orchestrator`**: coordinador de la rama SDD (*Spec-Driven Development*), que se activa solo por pedido explícito o propuesta aceptada
 - Convenciones de contexto y memoria persistente
 - Flujos de trabajo validados para evitar "correr al código sin entender el problema"
 
@@ -15,7 +16,7 @@ Gentle AI es un stack diseñado para coordinar agentes IA en flujos de desarroll
 Las skills aquí reunidas:
 
 - **Son reutilizables fuera de Gentle AI** — cualquier persona puede usarlas con Cursor, Windsurf u opencode
-- **Dan su mejor rendimiento dentro del stack de Gentle AI** — cuando hay un `sdd-orchestrator` coordinando fases y el entorno sigue las convenciones del stack
+- **Dan su mejor rendimiento dentro del stack de Gentle AI** — cuando hay un orquestador coordinando fases (ODD por defecto) y el entorno sigue las convenciones del stack
 
 En otras palabras: no son piezas mágicas aisladas, son un **potenciador del stack** para lograr mejor ejecución, menos ambigüedad y mejores resultados con agentes IA.
 
