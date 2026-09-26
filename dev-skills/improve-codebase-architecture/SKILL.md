@@ -6,139 +6,51 @@ metadata:
   author: KkapsCa
   version: "1.0"
 ---
-
 # Improve Codebase Architecture
 
 **Main Skill** — Revisión arquitectónica primaria (las otras dos son *companions*).
 
-## When to Use
+## Activation Contract
 
-Usa esta skill cuando:
+Carga esta skill cuando haya sospecha de deuda técnica, acoplamiento excesivo o responsabilidades mezcladas, se vaya a iniciar trabajo formal — ODD, o `sdd-propose` / `sdd-design` si SDD fue seleccionado — y necesites un diagnóstico previo, o quieras justificar un refactor antes de proponer cambios formales.
 
-- el usuario pida revisar la arquitectura de un proyecto o módulo,
-- haya sospecha de deuda técnica, acoplamiento excesivo o responsabilidades mezcladas,
-- se vaya a iniciar trabajo formal — ODD, o `sdd-propose` / `sdd-design` si SDD fue seleccionado — y necesites un diagnóstico previo,
-- quieras justificar un refactor antes de proponer cambios formales.
+NO la actives para: correcciones pequeñas o fixes puntuales (usa `diagnose`) · problemas específicos de Flutter, Firebase o Supabase (skill oficial correspondiente) · fase de `brainstorm`/`product-discovery` sin código que revisar · un comando `/sdd-*` explícito (SDD manda; esta skill es solo complemento previo).
 
-## Trigger
+Precedencia: main skill para revisión arquitectónica transversal. Si el problema es puramente de un stack (Flutter, Firebase, Supabase, Genkit), la skill oficial de ese stack tiene prioridad.
 
-Cárgala cuando escuches: "revisar arquitectura", "architecture review", "mejorar estructura", "codebase health", "tech debt check", "refactor review", o cualquier variante que sugiera evaluar la salud estructural del código.
+## Hard Rules
 
-## When NOT to Use
-
-- para correcciones pequeñas o fixes puntuales (usa `diagnose`),
-- cuando el problema sea específico de Flutter, Firebase o Supabase (usa la skill oficial correspondiente),
-- si el usuario apenas está en fase de `brainstorm` o `product-discovery` y no hay código que revisar,
-- **si hay un comando `/sdd-*` explícito (SDD manda, esta skill es solo complemento previo)**.
-
-## Precedencia
-
-- Si el problema es específico de un stack (Flutter, Firebase, Supabase, Genkit), usa la skill oficial de ese stack en lugar de esta.
-- Esta skill es **main skill** para revisión arquitectónica transversal; las skills de stack tienen prioridad si el problema es puramente de ese framework.
-
-## Fallback
-
-- Si no hay código suficiente para revisar (proyecto en fase `brainstorm`/`discovery`), no activar; usar la fase upstream correspondiente.
-- Si la skill requerida no está instalada en `~/.config/opencode/skills`, documentar la brecha y seguir con el flujo disponible (ODD o SDD).
-- Si el módulo ya es conocido y el cambio es mecánico, omitir esta skill.
-
----
-
-## Core Patterns
-
-### 1. Enfoque proporcional
-- No impongas Clean Architecture completa a un proyecto de 2 pantallas.
-- Detecta si el tamaño del proyecto justifica capas separadas (`flutter-architecting-apps`) o si basta con separar responsabilidades básicas.
-
-### 2. Detecta anti-patrones
-- Lógica de negocio dentro de UI,
-- IO (HTTP, DB) en widgets o controladores de estado,
-- Estado global compartido innecesariamente,
-- Dependencias circulares o acoplamiento fuerte entre módulos.
-
-### 3. Archivo de salida (output)
-La revisión debe producir un resumen ejecutivo conciso:
-
-```markdown
-# Architecture Review — [Proyecto/Módulo]
-
-## Estado general
-[Bueno / Aceptable / Problemático] — [breve justificación]
-
-## Hallazgos clave
-- [Violación 1: dónde, qué, impacto]
-- [Violación 2: ...]
-
-## Recomendaciones
-- [Acción concreta, archivos sugeridos, prioridad]
-
-## Input para el trabajo formal
-- [Si aplica: qué propuesta/diseño debería hacerse tras este review]
-```
-
-### 4. Integración con el trabajo formal (ODD / SDD)
-- Esta skill NO reemplaza el trabajo formal: ni ODD ni `sdd-propose` / `sdd-design`.
-- Es un paso previo que alimenta esas fases con contexto estructural.
-- Si el usuario quiere cambios formales después del review, enruta al trabajo formal (ODD, o `sdd-propose` si SDD fue seleccionado) con este output como base.
-
----
-
-## Workflow (Architecture Review)
-
-```
-1. Leer estructura de directorios relevante (lib/, src/, internal/, etc.)
-2. Identificar responsabilidades por archivo/carpeta
-3. Detectar anti-patrones y deuda técnica
-4. Evaluar si la arquitectura es proporcional al alcance
-5. Producir el resumen ejecutivo (ver formato arriba)
-6. Sugerir próximos pasos (trabajo formal o fixes puntuales)
-```
-
----
-
-## Output Contract
-
-La skill termina cuando se entregó el resumen ejecutivo y se indicó claramente si el siguiente paso es:
-
-- iniciar el trabajo formal ODD con un documento de feature (`odd/tasks/<feature>.md`; esto es lo que corresponde por defecto),
-- `sdd-propose` (cambio formal, solo si SDD fue seleccionado),
-- fix puntual (usa `diagnose`),
-- o mantener y monitorear (si el estado es bueno).
-
----
-
-## Diagnostics Integration
-
-Si durante la revisión encuentras un bug o comportamiento incorrecto, NO intentes arreglarlo aquí.
-- Documéntalo en la sección de hallazgos,
-- Luego usa `diagnose` para el fix puntual.
-
----
-
-## PRE-FLIGHT CHECKLIST
-
-- [ ] Ya identifiqué la estructura general del proyecto
-- [ ] Ya detecté si hay capas separadas o todo está mezclado
-- [ ] Ya confirmé si la arquitectura es proporcional al alcance
-- [ ] Ya produje el resumen ejecutivo
-- [ ] Ya indiqué próximos pasos (trabajo formal o fixes)
-
----
-
-## Reglas Operativas
-
-- Mantén el tono directo y constructivo, no seas un manual de teoría.
+- Mantén el tono directo y constructivo; no seas un manual de teoría.
 - Enfócate en lo que está mal y cómo arreglarlo, no en lo que está bien.
 - Si el proyecto no tiene arquitectura discernible, di "acoplado / sin estructura" y recomienda pasos mínimos.
 - No inventes reglas de Clean Architecture si el proyecto es pequeño.
 - Si aparece un concepto específico (Flutter, Firebase, Supabase), enruta a la skill oficial correspondiente.
+- No impongas Clean Architecture completa a un proyecto de 2 pantallas; evalúa si el tamaño justifica capas separadas (`references/anti-patterns.md`).
+- Si durante la revisión encuentras un bug, NO lo arregles aquí: documéntalo en hallazgos y usa `diagnose`.
 
----
+## Decision Gates
 
-## Commands (reference)
+| Gate | Ruta |
+| --- | --- |
+| No hay código suficiente para revisar (fase `brainstorm`/`discovery`) | No activar; usar la fase upstream correspondiente |
+| La skill requerida no está instalada en `~/.config/opencode/skills` | Documentar la brecha y seguir con el flujo disponible (ODD o SDD) |
+| Módulo ya conocido y cambio mecánico | Omitir esta skill |
+| Tras el review, el usuario quiere cambios formales | Enrutar al trabajo formal con este output como base (ODD, o `sdd-propose` si SDD) |
 
-```bash
-# Quick structure overview
-find lib -type f -name "*.dart" | head -20
-tree -L 3 src/ 2>/dev/null || find src -type d | head -20
-```
+## Execution Steps
+
+1. workflow (Architecture Review): leer estructura, identificar responsabilidades, detectar anti-patrones y deuda, evaluar proporción, producir el resumen y sugerir próximos pasos (`references/workflow.md`).
+2. Aplica el enfoque proporcional y detecta anti-patrones: `references/anti-patterns.md`.
+3. Termina cuando se entregó el resumen ejecutivo con el siguiente paso claro (Output Contract).
+
+## Output Contract
+
+La skill termina cuando se entregó el resumen ejecutivo y se indicó claramente si el siguiente paso es: iniciar el trabajo formal ODD con un documento de feature (`odd/tasks/<feature>.md`; esto es lo que corresponde por defecto), `sdd-propose` (cambio formal, solo si SDD fue seleccionado), fix puntual (usa `diagnose`), o mantener y monitorear (si el estado es bueno). Plantilla exacta y checklist: `references/report-template.md`.
+
+## References
+
+- `references/workflow.md` — Workflow (Architecture Review).
+- `references/anti-patterns.md` — enfoque proporcional y anti-patrones.
+- `references/report-template.md` — plantilla, integración formal y checklist.
+- `references/rules.md` — reglas operativas (detalle de las Hard Rules).
+- `references/commands.md` — comandos de overview rápido.
