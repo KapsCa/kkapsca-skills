@@ -11,124 +11,43 @@ metadata:
 
 **Companion Skill** — Contexto previo a edición (usa `improve-codebase-architecture` para review amplio).
 
-## When to Use
+## Activation Contract
 
-Usa esta skill cuando:
+Carga esta skill antes de editar código desconocido: cuando necesites entender cómo encaja una pieza en el sistema antes de proponer cambios, o vayas a implementar en un módulo que no dominas.
 
-- vayas a editar código que no conoces bien,
-- necesites entender cómo encaja una pieza en el sistema antes de proponer cambios,
-- el usuario pida "entender el sistema", "zoom out", "perspectiva global",
-- estés a punto de implementar en un módulo desconocido.
+NO la actives para debugging puntual (usa `diagnose`) ni para revisión de arquitectura amplia (usa `improve-codebase-architecture`). Si el módulo ya es conocido o el cambio es mecánico, omítela.
 
-## Trigger
+Precedencia: companion para contexto previo a edición; no compite con skills de stack específico.
 
-Cárgala al escuchar: "entender el sistema", "zoom out", "perspectiva global", "antes de editar esto", "entender flujo completo", "system map", "dependency check" o cualquier variante que pida ver el panorama completo antes de tocar código.
+## Hard Rules
 
-## When NOT to Use
+- Super breve: el resumen debe caber en una pantalla; no escribas un tratado.
+- No hagas cambios aquí: solo mapa y diagnóstico de riesgos.
+- Enfócate en efectos colaterales: el objetivo es no romper nada al editar.
+- Usa herramientas del stack: `grep -r "import" lib/`, `go list -m all`, etc.
 
-- para debugging puntual (usa `diagnose`),
-- para revisión de arquitectura amplia (usa `improve-codebase-architecture`),
-- cuando ya conoces bien el módulo y no hay riesgo de efectos colaterales.
+## Decision Gates
 
-## Precedencia
+| Gate | Ruta |
+| --- | --- |
+| No hay código suficiente o el usuario apenas inicia | No activar; usar fases upstream (`brainstorm`, `product-discovery`) |
+| La skill no está instalada en `~/.config/opencode/skills` | Documentar la brecha y seguir con el flujo disponible (ODD o SDD) |
+| Módulo ya conocido, cambio mecánico | Omitir esta skill y proceder directo a la implementación |
+| El mapa revela que el módulo necesita refactor | Considerar `improve-codebase-architecture` primero |
 
-- Omitir si el módulo ya es conocido o el cambio es mecánico.
-- Esta skill es **companion** para contexto previo a edición; no compite con skills de stack específico.
+## Execution Steps
 
-## Fallback
+1. Ejecuta el proceso de tres direcciones antes de editar código desconocido: mapa de dependencias, flujo de datos y riesgos identificados (`references/process.md`).
+2. Usa herramientas del stack en cada dirección (`references/commands.md`).
+3. Entrega el resumen breve (Output Contract) **antes** de escribir código en módulos que no dominas.
 
-- Si no hay código suficiente o el usuario apenas inicia, no activar; usar fases upstream (`brainstorm`, `product-discovery`).
-- Si la skill no está instalada en `~/.config/opencode/skills`, documentar la brecha y seguir con el flujo disponible (ODD o SDD).
-- Si el módulo es conocido, omitir esta skill y proceder directo a la implementación.
+## Output Contract
 
----
+Entrega `# System Zoom — [Módulo/Archivo]`: dependencias clave, flujo de datos (entrada, salida, efectos), riesgos al editar y recomendación final. Plantilla exacta, checklist e integración con el trabajo formal: `references/report-template.md`.
 
-## Paso de Perspectiva de Sistema
+## References
 
-Antes de editar código desconocido, ejecuta este proceso:
-
-```
-1. MAPA DE DEPENDENCIAS
-   - ¿Qué importa este archivo?
-   - ¿Qué otros archivos dependen de él?
-   - ¿Qué servicios, repositorios o APIs externas toca?
-
-2. FLUJO DE DATOS
-   - ¿De dónde entra la información?
-   - ¿Cómo se transforma antes de llegar aquí?
-   - ¿Qué efectos secundarios tiene (logs, DB, red)?
-
-3. RIESGOS IDENTIFICADOS
-   - ¿Qué podría romperse si cambio la firma de esta función?
-   - ¿Hay tests que cubran este flujo?
-   - ¿Hay otros módulos que asuman el comportamiento actual?
-```
-
----
-
-## Output Esperado
-
-Entrega un resumen súper breve:
-
-```markdown
-# System Zoom — [Módulo/Archivo]
-
-## Dependencias clave
-- [Archivo/Api 1]
-- [Archivo/Api 2]
-
-## Flujo de datos
-Entrada: [de dónde]
-Salida: [a dónde]
-Efectos: [logs, DB, red]
-
-## Riesgos al editar
-- [Riesgo 1: qué podría romperse]
-- [Riesgo 2: ...]
-
-## Recomendación
-[Editar con cuidado / Hacer refactor previo / Está seguro modificar]
-```
-
----
-
-## Integración con el trabajo formal (ODD / SDD)
-
-- Esta skill es **companion** de la implementación: ODD paso 6 por defecto, o `sdd-design` / `sdd-apply` si SDD fue seleccionado.
-- Úsala **antes** de escribir código en módulos que no dominas.
-- No reemplaza el análisis de diseño (`sdd-design` si SDD fue seleccionado), solo da contexto previo.
-- Si el mapa revela que el módulo necesita refactor, considera `improve-codebase-architecture` primero.
-
----
-
-## PRE-FLIGHT CHECKLIST
-
-- [ ] Ya identifiqué las dependencias directas del archivo/módulo
-- [ ] Ya trazé el flujo de datos de entrada a salida
-- [ ] Ya listé los riesgos potenciales al editar
-- [ ] Ya entregué el resumen breve
-- [ ] Ya indiqué si es seguro editar o requiere pasos previos
-
----
-
-## Reglas Operativas
-
-- **Super breve**: no escribas un tratado, el resumen debe caber en una pantalla.
-- **No hagas cambios aquí**: solo mapa y diagnóstico de riesgos.
-- **Enfócate en efectos colaterales**: el objetivo es no romper nada al editar.
-- **Usa herramientas del stack**: `grep -r "import" lib/`, `go list -m all`, etc.
-
----
-
-## Commands (reference)
-
-```bash
-# Ver imports de un archivo (Dart)
-grep -R "^import" lib/features/my_feature/
-
-# Ver dependencias de un paquete (Node)
-npm list --depth=1
-
-# Ver módulos que usan un paquete (Go)
-grep -r "mi_paquete" .
-```
+- `references/context-validation.md` — criterios de activación, precedencia y fallback.
+- `references/process.md` — proceso completo, reglas operativas y detalle de cada dirección.
+- `references/report-template.md` — plantilla del reporte, checklist e integración ODD/SDD.
+- `references/commands.md` — comandos por stack (Dart, Node, Go).
