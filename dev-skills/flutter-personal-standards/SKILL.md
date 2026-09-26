@@ -9,155 +9,65 @@ metadata:
 
 # Flutter Personal Standards
 
-## When to Use
-
-Usa esta skill cuando:
-
-- el usuario esté trabajando en Flutter o Dart y necesite criterio general,
-- haya dudas sobre estructura, estado, complejidad o arquitectura,
-- toque decidir qué tan simple o qué tan escalable debe ser una solución,
-- haga falta enrutar el problema hacia una skill oficial más específica.
-
-## When NOT to Use
-
-- cuando el problema ya es claramente específico y una skill oficial de Flutter cubre mejor el caso,
-- cuando el proyecto ya tenga GetX como convención explícita,
-- para backend, CLI o Dart sin Flutter.
+> **Input:** trabajo en Flutter o Dart con dudas de estructura, estado o complejidad
+> **Output:** decisión argumentada + routing a la skill oficial cuando corresponde
 
 ---
 
-## Principios No Negociables
+## Activation Contract
 
-1. **Primero simple, luego escalable**
-   - No metas arquitectura pesada antes de necesitarla.
-   - Empieza con la estructura mínima correcta.
+Carga cuando el usuario esté trabajando en **Flutter o Dart** y necesite criterio general: dudas sobre estructura, estado, complejidad o arquitectura; decidir qué tan simple o escalable debe ser una solución; o enrutar el problema hacia una skill oficial más específica.
 
-2. **Usa umbrales simples para decidir complejidad**
-   - hasta 5 pantallas → estructura simple por feature
-   - más de 5 pantallas o estado compartido entre múltiples flows → Riverpod recomendado
-   - si el equipo ya usa eventos/estados explícitos como estándar → Bloc/Cubit
+NO la actives cuando: el problema ya es claramente específico y una skill oficial de Flutter lo cubre mejor · el proyecto ya tenga GetX como convención explícita · sea para backend, CLI o Dart sin Flutter.
 
-3. **Separa responsabilidades**
-   - UI renderiza.
-   - Estado coordina.
-   - Servicios/repositorios hacen IO.
-   - Modelos/entidades representan datos.
+## Hard Rules
 
-4. **State management por alcance real del estado**
-   - local → `setState()`
-   - compartido sencillo → Provider / ChangeNotifier
-   - escalable y más robusto → Riverpod o Bloc
-   - GetX solo si el proyecto lo exige de verdad
+1. **Primero simple, luego escalable**: no metas arquitectura pesada antes de necesitarla.
+2. **Umbrales simples para la complejidad**: hasta 5 pantallas → estructura simple por feature; más de 5 o estado compartido entre varios flows → Riverpod; equipo con eventos/estados explícitos → Bloc/Cubit.
+3. **Separá responsabilidades**: UI renderiza, estado coordina, servicios/repositorios hacen IO, modelos representan datos.
+4. **State management por alcance real del estado**: local → `setState()`; compartido sencillo → Provider/ChangeNotifier; escalable → Riverpod o Bloc; **GetX solo si el proyecto lo exige de verdad**.
+5. **Sin librerías por moda**: cada dependencia justifica su costo.
+6. **Performance desde el diseño**: `const` donde se pueda, nada pesado dentro de `build()`, widgets grandes partidos en piezas pequeñas.
 
-5. **No elijas librerías por moda**
-   - cada dependencia debe justificar su costo.
+Los umbrales completos: `references/principios.md`.
 
-6. **Performance desde el diseño**
-   - `const` donde se pueda,
-   - nada pesado dentro de `build()`,
-   - widgets grandes se parten en piezas pequeñas.
-
----
-
-## Reglas de Decisión Rápida
+## Decision Gates
 
 | Situación | Recomendación |
 |---|---|
 | Pantalla simple con estado efímero | `StatefulWidget` + `setState()` |
 | Estado compartido simple | Provider / ChangeNotifier |
 | Más testabilidad y escalabilidad | Riverpod |
-| Equipo ama eventos/estados explícitos | Bloc/Cubit |
-| Proyecto ya usa GetX | aceptarlo como restricción, no como default |
+| Equipo con eventos/estados explícitos | Bloc/Cubit |
+| El proyecto ya usa GetX | Aceptarlo como restricción, no como default |
+| El caso es específico de un área | Cargar la skill oficial (`references/routing-skills-oficiales.md`) |
 
-### Regla operativa
+**Regla operativa**: si no podés ubicar el caso en una fila, no improvises framework — **preguntá antes de imponer uno**.
 
-Si no puedes ubicar el caso del usuario en una fila de la tabla anterior, no improvises framework: pregunta antes de imponer uno.
+## Execution Steps
 
----
+1. Confirmá que el problema es **general** de Flutter/Dart y no específico de un área.
+2. Verificá si el proyecto ya trae una librería de estado impuesta.
+3. Revisá si el caso cabe en `setState`, Provider, Riverpod o Bloc.
+4. Evaluá si conviene cargar una **skill oficial** especializada.
+5. Producí el output y, si corresponde, enrutá a la skill oficial.
 
-## Routing hacia Skills Oficiales
+Checklist previo: `references/pre-flight.md`. Anti-patrones a evitar: `references/anti-patrones.md`.
 
-Cuando el problema ya es específico, carga la skill oficial adecuada:
+## Output Contract
 
-| Necesidad | Skill oficial |
-|---|---|
-| arquitectura general por capas | `flutter-architecting-apps` |
-| estado y flujo de datos | `flutter-managing-state` |
-| navegación y routing | `flutter-implementing-navigation-and-routing` |
-| formularios | `flutter-building-forms` |
-| layout y composición UI | `flutter-building-layouts` |
-| HTTP + JSON | `flutter-handling-http-and-json` |
-| testing | `flutter-testing-apps` |
-| theming | `flutter-theming-apps` |
-| bases de datos locales | `flutter-working-with-databases` |
-| accesibilidad | `flutter-improving-accessibility` |
+Una decisión breve: tipo de proyecto, estructura propuesta, state management **con su justificación**, skills oficiales a cargar y anti-patrones relevantes. Plantilla exacta: `references/output-esperado.md`.
 
-No reexplique aquí lo que ya resuelven mejor las skills oficiales.
+Criterio de salida: estructura proporcional · state management justificado · UI/estado/datos separados · sin sobrecomplejidad · delegado a la skill oficial cuando correspondía (`references/criterio-de-salida.md`).
 
----
+## References
 
-## Anti-Patrones
-
-- meter Clean Architecture completa en una app que apenas tiene dos pantallas,
-- mezclar llamadas HTTP dentro de widgets,
-- usar una librería de estado solo porque está de moda,
-- hacer un widget monstruo con lógica, IO y navegación mezclados,
-- meter GetX como respuesta automática a todo.
-
-## PRE-FLIGHT CHECKLIST
-
-- [ ] Ya identifiqué si el problema es general o específico
-- [ ] Ya confirmé si el proyecto ya trae una librería de estado impuesta
-- [ ] Ya confirmé si el caso cabe en `setState`, Provider, Riverpod o Bloc
-- [ ] Ya confirmé si en realidad conviene cargar una skill oficial especializada
-
-Si la respuesta a la última casilla es sí, enruta a la skill oficial y no reinventes la guía aquí.
-
----
-
-## Criterio de salida
-
-Esta skill está completa cuando el agente ya:
-
-- propuso una estructura proporcional al proyecto,
-- justificó la elección de state management,
-- separó UI/estado/datos,
-- evitó sobrecomplejidad,
-- y, cuando aplicaba, delegó a la skill oficial correcta.
-
----
-
-## Output esperado
-
-```markdown
-# Decisión Flutter — [Proyecto]
-
-## Tipo de proyecto
-[simple / intermedio / escalable]
-
-## Estructura propuesta
-[feature-first simple / capas separadas / otra]
-
-## State management
-[setState / Provider / Riverpod / Bloc] — Justificación: [razón]
-
-## Skills oficiales a cargar
-- [skill-name] para [problema específico]
-
-## Anti-patrones a evitar
-- [anti-patrón relevante]
-```
-
----
-
-## Commands
-
-```bash
-# Ejemplo simple para recordar el enfoque feature-first
-mkdir -p lib/features/my_feature/{presentation,state,data}
-```
-
-## Resources
-
-- **Referencia**: usa las skills oficiales de Flutter para problemas especializados
-- **Bootstrap**: usa `repo-bootstrap` cuando el repo aún no tiene estándares operativos
+- `references/context-validation.md` — cuándo activarse y cuándo no.
+- `references/principios.md` — los principios no negociables y sus umbrales.
+- `references/reglas-decision.md` — la tabla de decisión rápida.
+- `references/routing-skills-oficiales.md` — qué skill oficial cargar según la necesidad.
+- `references/anti-patrones.md` — lo que hay que evitar.
+- `references/pre-flight.md` — el checklist previo.
+- `references/output-esperado.md` — la plantilla del output.
+- `references/criterio-de-salida.md` — cuándo la skill está completa.
+- `references/commands.md` — el comando de ejemplo.
