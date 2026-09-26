@@ -1,10 +1,7 @@
 ---
 name: repo-guardrails
-description: >
-  Capa advisory/warning-first que revisa estado de ramas, PRs, labels y commits
-  antes de acciones git/gh. NO reemplaza repo-bootstrap ni bloquea nada.
-  Solo advierte basándose en reglas ya definidas en repo-bootstrap y docs/governance.md.
-license: Apache-2.0
+description: "Trigger: estar por hacer push, crear PR o mergear, revisión de cumplimiento antes de ejecutar, recordatorios de convenciones. Capa advisory: revisa ramas, PRs, labels y commits; solo advierte, no bloquea."
+license: MIT
 metadata:
   author: KkapsCa
   version: "1.0"

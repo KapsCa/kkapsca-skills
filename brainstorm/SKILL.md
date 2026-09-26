@@ -1,15 +1,7 @@
 ---
 name: brainstorm
-description: >
-  PASO 1 de un pipeline de definición de producto. Convierte una idea vaga en un
-  Product Brief útil, enfocándose en problema, usuario, propuesta de valor, MVP y
-  diferenciadores. Sirve como punto de entrada cuando todavía no existe suficiente
-  claridad para pasar directo a discovery o a decisiones técnicas.
-
-  Usa esta skill cuando alguien tenga una idea inicial, quiera aterrizarla, no sepa
-  por dónde empezar o necesite transformar intuición en una hipótesis de producto más clara.
-
-license: Apache-2.0
+description: "Trigger: tengo una idea, quiero hacer una app, no sé por dónde empezar, ayúdame a aterrizar esto, definir mejor mi producto. Convierte una idea vaga en un Product Brief."
+license: MIT
 metadata:
   author: KkapsCa
   version: "4.0"

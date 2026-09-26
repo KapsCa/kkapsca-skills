@@ -1,15 +1,11 @@
 ---
 name: tasks-to-issues
-description: >
-  Export-only skill que convierte un plan de trabajo ya aprobado en issue drafts
-  o issues GitHub reales usando issue-creation. Acepta el documento de feature de ODD
-  (`odd/tasks/<feature>.md`) por defecto, o artifacts SDD (spec, design, tasks) si SDD
-  fue seleccionado. NO descompone trabajo; eso es territorio de sdd-tasks.
-license: Apache-2.0
+description: "Trigger: plan de trabajo ya aprobado (feature de ODD o artifacts SDD), exportar a issues o crear issues desde el plan. Exporta el plan a issues GitHub vía issue-creation, sin reescribir ni partir el trabajo."
+license: MIT
 metadata:
   author: KkapsCa
   version: "1.0"
-  pipeline: "project-kickstart/sdd"
+  pipeline: "project-kickstart/core"
 ---
 
 # Tasks-to-Issues — Export-Only Wrapper

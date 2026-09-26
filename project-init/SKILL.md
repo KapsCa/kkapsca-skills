@@ -1,19 +1,7 @@
 ---
 name: project-init
-description: >
-  Skill para cerrar la brecha entre product-discovery y tech-feasibility.
-  Transforma hallazgos de discovery en un plan ejecutable para desarrollo.
-  Recibe como entrada el Discovery Report y produce un Project Framing Doc.
-
-  Usa esta skill cuando ya exista un Discovery Report con:
-  - Usuario principal identificado
-  - Problema validado
-  - Hipótesis de riesgos
-  - Señal de enfoque de desarrollo
-
-  El output principal es el Project Framing Doc (Project Charter como alias).
-
-license: Apache-2.0
+description: "Trigger: decidir enfoque de desarrollo (predictivo, adaptativo o híbrido), secuencia de trabajo, alcance en épics y stories, acuerdos mínimos. Convierte el Discovery Report en un Project Framing Doc."
+license: MIT
 metadata:
   author: KkapsCa
   version: "1.0"

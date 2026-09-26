@@ -1,10 +1,7 @@
 ---
 name: clarify-with-artifacts
-description: >
-  Helper opt-in que estructura la intención del usuario usando artifacts existentes
-  (docs, Engram, proposal, spec, explore). NO sustituye el trabajo formal (ODD, ni `sdd-propose` / `sdd-spec` si SDD fue seleccionado);
-  output mínimo inline o checklist para alimentar el trabajo formal.
-license: Apache-2.0
+description: "Trigger: idea vaga con artifacts ya existentes, estructurar contexto antes del trabajo formal, resumen breve de lo sabido. Helper opt-in que estructura la intención; no sustituye el trabajo formal."
+license: MIT
 metadata:
   author: KkapsCa
   version: "1.0"
