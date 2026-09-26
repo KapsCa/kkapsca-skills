@@ -22,15 +22,10 @@ Usa esta skill cuando:
 - toque decidir qué tan simple o qué tan escalable debe ser una solución,
 - haga falta enrutar el problema hacia una skill oficial más específica.
 
-## Trigger
-
-Usa esta skill cuando el usuario trabaje con Flutter/Dart y necesite guía general de arquitectura,
-estructura, decisiones técnicas o dirección sobre qué skill oficial conviene cargar.
-
 ## When NOT to Use
 
 - cuando el problema ya es claramente específico y una skill oficial de Flutter cubre mejor el caso,
-- cuando el proyecto sea Ananta o cualquier otro proyecto donde GetX ya sea convención explícita,
+- cuando el proyecto ya tenga GetX como convención explícita,
 - para backend, CLI o Dart sin Flutter.
 
 ---
@@ -156,18 +151,6 @@ Esta skill está completa cuando el agente ya:
 ## Anti-patrones a evitar
 - [anti-patrón relevante]
 ```
-
----
-
-## Resultado Esperado
-
-Si esta skill se usa bien, el agente debe:
-
-- proponer una estructura proporcional al proyecto,
-- justificar la elección de estado,
-- separar UI/estado/datos,
-- evitar sobrecomplejidad,
-- y, cuando aplique, delegar a la skill oficial correcta.
 
 ---
 

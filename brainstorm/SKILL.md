@@ -472,8 +472,14 @@ Solo genera este bloque cuando ya pasaste por todas las reglas de avance anterio
 - [feature 1]
 - [feature 2]
 
-### Fuera del MVP
+### Should Have
 - [feature 3]
+
+### Could Have
+- [feature 4]
+
+### Fuera del MVP
+- [feature 5]
 
 ## 7. Valor esperado
 - Para el usuario: [qué gana]
@@ -504,9 +510,9 @@ Este Product Brief está diseñado para ser el **input directo y compatible** co
 
 | Campo del Product Brief | Uso en `product-discovery` |
 |---|---|
-| 1. Problema + 2. Solución actual + 3. Gap | Valida el problema (Fase1 y Discovery ligero punto 1) |
-| 4. Usuario principal | Define el usuario a validar (Fase3 y Discovery ligero punto 2) |
-| 5. Propuesta de valor | Base para la propuesta de valor en discovery (Fase4) |
+| 1. Problema + 2. Solución actual + 3. Gap | Valida el problema (Fase 1 y Discovery ligero punto 1) |
+| 4. Usuario principal | Define el usuario a validar (Fase 3 y Discovery ligero punto 2) |
+| 5. Propuesta de valor | Base para la propuesta de valor en discovery (Fase 4) |
 | 6. MVP | Referencia para no sobre-dimensionar el discovery |
 | 10. Dudas abiertas | Se convierten en hipótesis de riesgos para `project-init` |
 | 11. Siguiente paso | Confirma el pipeline `brainstorm → product-discovery` |

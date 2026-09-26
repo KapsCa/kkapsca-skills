@@ -41,7 +41,7 @@ Usa esta skill cuando el usuario necesite:
 
 ## When NOT to Use
 
-- El proyecto ya es pequeno y el alcance ya está claro
+- El proyecto ya es pequeño y el alcance ya está claro
 - El usuario es el único interesado y decisor
 - No hay restricciones regulatorias u organizacionales
 - En este caso, se puede usar el bypass: `brainstorm → product-discovery → tech-feasibility`
@@ -130,7 +130,7 @@ Si el stack elegido en `tech-feasibility` es **Supabase**, esta señal debe prop
 - **implementación** (con SQL/RLS/Postgres): activar `supabase-postgres-best-practices`
 - El orquestador resuelve estas activaciones vía `docs/skill-registry.md`
 
-> **Nota**: Las skills de Supabase requieren instalación previa en `~/.config/opencode/skills/` para estar disponibles realmente. El registry define orquestación, no instala.
+> **Nota**: Las skills de Supabase requieren instalación previa en `~/.config/opencode/skills/` (destino de opencode) o en `~/.agents/skills/` (destino de Pi) para estar disponibles realmente. El registry define orquestación, no instala.
 
 Si el stack elegido en `tech-feasibility` es **Firebase**, esta señal debe propagarse a fases siguientes:
 
@@ -149,7 +149,7 @@ Si el stack elegido en `tech-feasibility` es **Firebase**, esta señal debe prop
 - **implementación** (con Genkit JS/TS): activar `developing-genkit-js`
 - El orquestador resuelve estas activaciones vía `docs/skill-registry.md` y sus compact rules.
 
-> **Nota**: Las skills de Firebase requieren instalación previa en `~/.config/opencode/skills/` para estar disponibles realmente. El registry define orquestación lógica (cuándo activar), no garantiza disponibilidad real. No activar skills Firebase solo por mencionar Firebase genéricamente.
+> **Nota**: Las skills de Firebase requieren instalación previa en `~/.config/opencode/skills/` (destino de opencode) o en `~/.agents/skills/` (destino de Pi) para estar disponibles realmente. El registry define orquestación lógica (cuándo activar), no garantiza disponibilidad real. No activar skills Firebase solo por mencionar Firebase genéricamente.
 
 ---
 

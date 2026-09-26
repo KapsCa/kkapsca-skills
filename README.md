@@ -5,7 +5,7 @@
 [![GitHub repo](https://img.shields.io/badge/GitHub-KkapsCa%2Fkkapsca--skills-blue?logo=github)](https://github.com/KapsCa/kkapsca-skills)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-Este repositorio reúne habilidades (**skills**) pensadas desde la experiencia personal de **KkapsCa**, optimizadas para flujos de trabajo asistidos por Inteligencia Artificial (como Cursor, Windsurf o **opencode**) y redactadas para que **cualquier persona pueda reutilizarlas** en sus propios proyectos.
+Este repositorio reúne habilidades (**skills**) pensadas desde la experiencia personal de **KkapsCa**, optimizadas para flujos de trabajo asistidos por Inteligencia Artificial (como **Pi** u **opencode**) y redactadas para que **cualquier persona pueda reutilizarlas** en sus propios proyectos.
 
 ---
 
