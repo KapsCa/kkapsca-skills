@@ -17,4 +17,4 @@ fi
 bash "${INSTALLER}" "$@"
 
 printf '\n✅ Bootstrap completado.\n'
-printf '👉 Reinicia opencode para que refresque la lista de skills disponibles.\n'
+printf '👉 Reinicia el o los agentes para que refresquen la lista de skills disponibles.\n'

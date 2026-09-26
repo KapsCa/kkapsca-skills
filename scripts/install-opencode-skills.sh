@@ -27,6 +27,11 @@ if [[ -n "${PI_SKILLS:-}" ]]; then
   read -r -a PI_SKILL_NAMES <<< "${PI_SKILLS}"
 fi
 
+# Destinos que no se pudieron instalar porque ya existian y no los creo este
+# repo. Se acumulan para reportarlos al final en vez de abortar la corrida
+# entera en el primer choque.
+CONFLICTS=()
+
 PI_ONLY=false
 
 for arg in "$@"; do
@@ -92,20 +97,23 @@ install_skill() {
   if [[ -L "${target_dir}" ]]; then
     current_link="$(readlink "${target_dir}")"
     if [[ "${current_link}" != "${source_dir}" ]]; then
-      printf 'Conflicto: %s ya existe y apunta a %s\n' "${target_dir}" "${current_link}" >&2
-      exit 1
+      CONFLICTS+=("${skill_name} (apunta a ${current_link})")
+      printf '⚠ Omitida, conflicto: %s ya existe y apunta a otro lado\n' "${target_dir}" >&2
+      return 0
     fi
     rm -f "${target_dir}"
   elif [[ -d "${target_dir}" ]]; then
     if [[ -f "${target_dir}/.kkapsca-skill-source" ]]; then
       rm -rf "${target_dir}"
     else
-      printf 'Conflicto: %s ya existe y no fue instalado por este repo\n' "${target_dir}" >&2
-      exit 1
+      CONFLICTS+=("${skill_name} (directorio real, no instalado por este repo)")
+      printf '⚠ Omitida, conflicto: %s ya existe y no fue instalado por este repo\n' "${target_dir}" >&2
+      return 0
     fi
   elif [[ -e "${target_dir}" ]]; then
-    printf 'Conflicto: %s ya existe y no es un directorio manejable\n' "${target_dir}" >&2
-    exit 1
+    CONFLICTS+=("${skill_name} (existe y no es un directorio manejable)")
+    printf '⚠ Omitida, conflicto: %s ya existe y no es un directorio manejable\n' "${target_dir}" >&2
+    return 0
   fi
 
   if [[ "${MODE}" == "copy" ]]; then
@@ -164,3 +172,14 @@ if [[ "$PI_ONLY" != true ]]; then
 fi
 printf '  Pi:       %s\n' "${PI_TARGET_ROOT}"
 printf 'Reinicia cada agente para que refresque la lista de skills.\n'
+
+if [[ ${#CONFLICTS[@]} -gt 0 ]]; then
+  printf '\n⚠ %d destino(s) omitido(s) por conflicto:\n' "${#CONFLICTS[@]}"
+  for conflict in "${CONFLICTS[@]}"; do
+    printf '  · %s\n' "${conflict}"
+  done
+  printf '\nEsos directorios ya existian y NO los creo este repo, asi que no se tocaron.\n'
+  printf 'Si son copias viejas, borralos y volve a correr el instalador para que queden\n'
+  printf 'como enlaces a este repositorio.\n'
+  exit 1
+fi
