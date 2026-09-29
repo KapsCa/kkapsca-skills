@@ -202,6 +202,19 @@ Puedes instalar las habilidades una sola vez en tu máquina local y luego usarla
 
 Si vas a usar **opencode en Windows**, la recomendación es correrlo bajo **WSL2** para mantener un entorno más consistente con Linux. Ver detalles en [docs/wsl-setup.md](wsl-setup.md).
 
+Si estás por armar **el ecosistema completo** (pi, Gentle AI, Engram, skills, MCP) en una máquina nueva, hay dos rutas documentadas, cada una con su instalador de un solo paso:
+
+| Ruta | Entorno | Instalador | Documento |
+|---|---|---|---|
+| **WSL2** | Ubuntu bajo WSL2 | `scripts/install-wsl.sh` (bash) | [Instalación del ecosistema en WSL2](wsl-setup.md) |
+| **Windows nativo** | Sin WSL | `scripts/install-windows.ps1` (PowerShell) | [Instalación en Windows nativo](windows-native-setup.md) |
+
+La ruta WSL2 lleva el ecosistema completo desde los prerequisitos, incluido el acceso desde el teléfono y la red de Tailscale, con bastante menos pasos manuales:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/KapsCa/kkapsca-skills/main/scripts/install-wsl.sh | bash
+```
+
 Si en cambio necesitás el ecosistema en **Windows nativo**, WSL2 no es una opción válida. Esa ruta tiene restricciones propias —el CLI de Gentle AI solo se instala desde fuente, el instalador de skills usa enlaces simbólicos y apunta a la ruta de opencode— y está cubierta paso a paso en [Instalación en Windows nativo](windows-native-setup.md).
 
 ---
@@ -213,3 +226,4 @@ Si en cambio necesitás el ecosistema en **Windows nativo**, WSL2 no es una opci
 - [Memoria Persistente (Engram)](engram.md) — Diferencia entre Engram, bootstrap y skill-registry
 - [Desarrollo Estructurado (ODD y SDD)](sdd.md) — ODD por defecto; SDD como rama opcional
 - [Instalación en Windows nativo](windows-native-setup.md) — Runbook del ecosistema completo sin WSL
+- [Instalación del ecosistema en WSL2](wsl-setup.md) — Runbook del ecosistema completo con el instalador de un solo paso (bash)
