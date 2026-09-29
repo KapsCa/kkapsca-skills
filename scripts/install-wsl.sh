@@ -22,7 +22,12 @@ set -euo pipefail
 #      this script owns exactly the files upstream tools do not write
 #      correctly; settings.json and the pi packages belong to `pi install`
 #      and `gentle-ai install`)
-#   10. final verification + summary table
+#   10. tailscale: network reachability shared by the phone (Moshi) and a
+#      future Engram Cloud — stable tailnet identity where WSL2's NAT'd IP
+#      changes on every reboot
+#   11. moshi: phone access — openssh-server (normal sshd), mosh, tmux,
+#      moshi-hook, and the pairing/daemon steps printed as exact commands
+#   12. final verification + summary table
 #
 # The Windows-native sibling is scripts/install-windows.ps1; the skills-only
 # installer is scripts/install.sh (this file's log/UX conventions come from
@@ -40,7 +45,9 @@ set -euo pipefail
 #   - idempotent: existing, working tools are reported, not reinstalled
 #   - fail-closed on every download this script performs itself: engram is
 #     SHA256-verified against checksums.txt; a missing checksums file aborts
-#     the phase. Third-party installers verify their own downloads.
+#     the phase. Third-party installers (tailscale, moshi-hook, gentle-ai)
+#     verify their own downloads; each is first downloaded to a temporary
+#     file and then run — never piped blindly to a shell.
 #   - installs the LATEST published version of everything (user decision);
 #     no version pins in this file
 #   - generic and public: no personal project names, paths, or values. The
@@ -51,6 +58,10 @@ set -euo pipefail
 #   - never calls `pi-engram init`: that writes mcp.json, which
 #     pi-mcp-adapter 3.x no longer reads (it reads mcp-adapter.json). That
 #     file is owned by the pi-config phase below.
+#   - phase order: Tailscale runs BEFORE Moshi on purpose. Only when the
+#     --tailscale-ssh experimental flag is given (see flag documentation)
+#     does Moshi skip openssh-server; the default and supported path runs
+#     the tailscale phase first and then installs a normal sshd.
 # ============================================================================
 
 # ----------------------------------------------------------------------------
@@ -66,6 +77,13 @@ ENGRAM_RELEASES_URL="https://github.com/${ENGRAM_REPO}/releases"
 GENTLE_AI_REPO="Gentleman-Programming/gentle-ai"
 GENTLE_AI_INSTALL_URL="https://raw.githubusercontent.com/${GENTLE_AI_REPO}/main/scripts/install.sh"
 HERDR_INSTALL_URL="https://herdr.dev/install.sh"
+TAILSCALE_INSTALL_URL="https://tailscale.com/install.sh"
+MOSHI_INSTALL_URL="https://getmoshi.app/install.sh"
+SWITCH_TO_ROOT_HINT="/usr/bin/wsl.exe -u root"
+
+# moshi-hook below 0.4.3 lacks 'moshi-hook doctor'; the daemon/pairing phases
+# cannot report feature-level readiness on such an install.
+MOSHI_HOOK_MIN_DOCTOR="0.4.3"
 
 PI_PACKAGE="npm:@earendil-works/pi-coding-agent"
 CODEGRAPH_PACKAGE="npm:@colbymchenry/codegraph"
@@ -134,6 +152,9 @@ ENGRAM_PIN_DIRS=()
 OPT_SKIP_SKILLS=0
 OPT_SKIP_HERDR=0
 OPT_SKIP_EXTERNAL_SKILLS=0
+OPT_SKIP_TAILSCALE=0
+OPT_SKIP_MOSHI=0
+OPT_TAILSCALE_SSH=0
 
 ASSUME_YES=0
 TTY_OK=0
@@ -381,6 +402,28 @@ run_priv() {
     $SUDO "$@"
 }
 
+# sudo_hint — exact, copy-pastable escalation when sudo is unavailable.
+# Used by privileged steps so the user can complete them by hand and re-run.
+sudo_hint() {
+    echo "sudo could not run non-interactively (sudo -n) and no TTY is readable."
+    echo "Run this step yourself, then re-run this installer inside WSL:"
+    echo "  ${SWITCH_TO_ROOT_HINT} -- bash -c '<command>'"
+    echo "Alternative: inside an interactive WSL shell, plain 'sudo <command>'"
+    echo "asks for your password there (only when a TTY is readable)."
+}
+
+# no_stdin_cmd — prefix for commands that must never read stdin. Used for
+# the third-party installers' own sudo elevations: under `curl | bash` the
+# script text is stdin, and a helper reading it would eat the script. The
+# phase records the exact manual command when this rule trips.
+no_stdin_cmd() {
+    if command -v setsid >/dev/null 2>&1; then
+        printf 'setsid\n'
+    else
+        printf '\n'
+    fi
+}
+
 # ----------------------------------------------------------------------------
 # rc-file editing (idempotent, marker-based)
 # ----------------------------------------------------------------------------
@@ -491,6 +534,16 @@ Options:
   --skip-skills            Skip the kkapsca-skills skills phase
   --skip-herdr             Skip the herdr phase
   --skip-external-skills   Skip firebase + supabase skill sources
+  --skip-tailscale         Skip the tailscale phase (network reachability)
+  --skip-moshi             Skip the moshi phase (phone access)
+  --tailscale-ssh          EXPERIMENTAL: run 'sudo tailscale up --ssh' and
+                           skip openssh-server in the moshi phase. moshi's
+                           Easy Pair pairs against a normal sshd, and
+                           Tailscale SSH breaks mosh (issue #4919, fixed for
+                           mosh only by PR #5057) and claims port 22 on the
+                           tailnet address; the default (normal
+                           openssh-server + Tailscale as the network) is the
+                           supported path
   --yes                    Assume yes: no confirmation prompts (still never
                            reads stdin; sudo prompts on /dev/tty only)
   -h, --help               Show this help and exit 0
@@ -552,6 +605,18 @@ parse_args() {
                 ;;
             --skip-external-skills)
                 OPT_SKIP_EXTERNAL_SKILLS=1
+                shift
+                ;;
+            --skip-tailscale)
+                OPT_SKIP_TAILSCALE=1
+                shift
+                ;;
+            --skip-moshi)
+                OPT_SKIP_MOSHI=1
+                shift
+                ;;
+            --tailscale-ssh)
+                OPT_TAILSCALE_SSH=1
                 shift
                 ;;
             --yes|-y)
@@ -667,7 +732,7 @@ apt_missing_human() {
 }
 
 phase_apt_prerequisites() {
-    step "Phase 1/11: apt prerequisites"
+    step "Phase 1/13: apt prerequisites"
     apt_missing_pkgs
     if [ "${#APT_MISSING[@]}" -eq 0 ]; then
         phase_set apt-prerequisites ok "all packages present"
@@ -783,7 +848,7 @@ print_sudo_node_hint() {
 }
 
 phase_node_runtime() {
-    step "Phase 2/11: Node.js runtime"
+    step "Phase 2/13: Node.js runtime"
 
     local req cur
     req="$(node_engine_requirement)"
@@ -855,7 +920,7 @@ phase_node_runtime() {
 # ============================================================================
 
 phase_agent_runtime() {
-    step "Phase 3/11: agent runtime (pi + CodeGraph)"
+    step "Phase 3/13: agent runtime (pi + CodeGraph)"
 
     if ! command -v npm >/dev/null 2>&1; then
         phase_set agent-runtime fail "npm is not available (node-runtime phase failed?)"
@@ -959,7 +1024,7 @@ release_latest_tag() {
 }
 
 phase_engram() {
-    step "Phase 4/11: engram binary"
+    step "Phase 4/13: engram binary"
     if [ "$MODE_DRYRUN" != "1" ]; then
         mkdir -p "$PI_BIN_DIR"
     fi
@@ -1101,7 +1166,7 @@ ensure_local_bin_path() {
 }
 
 phase_gentle_stack() {
-    step "Phase 5/11: Gentle AI stack"
+    step "Phase 5/13: Gentle AI stack"
 
     ensure_local_bin_path
 
@@ -1303,7 +1368,7 @@ pkg_equivalent_exists() {
 # phase says so and falls back to the previous (ungated) behaviour instead
 # of corrupting the file.
 phase_pi_packages() {
-    step "Phase 6/11: pi packages (idempotent by specifier)"
+    step "Phase 6/13: pi packages (idempotent by specifier)"
 
     if ! command -v pi >/dev/null 2>&1; then
         phase_set pi-packages fail "pi is not available (agent-runtime phase failed?)"
@@ -1359,6 +1424,206 @@ phase_pi_packages() {
     return 0
 }
 
+# ============================================================================
+# Phase 10: Tailscale — network reachability (shared by Engram Cloud and
+# the Moshi phone path)
+#
+# On a WSL2 host the IP is NAT'd and changes on every reboot, so a stable
+# tailnet identity is the only workable way in for phone access. SSH
+# transport stays the normal `openssh-server` (supported); `--tailscale-ssh`
+# switches to `tailscale up --ssh`, which is experimental here because
+# Moshi's Easy Pair pairs against a normal sshd and Tailscale SSH breaks
+# mosh (tailscale/tailscale #4919, mosh fixed by PR #5057) and claims port
+# 22 on the tailnet address.
+#
+# The Engram Cloud piece — enabling HTTPS certs in the admin console and
+# `tailscale serve` for a server that does not exist on this machine yet —
+# is NEVER executed here; it is printed as manual next steps.
+# ============================================================================
+
+tailscale_installed() {
+    command -v tailscale >/dev/null 2>&1
+}
+
+run_tailscale_installer() {
+    # Mirror how the gentle-ai and herdr phases do it: download to a file,
+    # none of that curl-to-shell piping ever happening.
+    local script
+    script="${TMPDIR:-/tmp}/install-wsl-tailscale.$$-${RANDOM}.sh"
+    info "Downloading the official tailscale installer (${TAILSCALE_INSTALL_URL})"
+    if ! http_fetch "$TAILSCALE_INSTALL_URL" "$script"; then
+        error "Could not download ${TAILSCALE_INSTALL_URL}"
+        return 1
+    fi
+    if [ ! -s "$script" ]; then
+        error "Downloaded tailscale installer is empty"
+        return 1
+    fi
+    info "Running the official tailscale installer (it verifies its own downloads; needs sudo)"
+    # shellcheck disable=SC2094 # intentionally not: curl | sh
+    if ! sh "$script"; then
+        error "The tailscale installer failed (exit non-zero)."
+        return 1
+    fi
+    return 0
+}
+
+runs_tailscale_up() {
+    # Interactive on purpose: `sudo tailscale up` opens a browser auth flow
+    # that blocks until the user completes it in the browser. Only called
+    # when /dev/tty is readable, so a curl|bash run never hangs silently.
+    if [ ! -r /dev/tty ]; then
+        return 1
+    fi
+    info "Starting interactive authentication: ${SUDO} tailscale up $*"
+    info "Complete the flow in the browser that opens; this waits until it finishes."
+    if ! $SUDO tailscale up "$@"; then
+        return 1
+    fi
+    return 0
+}
+
+manual_tailscale_up_next() {
+    echo "tailscale authentication is interactive ('sudo tailscale up' opens a browser flow)."
+    echo "No TTY is readable in this session, so it was NOT started for you."
+    echo "Run it by hand inside WSL, then re-run this installer to verify:"
+    echo "  sudo tailscale up"
+    echo "It is never started here automatically: that would hang on the browser flow."
+    echo "Alternative from Windows PowerShell (outside WSL):"
+    echo "  ${SWITCH_TO_ROOT_HINT} -- tailscale up"
+    echo "Then verify: tailscale status && tailscale ip -4"
+}
+
+phase_tailscale() {
+    if [ "$OPT_SKIP_TAILSCALE" = "1" ]; then
+        phase_set tailscale skip "--skip-tailscale given"
+        return 0
+    fi
+    step "Phase 10/13: tailscale (network reachability)"
+
+    if [ "$OPT_TAILSCALE_SSH" = "1" ]; then
+        warn "--tailscale-ssh is EXPERIMENTAL: tailscale up --ssh"
+        echo "  Easy Pair pairs against a normal sshd; tailscale SSH claims port 22 on"
+        echo "  the tailnet address and breaks mosh (tailscale/tailscale #4919, fixed for"
+        echo "  mosh only by PR #5057). The default (normal openssh-server + tailscale as"
+        echo "  the network) is the supported path."
+    fi
+
+    if ! tailscale_installed; then
+        if [ "$MODE_DRYRUN" = "1" ]; then
+            info "(dry-run) would download ${TAILSCALE_INSTALL_URL} to a temp file and run it with sh (needs sudo)"
+        else
+            if ! run_tailscale_installer; then
+                phase_set tailscale fail "tailscale installer failed (download or installer itself)"
+                error "Fix the download problem above, then re-run this installer (idempotent)."
+                echo "Manual alternative (needs sudo, interactive):"
+                echo "  curl -fsSL ${TAILSCALE_INSTALL_URL} -o /tmp/tailscale-install.sh && sh /tmp/tailscale-install.sh"
+                echo "After that, re-run this installer; it verifies the node and prints the addresses."
+                return 0
+            fi
+            hash -r 2>/dev/null || true
+            if ! tailscale_installed; then
+                phase_set tailscale fail "tailscale not on PATH after its installer"
+                error "The installer exited zero but 'tailscale' is still not on PATH."
+                error "Open a new shell (or add /usr/bin and /usr/local/bin to PATH) and re-run this installer."
+                return 0
+            fi
+        fi
+    else
+        local tv
+        tv="$(tailscale --version 2>/dev/null | head -n 1)"
+        success "tailscale already installed: ${tv:-unknown}"
+    fi
+
+    # --- authenticated? ---
+    # tailscale status already covers it (it fails without a tailnet
+    # identity); sudo netcheck would additionally probe UDP for DERP
+    # latency, which is not an authentication question.
+    if [ "$MODE_DRYRUN" = "1" ]; then
+        info "(dry-run) would now check 'tailscale status' and, when unauthenticated, start: sudo tailscale up"
+        info "(dry-run) authentication is interactive (browser flow); under --dry-run it stays a preview"
+        phase_set tailscale ok "(dry-run) tailscale installer/up previewed"
+        return 0
+    fi
+
+    if tailscale status >/dev/null 2>&1; then
+        success "tailscale node is authenticated"
+    elif [ "$OPT_TAILSCALE_SSH" = "1" ]; then
+        # Interactive on purpose; the --ssh flag only matters when a node is
+        # first authenticated (or when enabling the feature later).
+        if ! runs_tailscale_up --ssh; then
+            if [ -r /dev/tty ]; then
+                phase_set tailscale fail "tailscale up --ssh failed (see the error above)"
+                error "Re-run this installer after fixing it (idempotent)."
+            else
+                manual_tailscale_up_next
+                phase_set tailscale fail "tailscale needs interactive authentication (no TTY readable)"
+            fi
+            return 0
+        fi
+        info "tailscale up --ssh completed"
+    else
+        if ! runs_tailscale_up; then
+            if [ -r /dev/tty ]; then
+                phase_set tailscale fail "tailscale up failed (see the error above)"
+                error "Re-run this installer after fixing it (idempotent)."
+            else
+                manual_tailscale_up_next
+                phase_set tailscale fail "tailscale needs interactive authentication (no TTY readable)"
+            fi
+            return 0
+        fi
+        info "tailscale up completed"
+    fi
+
+    # --- verified addresses for phone + runbook ---
+    if ! tailscale status >/dev/null 2>&1; then
+        phase_set tailscale fail "tailscale is installed but not authenticated"
+        error "tailscale status failed. Authenticate by hand, then re-run this installer:"
+        echo "  sudo tailscale up"
+        return 0
+    fi
+    success "tailscale: node is authenticated"
+
+    local ts_ip ts_dns
+    ts_ip="$(tailscale ip -4 2>/dev/null | head -n 1)"
+    # status column 2 is the MagicDNS name when MagicDNS is enabled for the
+    # tailnet; when it is disabled only the bare IP appears there. Accept
+    # only a name that actually looks like one; never print a half-verified
+    # guess.
+    ts_dns="$(tailscale status 2>/dev/null | head -n 1 | awk '{print $2}')"
+    case "$ts_dns" in
+        *.ts.net) : ;;
+        *) ts_dns="" ;;
+    esac
+    if [ -n "$ts_ip" ]; then
+        success "tailscale IPv4: ${ts_ip}"
+    else
+        warn "tailscale ip -4 returned nothing; the node may not be able to reach the tailnet"
+    fi
+    if [ -n "$ts_dns" ]; then
+        success "MagicDNS name: ${ts_dns}"
+        echo "  ssh target for the phone: <user>@${ts_dns}"
+    else
+        info "MagicDNS name not shown; run 'tailscale status' — column 2 is the MagicDNS name (when MagicDNS is enabled)"
+    fi
+
+    # --- never automated here: printed as documented manual steps ---
+    echo ""
+    echo "Manual next steps (never run automatically here):"
+    echo "  1) HTTPS certificates: in the tailscale admin console enable MagicDNS +"
+    echo "     'Enable HTTPS'. Engram Cloud clients require HTTPS; this is a console"
+    echo "     step, not an automated one."
+    echo "  2) when an Engram Cloud server runs on THIS machine on 127.0.0.1:18080,"
+    echo "     expose it on the tailnet (do NOT run it now — no cloud server here yet):"
+    echo "       sudo tailscale serve --bg --https=443 http://127.0.0.1:18080"
+    echo "  3) from the phone, verify reachability:"
+    echo "       tailscale ping <this-host>"
+    echo ""
+    phase_set tailscale ok "tailscale ${tv:-installed}, authenticated"
+    return 0
+}
+
 HERDR_TMP_SH=""
 
 phase_herdr() {
@@ -1366,7 +1631,7 @@ phase_herdr() {
         phase_set herdr skip "--skip-herdr given"
         return 0
     fi
-    step "Phase 7/11: herdr"
+    step "Phase 7/13: herdr"
 
     if command -v herdr >/dev/null 2>&1; then
         local v
@@ -1475,7 +1740,7 @@ phase_skills_source_repo() {
         phase_set repo-skills skip "--skip-skills given"
         return 0
     fi
-    step "Phase 8/11: skills — source A: ${GITHUB_OWNER}/${GITHUB_REPO}"
+    step "Phase 8/13: skills — source A: ${GITHUB_OWNER}/${GITHUB_REPO}"
 
     local cache="${XDG_DATA_HOME:-$HOME/.local/share}/${GITHUB_REPO}"
     local script="${cache}/scripts/install.sh"
@@ -1553,7 +1818,7 @@ phase_skills_source_npx() {
         phase_set framework-skills skip "--skip-external-skills given"
         return 0
     fi
-    step "Phase 9/11: skills — sources B/C: firebase/agent-skills, supabase/agent-skills"
+    step "Phase 9/13: skills — sources B/C: firebase/agent-skills, supabase/agent-skills"
 
     if ! command -v npx >/dev/null 2>&1; then
         phase_set framework-skills fail "npx not available (node missing?)"
@@ -1597,7 +1862,320 @@ phase_skills_source_npx() {
 }
 
 # ============================================================================
-# Phase 10: pi config — mcp-adapter.json + subagents.json (the hybrid decision)
+# Phase 11: Moshi — phone access (mosh/tmux/sshd + moshi-hook)
+#
+# The phone reaches this host over mosh/ssh (transport) and reads agent
+# hooks through the moshi-hook daemon (127.0.0.1:24543, itself reached
+# through the SSH session). Network reachability comes from the tailscale
+# phase (a WSL2 host has no stable IP otherwise).
+#
+# Three Moshi steps need the phone and are NEVER executed by this script:
+# Easy Pair, token pairing, and the agent hook install. They are detected
+# and, when not done, printed as the exact commands to run. An unpaired
+# host is a valid intermediate state, so it is reported as a skip, not a
+# failure.
+# ============================================================================
+
+MOSHI_HOOK_BIN="${HOME}/.local/bin/moshi-hook"
+MOSHI_UNIT_FILE="${HOME}/.config/systemd/user/moshi-hook.service"
+
+# have_systemd — true only when a systemd USER session is actually usable:
+# the systemd runtime dir present AND systemctl on PATH. Under plain WSL2
+# this is false, and the moshi phase documents the shell-startup alternative
+# instead of inventing autostart that cannot exist.
+have_systemd() {
+    [ -d /run/systemd/system ] && command -v systemctl >/dev/null 2>&1
+}
+
+moshi_ssh_skip_note() {
+    echo "  openssh-server skipped: --tailscale-ssh was given (EXPERIMENTAL)."
+    echo "  The tailnet address must carry an sshd: login goes over 'tailscale up --ssh'"
+    echo "  there, not over a normal sshd. mosh does NOT work over Tailscale SSH"
+    echo "  (tailscale/tailscale #4919; mosh fixed by PR #5057)."
+}
+
+phase_moshi() {
+    if [ "$OPT_SKIP_MOSHI" = "1" ]; then
+        phase_set moshi skip "--skip-moshi given"
+        return 0
+    fi
+    step "Phase 11/13: moshi (phone access)"
+
+    # --- packages: mosh, tmux, openssh-server (skipped under --tailscale-ssh) ---
+    local missing=() p
+    for p in mosh tmux; do
+        command -v "$p" >/dev/null 2>&1 || missing+=("$p")
+    done
+    if [ "$OPT_TAILSCALE_SSH" != "1" ]; then
+        if ! dpkg -s openssh-server >/dev/null 2>&1; then
+            missing+=("openssh-server")
+        fi
+    fi
+
+    if [ "${#missing[@]}" -gt 0 ]; then
+        if [ "$MODE_DRYRUN" = "1" ]; then
+            info "(dry-run) would run: ${SUDO:-"sudo"} apt-get update && ${SUDO:-"sudo"} apt-get install -y ${missing[*]}"
+            if [ "$OPT_TAILSCALE_SSH" = "1" ]; then
+                info "(dry-run) openssh-server would be skipped (--tailscale-ssh: tailscale --ssh is the sshd)"
+            fi
+            phase_set moshi ok "(dry-run) would apt install: ${missing[*]}"
+            return 0
+        fi
+        if ! command -v apt-get >/dev/null 2>&1; then
+            phase_set moshi fail "no apt; missing: ${missing[*]}"
+            error "Install these packages with your package manager: ${missing[*]}"
+            return 0
+        fi
+        sudo_probe
+        if ! run_priv apt-get update; then
+            phase_set moshi fail "sudo unavailable for apt-get update"
+            error "Missing moshi packages: ${missing[*]}"
+            sudo_hint
+            echo "  sudo apt-get update && sudo apt-get install -y ${missing[*]}"
+            return 0
+        fi
+        if ! run_priv apt-get install -y "${missing[@]}"; then
+            phase_set moshi fail "apt-get install failed"
+            error "Run it by hand and re-run the installer:"
+            echo "  sudo apt-get install -y ${missing[*]}"
+            return 0
+        fi
+        success "moshi packages installed: ${missing[*]}"
+    else
+        if [ "$OPT_TAILSCALE_SSH" = "1" ]; then
+            success "mosh and tmux installed; openssh-server intentionally skipped (--tailscale-ssh)"
+        else
+            success "mosh, tmux and openssh-server are already installed"
+        fi
+    fi
+
+    # --- sshd running on :22 (never assumed; actually probed) ---
+    if [ "$OPT_TAILSCALE_SSH" != "1" ]; then
+        if have_systemd; then
+            if ! systemctl is-enabled --quiet ssh >/dev/null 2>&1 \
+                || ! systemctl is-active --quiet ssh >/dev/null 2>&1; then
+                if [ "$MODE_DRYRUN" = "1" ]; then
+                    info "(dry-run) would run: sudo systemctl enable --now ssh"
+                else
+                    sudo_probe
+                    if ! run_priv systemctl enable --now ssh; then
+                        phase_set moshi fail "systemctl enable --now ssh failed"
+                        error "Run it by hand, then re-run this installer:"
+                        echo "  sudo systemctl enable --now ssh"
+                        return 0
+                    fi
+                fi
+            fi
+            if [ "$MODE_DRYRUN" != "1" ]; then
+                if systemctl is-active --quiet ssh && ss -ltn 2>/dev/null | grep -q ':22[[:space:]]'; then
+                    success "sshd: active and listening on port 22"
+                else
+                    phase_set moshi fail "sshd not listening on :22 after enable --now"
+                    error "Check it by hand:"
+                    echo "  systemctl status ssh"
+                    echo "  ss -ltn | grep :22"
+                    return 0
+                fi
+            fi
+        else
+            info "sshd: systemd is unavailable in this WSL environment; the service was not touched."
+            info "Start it manually inside WSL (then verify with 'ss -ltn | grep :22'):"
+            echo "  ${SWITCH_TO_ROOT_HINT} -- service ssh start"
+            echo "To make it survive reboots without systemd, add /etc/wsl.conf [boot] systemd=true"
+            echo "(wsl --shutdown from Windows, then start WSL again) or add 'service ssh start' to"
+            echo "your WSL session startup."
+        fi
+    else
+        moshi_ssh_skip_note
+        if [ "$MODE_DRYRUN" = "1" ]; then
+            : # only prints, no state to guard
+        fi
+    fi
+
+    # --- moshi-hook CLI (user-local; no sudo; downloaded, then run) ---
+    local mh="" mv=""
+    if [ -x "$MOSHI_HOOK_BIN" ]; then
+        mv="$(tool_version "$MOSHI_HOOK_BIN" --version)"
+        success "moshi-hook already installed: ${mv:-present} (${MOSHI_HOOK_BIN})"
+    elif command -v moshi-hook >/dev/null 2>&1; then
+        mv="$(tool_version moshi-hook --version)"
+        success "moshi-hook already installed (on PATH): ${mv:-present}"
+    else
+        if [ "$MODE_DRYRUN" = "1" ]; then
+            info "(dry-run) would download ${MOSHI_INSTALL_URL} to a temp file and run: sh <installer> (installs into ~/.local/bin; needs no sudo)"
+        else
+            local script
+            script="${TMPDIR:-/tmp}/install-wsl-moshi.$$.sh"
+            info "Downloading ${MOSHI_INSTALL_URL}"
+            if ! http_fetch "$MOSHI_INSTALL_URL" "$script" || [ ! -s "$script" ]; then
+                phase_set moshi fail "could not download ${MOSHI_INSTALL_URL}"
+                return 0
+            fi
+            info "Running the official moshi installer with sh (never piped blind; installs into ~/.local/bin, no sudo)"
+            if ! sh "$script"; then
+                phase_set moshi fail "moshi installer failed"
+                error "Run it by hand inside WSL, then re-run this installer:"
+                echo "  curl -fsSL ${MOSHI_INSTALL_URL} -o /tmp/moshi-install.sh && sh /tmp/moshi-install.sh"
+                return 0
+            fi
+            hash -r 2>/dev/null || true
+            [ -x "$MOSHI_HOOK_BIN" ] || command -v moshi-hook >/dev/null 2>&1 || {
+                phase_set moshi fail "moshi-hook not found after its installer"
+                error "Expected ${MOSHI_HOOK_BIN} (or moshi-hook on PATH). Install manually, then re-run."
+                return 0
+            }
+            mv="$(tool_version "$MOSHI_HOOK_BIN" --version)"
+            success "moshi-hook installed: ${mv:-present}"
+        fi
+    fi
+    mh="$(command -v moshi-hook || echo "$MOSHI_HOOK_BIN")"
+
+    if [ "$MODE_DRYRUN" = "1" ]; then
+        info "(dry-run) pair-state detection, doctor, daemon unit and runbook lines are shown, never executed"
+        info "(dry-run) would write ${MOSHI_UNIT_FILE} only when the daemon is not armed yet (ExecStart=${mh} serve)"
+        info "(dry-run) would run: systemctl --user daemon-reload && systemctl --user enable --now moshi-hook"
+        phase_set moshi ok "(dry-run) moshi previewed"
+        return 0
+    fi
+
+    # --- version gate: 'moshi-hook doctor' needs >= 0.4.3 ---
+    if [ -n "$mv" ] && ! version_ge "$mv" "$MOSHI_HOOK_MIN_DOCTOR"; then
+        warn "moshi-hook ${mv} is older than ${MOSHI_HOOK_MIN_DOCTOR}; 'moshi-hook doctor' should work, but the daemon/pairing phases were not verified against it. Update the vendor CLI and re-run."
+    fi
+
+    # --- pair-state detection (idempotency: a paired host reports, never repeats) ---
+    local paired=0 token=0 hook=0
+    "$mh" status >/dev/null 2>&1 && paired=1
+    "$mh" pair --help >/dev/null 2>&1 || token=1   # presence of the subcommand only; real pairing state comes from 'status'
+    [ -f "$HOME/.pi/agent/extensions/moshi-hooks.ts" ] && hook=1
+
+    # --- phone-dependent steps: detected and printed, NEVER executed ---
+    echo ""
+    echo "Phone-dependent steps (need the Moshi app; never run by this script):"
+    echo ""
+    if [ "$paired" = "1" ]; then
+        echo "  1) Easy Pair ... already done (moshi-hook status is non-empty)"
+    else
+        echo "  1) Easy Pair — NOT done yet. Run, then scan the QR with the Moshi app:"
+        echo "       moshi-hook host setup"
+        echo "     NOTE: the QR is a temporary credential. Anyone who scans it first gets"
+        echo "     SSH access to this machine. Scan it yourself immediately."
+    fi
+    if [ "$token" = "1" ]; then
+        echo "  2) hook pairing — NOT done yet. Get a token from the Moshi app"
+        echo "     (Settings -> Hooks), then run, replacing <token>:"
+        echo "       moshi-hook pair --token <token>"
+        echo "     The token is a user secret; never share it or commit it anywhere."
+    else
+        echo "  2) hook pairing ... already done (paired and reachable from the phone)"
+    fi
+    if [ "$hook" = "1" ]; then
+        echo "  3) agent hook install ... already present (~/.pi/agent/extensions/moshi-hooks.ts)"
+    else
+        echo "  3) agent hook install — NOT present yet. Run:"
+        echo "       moshi-hook install --target pi"
+        echo "     (writes ~/.pi/agent/extensions/moshi-hooks.ts; keep this fresh: after a"
+        echo "      pi update the hook can go stale and Pi shows 'missing: extension'.)"
+    fi
+
+    # --- daemon under a process manager (user unit; systemd) ---
+    if have_systemd; then
+        if [ "$MODE_DRYRUN" = "1" ]; then
+            info "(dry-run) would create ~/.config/systemd/user and write ${MOSHI_UNIT_FILE} (ExecStart=${mh} serve)"
+        else
+            mkdir -p "$HOME/.config/systemd/user"
+        fi
+        if [ ! -f "$MOSHI_UNIT_FILE" ]; then
+            cat >"$MOSHI_UNIT_FILE" <<EOF
+[Unit]
+Description=moshi-hook daemon (phone-side notification of agent events)
+After=graphical-session.target
+
+[Service]
+ExecStart=${mh} serve
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
+EOF
+            info "wrote ${MOSHI_UNIT_FILE}"
+        else
+            success "moshi-hook user unit already present (${MOSHI_UNIT_FILE})"
+        fi
+    else
+        echo ""
+        echo "Daemon without systemd: instead of a user unit, start it at login."
+        echo "Add to ~/.bashrc (or ~/.profile):"
+        echo "  # --- install-wsl.sh: moshi-hook daemon ---"
+        echo "  pgrep -u \"\$USER\" -f \"moshi-hook serve\" >/dev/null 2>&1 || \"${mh}\" serve >/dev/null 2>&1 &"
+        echo "(systemd user units don't exist here; this is the documented shell alternative,"
+        echo "not an invented one.)"
+    fi
+
+    # --- daemon arming (never when a skip was requested) ---
+    if have_systemd && [ "$OPT_SKIP_MOSHI" != "1" ]; then
+        if [ "$MODE_DRYRUN" = "1" ]; then
+            info "(dry-run) would run: systemctl --user daemon-reload && systemctl --user enable --now moshi-hook"
+        else
+            if ! systemctl --user daemon-reload; then
+                phase_set moshi fail "systemctl --user daemon-reload failed"
+                return 0
+            fi
+            if ! systemctl --user enable --now moshi-hook; then
+                phase_set moshi fail "systemctl --user enable --now moshi-hook failed"
+                error "Run it by hand, then re-run:"
+                echo "  systemctl --user enable --now moshi-hook"
+                return 0
+            fi
+            success "moshi-hook daemon: systemd user service armed"
+        fi
+
+        # A user unit only survives reboots when linger is on; enable it only
+        # when it is actually off and the call can work — never assumed, and
+        # the manual command is left on screen when it cannot run here.
+        if [ "$MODE_DRYRUN" = "1" ]; then
+            info "(dry-run) would enable linger when needed (loginctl enable-linger)"
+        elif command -v loginctl >/dev/null 2>&1; then
+            linger_state="$(loginctl show-user "${USER:-}" --property=Linger 2>/dev/null || true)"
+            if [ "$linger_state" = "Linger=yes" ]; then
+                success "linger already enabled (the daemon survives without an active login session)"
+            elif loginctl enable-linger "${USER:-}" 2>/dev/null; then
+                success "linger enabled: the moshi-hook daemon survives without an active login session"
+            else
+                warn "couldn't enable linger; the user unit stops when all login sessions end."
+                echo "  sudo loginctl enable-linger \$USER"
+            fi
+        else
+            warn "loginctl is unavailable; if the daemon stops after reboots, run: loginctl enable-linger"
+        fi
+    fi
+
+    # --- verification: doctor for feature readiness, status for liveness ---
+    if [ -x "$MOSHI_HOOK_BIN" ] || command -v moshi-hook >/dev/null 2>&1; then
+        if "$mh" doctor >/dev/null 2>&1; then
+            echo ""
+            echo "moshi-hook doctor (feature readiness):"
+            "$mh" doctor 2>/dev/null || true
+        fi
+        if "$mh" status >/dev/null 2>&1; then
+            echo ""
+            echo "moshi-hook status (current daemon/pairing state):"
+            "$mh" status 2>/dev/null || true
+        fi
+        if [ "$paired" = "0" ] && [ "$token" = "1" ] && [ "$hook" = "0" ]; then
+            phase_set moshi ok "moshi installed; phone-dependent steps printed above"
+            echo "(an unpaired host is a valid intermediate state — the phone is the next step)."
+            return 0
+        fi
+        phase_set moshi ok "moshi-hook ${mv:-present}; doctor and status ran"
+    else
+        phase_set moshi fail "moshi-hook is not installed"
+    fi
+    return 0
+}
+# ============================================================================
+# Phase 12: pi config — mcp-adapter.json + subagents.json (the hybrid decision)
 #
 # These two files are the reason this installer exists: upstream tools write
 # mcp.json (which pi-mcp-adapter 3.x no longer reads) and no tool writes
@@ -1765,7 +2343,7 @@ write_engram_project_pin() {
 }
 
 phase_pi_config() {
-    step "Phase 10/11: pi config (mcp-adapter.json + subagents.json)"
+    step "Phase 12/13: pi config (mcp-adapter.json + subagents.json)"
     if [ "$MODE_DRYRUN" != "1" ]; then
         mkdir -p "$PI_AGENT_DIR"
     fi
@@ -1812,12 +2390,13 @@ phase_pi_config() {
     return 0
 }
 
+
 # ============================================================================
-# Phase 11: final verification — versions table, skills count, failures named
+# Phase 13: final verification — versions table, skills count, failures named
 # ============================================================================
 
 phase_verification() {
-    step "Phase 11/11: final verification"
+    step "Phase 13/13: final verification"
     local missing=0 line name
     local -a rows
     rows=("git|$(command -v git >/dev/null 2>&1 && git --version 2>/dev/null | head -n 1 || echo MISSING)")
@@ -1828,6 +2407,10 @@ phase_verification() {
     rows+=("engram|$([ -x "$PI_BIN_ENGRAM" ] && "$PI_BIN_ENGRAM" version 2>/dev/null | head -n 1 || echo MISSING)")
     rows+=("gentle-ai|$(command -v gentle-ai >/dev/null 2>&1 && gentle-ai version 2>/dev/null | head -n 1 || echo MISSING)")
     rows+=("herdr|$(command -v herdr >/dev/null 2>&1 && herdr --version 2>/dev/null | head -n 1 || echo MISSING)")
+    rows+=("tailscale|$(command -v tailscale >/dev/null 2>&1 && tailscale --version 2>/dev/null | head -n 1 || echo MISSING)")
+    rows+=("mosh|$(command -v mosh >/dev/null 2>&1 && mosh --version 2>/dev/null | head -n 1 || echo MISSING)")
+    rows+=("tmux|$(command -v tmux >/dev/null 2>&1 && tmux -V 2>/dev/null | head -n 1 || echo MISSING)")
+    rows+=("moshi-hook|$([ -x "$MOSHI_HOOK_BIN" ] && "$MOSHI_HOOK_BIN" --version 2>/dev/null | head -n 1 || echo MISSING)")
 
     echo ""
     echo -e "${BOLD}Installed components${NC}"
@@ -1902,6 +2485,48 @@ run_status() {
     if [ -n "$v" ]; then echo "  gentle-ai  ${v}"; else echo "  gentle-ai  not found"; fi
     v="$(tool_version herdr --version)"
     if [ -n "$v" ]; then echo "  herdr      ${v}"; else echo "  herdr      not found"; fi
+    v="$(tool_version tailscale --version)"
+    if [ -n "$v" ]; then echo "  tailscale  ${v}"; else echo "  tailscale  not found"; fi
+    if command -v mosh >/dev/null 2>&1; then
+        echo "  mosh       $(mosh --version 2>/dev/null | head -n 1)"
+    else
+        echo "  mosh       not found"
+    fi
+    if [ -x "$MOSHI_HOOK_BIN" ] || command -v moshi-hook >/dev/null 2>&1; then
+        local mvv
+        mvv="$(tool_version "${MOSHI_HOOK_BIN}" --version)"
+        echo "  moshi-hook ${mvv:-present}  (${MOSHI_HOOK_BIN})"
+    else
+        echo "  moshi-hook not found"
+    fi
+    if command -v tailscale >/dev/null 2>&1; then
+        if tailscale status >/dev/null 2>&1; then
+            echo "  tailnet    authenticated ($(tailscale ip -4 2>/dev/null | head -n 1))"
+        else
+            echo "  tailnet    installed but not authenticated (run: sudo tailscale up)"
+        fi
+    else
+        echo "  tailnet    no tailscale client"
+    fi
+    if dpkg -s openssh-server >/dev/null 2>&1; then
+        if command -v ss >/dev/null 2>&1 && ss -ltn 2>/dev/null | grep -q ':22[[:space:]]'; then
+            echo "  sshd       listening on :22"
+        else
+            echo "  sshd       installed, not confirmed listening on :22"
+        fi
+    else
+        echo "  sshd       openssh-server not installed"
+    fi
+    if [ -f "$MOSHI_UNIT_FILE" ]; then
+        echo "  moshi svc  unit present (${MOSHI_UNIT_FILE})"
+    else
+        echo "  moshi svc  no user unit (written by the moshi phase)"
+    fi
+    if [ -f "$HOME/.pi/agent/extensions/moshi-hooks.ts" ]; then
+        echo "  moshi hook pi extension present (~/.pi/agent/extensions/moshi-hooks.ts)"
+    else
+        echo "  moshi hook pi extension absent (moshi-hook install --target pi)"
+    fi
 
     if [ -f "$MCP_ADAPTER_FILE" ]; then
         echo "  mcp-adapter.json  present (${MCP_ADAPTER_FILE})"
@@ -1954,10 +2579,12 @@ run_all_phases() {
     phase_register "herdr"             "herdr + pi integration"
     phase_register "repo-skills"       "skills: kkapsca-skills"
     phase_register "framework-skills"  "skills: firebase + supabase"
+    phase_register "tailscale"         "tailscale (network)"
+    phase_register "moshi"             "moshi (phone access)"
     phase_register "pi-config"         "pi config (mcp-adapter, subagents)"
     phase_register "verification"      "final verification"
 
-    local -a order=(apt-prerequisites node-runtime agent-runtime engram gentle-stack pi-packages herdr repo-skills framework-skills pi-config verification)
+    local -a order=(apt-prerequisites node-runtime agent-runtime engram gentle-stack pi-packages herdr repo-skills framework-skills tailscale moshi pi-config verification)
     local id
     for id in "${order[@]}"; do
         case "$id" in
@@ -1970,6 +2597,8 @@ run_all_phases() {
             herdr)             phase_herdr ;;
             repo-skills)       phase_skills_source_repo ;;
             framework-skills)  phase_skills_source_npx ;;
+            tailscale)         phase_tailscale ;;
+            moshi)             phase_moshi ;;
             pi-config)         phase_pi_config ;;
             verification)      phase_verification ;;
         esac
