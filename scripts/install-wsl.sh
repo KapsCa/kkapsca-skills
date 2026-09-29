@@ -85,8 +85,12 @@ SWITCH_TO_ROOT_HINT="/usr/bin/wsl.exe -u root"
 # cannot report feature-level readiness on such an install.
 MOSHI_HOOK_MIN_DOCTOR="0.4.3"
 
-PI_PACKAGE="npm:@earendil-works/pi-coding-agent"
-CODEGRAPH_PACKAGE="npm:@colbymchenry/codegraph"
+# Bare npm package names. The "npm:<name>" form is pi's settings.json specifier
+# (see PI_PACKAGES below) and is NOT a valid package reference: "npm view
+# npm:<name>" answers 404. npm install happens to tolerate the prefix today, so
+# do not depend on that leniency here.
+PI_PACKAGE="@earendil-works/pi-coding-agent"
+CODEGRAPH_PACKAGE="@colbymchenry/codegraph"
 
 # pi packages: installed through `pi install` (that command owns
 # settings.json; this script never writes settings.json itself). The phase
@@ -106,12 +110,12 @@ PI_PACKAGES=(
     "npm:pi-web-access"
 )
 
-# External skill sources installed through the `skills` CLI (see machine
-# reference: firebase/agent-skills carries 13 skills, supabase/agent-skills 2).
-SKILL_REPOS=(
-    "firebase/agent-skills"
-    "supabase/agent-skills"
-)
+# The external skill sources (firebase/agent-skills carries 13 skills,
+# supabase/agent-skills 2) are deliberately NOT part of this installer: they
+# belong to the skills path and are optional. The user runs them only when
+# they want those skills:
+#   npx -y skills add firebase/agent-skills --yes
+#   npx -y skills add supabase/agent-skills --yes
 
 # ~/.engram is Engram's DATA directory (DB, WAL, logs). Project pins can only
 # be written for container directories, never for home itself. A pin lives in
@@ -151,7 +155,6 @@ ARG_ENGRAM_PROJECT=""
 ENGRAM_PIN_DIRS=()
 OPT_SKIP_SKILLS=0
 OPT_SKIP_HERDR=0
-OPT_SKIP_EXTERNAL_SKILLS=0
 OPT_SKIP_TAILSCALE=0
 OPT_SKIP_MOSHI=0
 OPT_TAILSCALE_SSH=0
@@ -533,7 +536,6 @@ Options:
                            .engram/config.json with the project name
   --skip-skills            Skip the kkapsca-skills skills phase
   --skip-herdr             Skip the herdr phase
-  --skip-external-skills   Skip firebase + supabase skill sources
   --skip-tailscale         Skip the tailscale phase (network reachability)
   --skip-moshi             Skip the moshi phase (phone access)
   --tailscale-ssh          EXPERIMENTAL: run 'sudo tailscale up --ssh' and
@@ -601,10 +603,6 @@ parse_args() {
                 ;;
             --skip-herdr)
                 OPT_SKIP_HERDR=1
-                shift
-                ;;
-            --skip-external-skills)
-                OPT_SKIP_EXTERNAL_SKILLS=1
                 shift
                 ;;
             --skip-tailscale)
@@ -732,7 +730,7 @@ apt_missing_human() {
 }
 
 phase_apt_prerequisites() {
-    step "Phase 1/13: apt prerequisites"
+    step "Phase 1/12: apt prerequisites"
     apt_missing_pkgs
     if [ "${#APT_MISSING[@]}" -eq 0 ]; then
         phase_set apt-prerequisites ok "all packages present"
@@ -848,7 +846,7 @@ print_sudo_node_hint() {
 }
 
 phase_node_runtime() {
-    step "Phase 2/13: Node.js runtime"
+    step "Phase 2/12: Node.js runtime"
 
     local req cur
     req="$(node_engine_requirement)"
@@ -920,7 +918,7 @@ phase_node_runtime() {
 # ============================================================================
 
 phase_agent_runtime() {
-    step "Phase 3/13: agent runtime (pi + CodeGraph)"
+    step "Phase 3/12: agent runtime (pi + CodeGraph)"
 
     if ! command -v npm >/dev/null 2>&1; then
         phase_set agent-runtime fail "npm is not available (node-runtime phase failed?)"
@@ -1024,7 +1022,7 @@ release_latest_tag() {
 }
 
 phase_engram() {
-    step "Phase 4/13: engram binary"
+    step "Phase 4/12: engram binary"
     if [ "$MODE_DRYRUN" != "1" ]; then
         mkdir -p "$PI_BIN_DIR"
     fi
@@ -1166,7 +1164,7 @@ ensure_local_bin_path() {
 }
 
 phase_gentle_stack() {
-    step "Phase 5/13: Gentle AI stack"
+    step "Phase 5/12: Gentle AI stack"
 
     ensure_local_bin_path
 
@@ -1188,7 +1186,7 @@ phase_gentle_stack() {
         fi
     else
         if [ "$MODE_DRYRUN" = "1" ]; then
-            info "(dry-run) would run: bash <(curl ${GENTLE_AI_INSTALL_URL}) --method binary --channel stable"
+            info "(dry-run) would download ${GENTLE_AI_INSTALL_URL} to a temp file and run: bash <installer> --method binary --channel stable"
         else
             if ! run_gentle_ai_installer; then
                 phase_set gentle-stack fail "gentle-ai installer failed"
@@ -1197,6 +1195,13 @@ phase_gentle_stack() {
                 return 0
             fi
         fi
+    fi
+
+    # A dry run installs nothing, so the post-install check below would always
+    # fail. Report the preview and end the phase here instead.
+    if [ "$MODE_DRYRUN" = "1" ]; then
+        phase_set gentle-stack ok "(dry-run) gentle-ai + pi stack previewed"
+        return 0
     fi
 
     # The installer may have placed the binary in ~/.local/bin just now.
@@ -1368,9 +1373,10 @@ pkg_equivalent_exists() {
 # phase says so and falls back to the previous (ungated) behaviour instead
 # of corrupting the file.
 phase_pi_packages() {
-    step "Phase 6/13: pi packages (idempotent by specifier)"
+    step "Phase 6/12: pi packages (idempotent by specifier)"
 
-    if ! command -v pi >/dev/null 2>&1; then
+    # In a dry run pi has not been installed yet, so its absence is expected.
+    if [ "$MODE_DRYRUN" != "1" ] && ! command -v pi >/dev/null 2>&1; then
         phase_set pi-packages fail "pi is not available (agent-runtime phase failed?)"
         error "pi is required to install the pi packages; fix the agent-runtime phase and re-run."
         return 0
@@ -1499,7 +1505,7 @@ phase_tailscale() {
         phase_set tailscale skip "--skip-tailscale given"
         return 0
     fi
-    step "Phase 10/13: tailscale (network reachability)"
+    step "Phase 9/12: tailscale (network reachability)"
 
     if [ "$OPT_TAILSCALE_SSH" = "1" ]; then
         warn "--tailscale-ssh is EXPERIMENTAL: tailscale up --ssh"
@@ -1631,7 +1637,7 @@ phase_herdr() {
         phase_set herdr skip "--skip-herdr given"
         return 0
     fi
-    step "Phase 7/13: herdr"
+    step "Phase 7/12: herdr"
 
     if command -v herdr >/dev/null 2>&1; then
         local v
@@ -1658,6 +1664,12 @@ phase_herdr() {
                 return 0
             fi
         fi
+    fi
+
+    # Same reason as the gentle-ai phase: a dry run installs nothing.
+    if [ "$MODE_DRYRUN" = "1" ]; then
+        phase_set herdr ok "(dry-run) herdr + pi integration previewed"
+        return 0
     fi
 
     hash -r 2>/dev/null || true
@@ -1714,8 +1726,6 @@ phase_run_herdr_installer() {
 # ============================================================================
 
 SKILLS_COUNT_REPO=0
-SKILLS_COUNT_FIREBASE=0
-SKILLS_COUNT_SUPABASE=0
 
 skills_dir() {
     printf '%s\n' "$HOME/.agents/skills"
@@ -1740,7 +1750,7 @@ phase_skills_source_repo() {
         phase_set repo-skills skip "--skip-skills given"
         return 0
     fi
-    step "Phase 8/13: skills — source A: ${GITHUB_OWNER}/${GITHUB_REPO}"
+    step "Phase 8/12: skills — source A: ${GITHUB_OWNER}/${GITHUB_REPO}"
 
     local cache="${XDG_DATA_HOME:-$HOME/.local/share}/${GITHUB_REPO}"
     local script="${cache}/scripts/install.sh"
@@ -1812,54 +1822,11 @@ phase_skills_source_repo() {
     return 0
 }
 
-phase_skills_source_npx() {
-    # Sources B and C: the `skills` CLI (installed through npx on demand).
-    if [ "$OPT_SKIP_EXTERNAL_SKILLS" = "1" ]; then
-        phase_set framework-skills skip "--skip-external-skills given"
-        return 0
-    fi
-    step "Phase 9/13: skills — sources B/C: firebase/agent-skills, supabase/agent-skills"
-
-    if ! command -v npx >/dev/null 2>&1; then
-        phase_set framework-skills fail "npx not available (node missing?)"
-        return 0
-    fi
-
-    local repo
-    for repo in "${SKILL_REPOS[@]}"; do
-        if [ "$MODE_DRYRUN" = "1" ]; then
-            info "(dry-run) would run: npx -y skills add ${repo} --yes"
-            continue
-        fi
-        info "Adding ${repo} via the skills CLI"
-        if npx -y skills add "${repo}" --yes; then
-            success "skills from ${repo} installed"
-        else
-            warn "skills add ${repo} failed (continuing with the next source)"
-        fi
-    done
-
-    # Report per-source counts by probing the lock file the skills CLI keeps.
-    local lock="$HOME/.agents/.skill-lock.json"
-    if [ -f "$lock" ]; then
-        local fb sb
-        fb="$(grep -c 'firebase/agent-skills' "$lock" 2>/dev/null || true)"
-        sb="$(grep -c 'supabase/agent-skills' "$lock" 2>/dev/null || true)"
-        if [ "${fb:-0}" -gt 0 ] 2>/dev/null; then SKILLS_COUNT_FIREBASE="$fb"; fi
-        if [ "${sb:-0}" -gt 0 ] 2>/dev/null; then SKILLS_COUNT_SUPABASE="$sb"; fi
-        info "skills lock: firebase=${SKILLS_COUNT_FIREBASE} supabase=${SKILLS_COUNT_SUPABASE}"
-    fi
-
-    local total
-    total="$(count_skills_dirs "$(skills_dir)")"
-    if [ "${total:-0}" -eq 0 ]; then
-        phase_set framework-skills fail "no SKILL.md found under ~/.agents/skills"
-        return 0
-    fi
-    phase_set framework-skills ok "firebase=${SKILLS_COUNT_FIREBASE} supabase=${SKILLS_COUNT_SUPABASE} total=${total}"
-    success "external skills present (total ${total})"
-    return 0
-}
+# The firebase/agent-skills and supabase/agent-skills sources are NOT part of
+# this installer on purpose: they belong to the skills path (a separate,
+# optional concern) and the user installs them only when they want them:
+#   npx -y skills add firebase/agent-skills --yes
+#   npx -y skills add supabase/agent-skills --yes
 
 # ============================================================================
 # Phase 11: Moshi — phone access (mosh/tmux/sshd + moshi-hook)
@@ -1899,7 +1866,7 @@ phase_moshi() {
         phase_set moshi skip "--skip-moshi given"
         return 0
     fi
-    step "Phase 11/13: moshi (phone access)"
+    step "Phase 10/12: moshi (phone access)"
 
     # --- packages: mosh, tmux, openssh-server (skipped under --tailscale-ssh) ---
     local missing=() p
@@ -2343,7 +2310,7 @@ write_engram_project_pin() {
 }
 
 phase_pi_config() {
-    step "Phase 12/13: pi config (mcp-adapter.json + subagents.json)"
+    step "Phase 11/12: pi config (mcp-adapter.json + subagents.json)"
     if [ "$MODE_DRYRUN" != "1" ]; then
         mkdir -p "$PI_AGENT_DIR"
     fi
@@ -2396,7 +2363,7 @@ phase_pi_config() {
 # ============================================================================
 
 phase_verification() {
-    step "Phase 13/13: final verification"
+    step "Phase 12/12: final verification"
     local missing_count=0 line name
     local -a rows
     rows=("git|$(command -v git >/dev/null 2>&1 && git --version 2>/dev/null | head -n 1 || echo MISSING)")
@@ -2578,13 +2545,12 @@ run_all_phases() {
     phase_register "pi-packages"       "pi packages (settings.json)"
     phase_register "herdr"             "herdr + pi integration"
     phase_register "repo-skills"       "skills: kkapsca-skills"
-    phase_register "framework-skills"  "skills: firebase + supabase"
     phase_register "tailscale"         "tailscale (network)"
     phase_register "moshi"             "moshi (phone access)"
     phase_register "pi-config"         "pi config (mcp-adapter, subagents)"
     phase_register "verification"      "final verification"
 
-    local -a order=(apt-prerequisites node-runtime agent-runtime engram gentle-stack pi-packages herdr repo-skills framework-skills tailscale moshi pi-config verification)
+    local -a order=(apt-prerequisites node-runtime agent-runtime engram gentle-stack pi-packages herdr repo-skills tailscale moshi pi-config verification)
     local id
     for id in "${order[@]}"; do
         case "$id" in
@@ -2596,7 +2562,6 @@ run_all_phases() {
             pi-packages)       phase_pi_packages ;;
             herdr)             phase_herdr ;;
             repo-skills)       phase_skills_source_repo ;;
-            framework-skills)  phase_skills_source_npx ;;
             tailscale)         phase_tailscale ;;
             moshi)             phase_moshi ;;
             pi-config)         phase_pi_config ;;
