@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.8.0...kkapsca-skills-v0.9.0) (2026-09-29)
+
+
+### Features
+
+* **scripts:** add Moshi and Tailscale phases to the WSL installer ([509000f](https://github.com/KapsCa/kkapsca-skills/commit/509000f02c6c9eda3f1bc8060891aa111fb688c8))
+* **scripts:** add the WSL ecosystem installer with the Moshi phone path ([5b11df0](https://github.com/KapsCa/kkapsca-skills/commit/5b11df004288e58b840c1d145d24459e429dab55))
+* **scripts:** add WSL ecosystem installer ([f1926f3](https://github.com/KapsCa/kkapsca-skills/commit/f1926f3418e0035e7e4b879f2d4615aee1beb831))
+
+
+### Bug Fixes
+
+* **scripts:** rename the verification counter to clear ShellCheck ([71c94e6](https://github.com/KapsCa/kkapsca-skills/commit/71c94e6a206eb618c486ccc3145ef72d46e0fccf))
+
 ## [0.8.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.7.1...kkapsca-skills-v0.8.0) (2026-09-26)
 
 
