@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.1](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.9.0...kkapsca-skills-v0.9.1) (2026-09-29)
+
+
+### Bug Fixes
+
+* **scripts:** make the dry run honest on a fresh machine and drop the framework skills phase ([146e603](https://github.com/KapsCa/kkapsca-skills/commit/146e603a860030a61e0e9c9221f33834f7642306))
+* **scripts:** make the dry run honest on a fresh machine and drop the framework skills phase ([aad3f03](https://github.com/KapsCa/kkapsca-skills/commit/aad3f0314c057e5dede4d85168e657c95538ecc7))
+
 ## [0.9.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.8.0...kkapsca-skills-v0.9.0) (2026-09-29)
 
 
