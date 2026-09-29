@@ -8,7 +8,7 @@
 [![Skills: 12](https://img.shields.io/badge/skills-12-7D70C1?style=flat-square)](docs/skill-registry.md)
 [![GitHub](https://img.shields.io/badge/GitHub-KapsCa%2Fkkapsca--skills-854472?style=flat-square&logo=github)](https://github.com/KapsCa/kkapsca-skills)
 
-**[Inicio rápido](#inicio-rápido)** · **[Las 12 skills](#las-12-skills)** · **[Seguridad](#seguridad-desde-el-primer-commit)** · **[Documentación](#documentación)**
+**[Inicio rápido](#inicio-rápido)** · **[Entorno completo](#entorno-completo-en-una-máquina-nueva-wsl2)** · **[Las 12 skills](#las-12-skills)** · **[Seguridad](#seguridad-desde-el-primer-commit)** · **[Documentación](#documentación)**
 
 </div>
 
@@ -21,6 +21,10 @@ No hace falta usar el mismo entorno que el autor ni ninguna herramienta en parti
 ---
 
 ## Inicio Rápido
+
+> **Ojo: acá abajo se instalan SÓLO las skills** (que son archivos de texto).
+>
+> Si lo que querés es **dejar una máquina nueva lista para trabajar**, con el agente, la memoria y todo lo demás, eso es otra cosa y tiene su propia sección: **[Entorno completo en una máquina nueva →](#entorno-completo-en-una-máquina-nueva-wsl2)**.
 
 ### La vía corta: sin clonar, para cualquier agente
 
@@ -84,6 +88,86 @@ Si tu agente lee de un directorio conocido, es el mismo que ya usás para tus ot
 Si un directorio ya existe y no lo creó este repositorio, el bootstrap **no lo pisa**: lo reporta como conflicto y sigue.
 
 **[Guía de instalación →](docs/installation.md)**
+
+---
+
+## Entorno completo en una máquina nueva (WSL2)
+
+> **Esto es distinto de lo de arriba.** Ahí arriba instalás **sólo las 12 skills** (que son archivos de texto). Acá instalás **todo el taller**: el agente, la memoria, el framework de trabajo, las skills y la configuración.
+
+**Es un instalador.** Como el de un juego: corrés un comando y te queda todo armado. La diferencia es que **podés mirar antes qué va a hacer**, sin que toque nada.
+
+### ¿Para quién es?
+
+Para vos, si:
+
+- tenés **Windows** y querés un Linux de verdad adentro (**WSL2**) en vez de pelear con PowerShell;
+- la máquina está **nueva**, o querés dejarla igual a la que ya usás;
+- **no querés instalar diez cosas a mano**, una por una, acordándote del orden.
+
+### ¿Qué necesitás antes de empezar?
+
+| Qué | Detalle |
+|---|---|
+| **WSL2 con Ubuntu** | Se instala desde Windows con `wsl --install` y reiniciando. Esto es lo único que preparás vos: el instalador **no** crea WSL. |
+| **Un usuario con contraseña** | Te va a pedir la contraseña **varias veces** (para instalar programas). Tenela a mano. |
+| **La app de Moshi** (opcional) | Sólo si querés manejarlo desde el teléfono. Es gratis y se baja de la tienda de apps. |
+
+### Los tres comandos
+
+```bash
+# 1. Bajás el instalador. Todavía no instala nada.
+curl -fsSL https://raw.githubusercontent.com/KapsCa/kkapsca-skills/main/scripts/install-wsl.sh -o install-wsl.sh
+
+# 2. Mirás qué va a hacer. Tampoco instala nada.
+bash install-wsl.sh --dry-run
+
+# 3. Ahora sí: lo corrés de verdad.
+bash install-wsl.sh
+```
+
+El paso 2 no es un adorno: **es la forma de ver el plan antes de que escriba un solo archivo**. Si algo no te cierra, lo cortás ahí y no pasó nada.
+
+### Qué te va a instalar, en castellano
+
+Son trece pasos. No hace falta que sepas qué es cada cosa: el instalador te va diciendo `ok` a medida que avanza.
+
+| # | Qué hace | En castellano |
+|---|---|---|
+| 1 | Prerrequisitos | Las herramientas básicas que hacen falta para el resto |
+| 2 | Node.js | El motor que necesitan las demás herramientas |
+| 3 | `pi` + `codegraph` | **El agente** con el que vas a hablar, y su buscador de código |
+| 4 | `engram` | **Tu memoria**: lo que aprende en una sesión queda para la siguiente |
+| 5 | Gentle AI | El framework de trabajo: el método, la revisión, las reglas |
+| 6 | Paquetes de `pi` | Los complementos del agente |
+| 7 | `herdr` | El que mantiene tus terminales vivas aunque cierres la ventana |
+| 8 | Skills de este repo | Las 12 de más arriba |
+| 9 | Skills de otros | Las oficiales de Firebase y Supabase |
+| 10 | Tailscale | **Tu red privada**: conecta tus máquinas y tu teléfono sin abrir puertos |
+| 11 | Moshi | **Para manejarlo desde el teléfono** |
+| 12 | Configuración | Deja el agente configurado y listo para usar |
+| 13 | Verificación | Te muestra una tabla con todo lo que quedó instalado |
+
+> **El paso 10 va antes que el 11 a propósito:** en WSL2 la dirección de la máquina **cambia cada vez que reiniciás**, así que el teléfono necesita la red privada para encontrarla. La misma red sirve después para sincronizar la memoria entre máquinas.
+
+### ¿Y si algo sale mal?
+
+**No se rompe nada y no se pierde nada: podés correrlo de nuevo.** El instalador se acuerda de lo que ya hizo y sólo completa lo que falta; si lo corrés dos veces, la segunda te dice *"ya instalado"* en todo.
+
+Y si una fase falla, te dice **el comando exacto** para arreglarla a mano.
+
+### Cosas que conviene saber
+
+- **No te trae tus memorias.** Deja el entorno completo, pero la memoria entre máquinas todavía no está disponible.
+- **Te va a encender el SSH de esa máquina**, para que el teléfono pueda entrar. Queda alcanzable **sólo desde tu red privada**, y con clave en lugar de contraseña.
+- **Te va a pedir que te autentiques en Tailscale** con el navegador. Si no tenés cuenta, la creás en ese momento: es gratis y no pide tarjeta.
+- Si querés manejarlo **desde el teléfono**, vas a escanear un **código QR** con la app. Ese QR es **como una llave**: no lo compartas con nadie.
+
+**[El runbook completo, paso por paso →](docs/wsl-setup.md)**
+
+### ¿Y si querés Windows sin WSL?
+
+También está cubierto, aunque tiene bastante más pasos manuales: **[instalación en Windows nativo →](docs/windows-native-setup.md)**.
 
 ---
 
@@ -194,8 +278,8 @@ El contrato está escrito en [el contrato de estilo](docs/skill-style-guide.md) 
 | Documento | Qué encontrás |
 |---|---|
 | [Guía de instalación](docs/installation.md) | Bootstrap, destinos, cualquier agente, desinstalación |
-| [Instalación del ecosistema en WSL2](docs/wsl-setup.md) | Runbook del ecosistema completo bajo WSL2, con el instalador de un solo paso (bash) |
-| [Instalación en Windows nativo](docs/windows-native-setup.md) | Reconstruir el ecosistema completo sin WSL (PowerShell) |
+| [Instalador del entorno completo para WSL2](docs/wsl-setup.md) | Dejar una máquina nueva lista con **un comando**: las 13 fases, el camino del teléfono (Moshi) y la red privada (Tailscale) |
+| [Instalación en Windows nativo](docs/windows-native-setup.md) | Reconstruir el ecosistema completo sin WSL (PowerShell), paso a paso |
 | [Registro de skills](docs/skill-registry.md) | Qué skill se activa en qué situación, y quién manda cuando dos se solapan |
 | [Contrato de estilo](docs/skill-style-guide.md) | La norma LLM-first a la que se migran las skills |
 | [ODD y SDD](docs/sdd.md) | El método que sigue el repo y la rama opcional |
