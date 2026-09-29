@@ -194,7 +194,8 @@ El contrato está escrito en [el contrato de estilo](docs/skill-style-guide.md) 
 | Documento | Qué encontrás |
 |---|---|
 | [Guía de instalación](docs/installation.md) | Bootstrap, destinos, cualquier agente, desinstalación |
-| [Instalación en Windows nativo](docs/windows-native-setup.md) | Reconstruir el ecosistema completo sin WSL |
+| [Instalación del ecosistema en WSL2](docs/wsl-setup.md) | Runbook del ecosistema completo bajo WSL2, con el instalador de un solo paso (bash) |
+| [Instalación en Windows nativo](docs/windows-native-setup.md) | Reconstruir el ecosistema completo sin WSL (PowerShell) |
 | [Registro de skills](docs/skill-registry.md) | Qué skill se activa en qué situación, y quién manda cuando dos se solapan |
 | [Contrato de estilo](docs/skill-style-guide.md) | La norma LLM-first a la que se migran las skills |
 | [ODD y SDD](docs/sdd.md) | El método que sigue el repo y la rama opcional |
