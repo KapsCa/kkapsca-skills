@@ -2397,7 +2397,7 @@ phase_pi_config() {
 
 phase_verification() {
     step "Phase 13/13: final verification"
-    local missing=0 line name
+    local missing_count=0 line name
     local -a rows
     rows=("git|$(command -v git >/dev/null 2>&1 && git --version 2>/dev/null | head -n 1 || echo MISSING)")
     rows+=("node|$(command -v node >/dev/null 2>&1 && node --version 2>/dev/null || echo MISSING)")
@@ -2418,7 +2418,7 @@ phase_verification() {
         name="${line%%|*}"
         if [ "${line#*|}" = "MISSING" ]; then
             printf '  %b- %b%-12s %s\n' "$RED" "$NC" "$name" "not found"
-            missing=$((missing + 1))
+            missing_count=$((missing_count + 1))
         else
             printf '  %b+%b %-12s %s\n' "$GREEN" "$NC" "$name" "${line#*|}"
         fi
@@ -2446,9 +2446,9 @@ phase_verification() {
         info "pi packages: pi list (see above summary)"
     fi
 
-    if [ "$missing" -gt 0 ]; then
-        phase_set verification fail "${missing} component(s) not found"
-        warn "${missing} component(s) reported MISSING above — see the failed phases for the fix."
+    if [ "$missing_count" -gt 0 ]; then
+        phase_set verification fail "${missing_count} component(s) not found"
+        warn "${missing_count} component(s) reported MISSING above — see the failed phases for the fix."
         return 0
     fi
     phase_set verification ok "all components respond"
