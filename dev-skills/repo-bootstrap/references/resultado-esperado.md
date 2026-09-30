@@ -27,5 +27,14 @@ Cuando esta skill se aplica bien, el repo debe quedar con:
 - `SECURITY.md`
 - bloque de secretos fusionado dentro del `.gitignore`
 
+**Etiquetas canónicas:**
+
+- las seis del conjunto canónico: cuatro `type:*` y dos `status:*`
+- `type:feature` `#A2EEEF`, `type:chore` `#D4C5F9`, `type:docs` `#0E8A16`, `type:bug` `#D73A4A`, `status:approved` `#0E8A16`, `status:needs-review` `#FBCA04`
+- se crean con `gh label create --force`, así que re-logear no duplica: refresca color y descripción
+- no toca los defaults de GitHub ni los labels que el proyecto ya tenga
+- si `gh` no está instalado o autenticado (o el CLI devuelve un error), el bootstrap lo reporta como omitido y sigue; nunca aborta por etiquetas
+- una tarea de bootstrap previa que recoloreó una etiqueta canónica la vuelve al color canónico
+
 ---
 
