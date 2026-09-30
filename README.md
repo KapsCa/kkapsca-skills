@@ -128,6 +128,28 @@ bash install-wsl.sh
 
 El paso 2 no es un adorno: **es la forma de ver el plan antes de que escriba un solo archivo**. Si algo no te cierra, lo cortás ahí y no pasó nada.
 
+#### Si vas a usar Engram en más de una máquina
+
+El comando de arriba instala todo, pero **no fija la identidad de Engram**. Si trabajás desde varias máquinas, conviene fijarla para que la memoria caiga en el mismo proyecto en todas y no se reparta en lugares distintos:
+
+```bash
+bash install-wsl.sh \
+  --engram-project <tu-proyecto> \
+  --engram-pin-dir ~/dev \
+  --engram-pin-dir ~/dev/proyects
+```
+
+| Flag | Qué hace |
+|---|---|
+| `--engram-project NOMBRE` | El nombre del proyecto Engram que querés fijar. **Es tuyo**: lo elegís vos |
+| `--engram-pin-dir DIR` | Un directorio contenedor a fijar (como `~/dev`). Se puede repetir |
+
+- Los valores van **en runtime**: **nunca** terminan en este repositorio, así que este comando se ve distinto en cada máquina.
+- **Si los omitís, la instalación funciona igual** — simplemente no fija nada, y Engram resuelve cada directorio por su propio nombre. Eso reparte la memoria en buckets distintos entre máquinas.
+- `--engram-project` **sin** `--engram-pin-dir` es un error de uso (y al revés también): el instalador **no adivina** ningún nombre.
+
+Detalle completo en [el runbook de WSL](docs/wsl-setup.md).
+
 ### Qué te va a instalar, en castellano
 
 Son trece pasos. No hace falta que sepas qué es cada cosa: el instalador te va diciendo `ok` a medida que avanza.
