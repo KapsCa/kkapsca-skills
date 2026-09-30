@@ -873,6 +873,7 @@ phase_node_runtime() {
     # --- user-local nvm path (no sudo) ---
     if [ ! -s "${NVM_DIR}/nvm.sh" ]; then
         info "Installing nvm ${NVM_VERSION} into ${NVM_DIR} (user-local, no sudo)"
+        info "nvm's installer clones from GitHub and prints nothing while it works: it can take up to a minute. Do not interrupt it."
         if ! http_get "${NVM_INSTALL_SH_URL}" | bash >/dev/null 2>&1; then
             phase_set node-runtime fail "nvm install failed"
             print_sudo_node_hint "$req_n"
@@ -883,6 +884,7 @@ phase_node_runtime() {
     if [ -s "${NVM_DIR}/nvm.sh" ]; then
         # shellcheck disable=SC1091  # loaded dynamically; path set above
         . "${NVM_DIR}/nvm.sh"
+        info "nvm is downloading the node LTS build; this step also stays quiet until it finishes."
         if ! nvm install --lts >/dev/null 2>&1; then
             phase_set node-runtime fail "nvm install --lts failed"
             print_sudo_node_hint "$req_n"
@@ -2613,6 +2615,9 @@ main() {
     TTY_OK=0
     if [ -r /dev/tty ]; then TTY_OK=1; fi
     trap cleanup EXIT
+    # A Ctrl+C used to kill the script with no message at all, which reads as
+    # "it hung". Say what happened, and that re-running costs nothing.
+    trap 'printf "\n" >&2; warn "interrupted. Re-running is safe: every phase is idempotent."; exit 130' INT
 
     parse_args "$@"
 
