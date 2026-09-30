@@ -14,6 +14,22 @@ REPO_NAME="$(basename "$REPO_ROOT")"
 TEMPLATES="${SKILL_DIR}/templates"
 GITIGNORE_MARKER="# >>> repo-bootstrap: secretos y credenciales >>>"
 
+# Conjunto canonico de etiquetas, el mismo banco que usa KapsCa/kkapsca-skills.
+# Las convenciones type:* / status:* arrancan en el primer commit: los cuatro
+# type:* son los que la validacion de PR reconoce (labels que empiezan con
+# 'type:'), y los dos status:* son los que usan el flujo de issues y el chequeo
+# de issue aprobada. Los colores y descripciones son exactamente los de alla.
+LABEL_NAMES=(type:feature type:chore type:docs type:bug status:approved status:needs-review)
+LABEL_COLORS=(A2EEEF D4C5F9 0E8A16 D73A4A 0E8A16 FBCA04)
+LABEL_DESCRIPTIONS=(
+  'Pull request adds a feature'
+  'Pull request updates tooling or repository maintenance'
+  'Documentation-only changes'
+  'Pull request fixes a defect'
+  'Issue approved for implementation'
+  'Issue needs maintainer review'
+)
+
 # El hook pre-push se pisa solo si se pide explicitamente, como dice el SKILL.md.
 REINSTALL_HOOK=false
 if [[ "${1:-}" == "--reinstall-hook" ]]; then
@@ -141,6 +157,68 @@ merge_gitignore() {
 }
 
 # ---------------------------------------------------------------------------
+# install_labels: crea o actualiza el conjunto canonico de etiquetas con gh.
+#
+# La convencion type:* / status:* debe funcionar desde el primer commit: los
+# cuatro type:* son los que la validacion de PR reconoce (todo label que
+# empieza con 'type:'), y los dos status:* son los que usan el flujo de issues
+# y el chequeo de issue aprobada. Los colores y descripciones son los mismos
+# que usa kkapsca-skills, para que todo el ecosistema quede visualmente igual.
+#
+# Solo-agrega: no toca los defaults de GitHub ni los labels que el proyecto
+# agrego por su cuenta. gh label create --force crea o actualiza en sitio, asi
+# que la corrida es idempotente: la segunda vez deja todo exactamente igual.
+#
+# Es fail-soft a proposito: si gh no esta, no esta autenticado, o el CLI
+# devuelve un error inesperado, imprime un aviso con el arreglo y deja que el
+# bootstrap siga, en vez de abortar algo que ya dejo workflows y archivos bien
+# puestos. La corrida de gh va encapsulada en un subshell para que ni un error
+# individual de gh corte el resto: el cd y el exit valen solo dentro del
+# subshell, como en repo_is_public.
+# ---------------------------------------------------------------------------
+install_labels() {
+  if ! command -v gh >/dev/null 2>&1; then
+    printf '%s\n' "↷ omitido: etiquetas canonicas (gh no esta instalado; por favor, instálalo desde https://cli.github.com/ y autentícate con gh auth login)"
+    return 0
+  fi
+  if ! gh auth status >/dev/null 2>&1; then
+    printf '%s\n' "↷ omitido: etiquetas canonicas (gh no esta autenticado; por favor, corre gh auth login y volve a correr este script)"
+    return 0
+  fi
+
+  # La corrida de gh va encapsulada en un subshell para que ni un error
+  # individual de gh corte el resto del bootstrap: el cd y el exit valen solo
+  # ahi, y las leyendes ya se muestran en vivo mientras corre.
+  local gh_labels_rc=0
+  local row i name color description
+  (
+    cd "$REPO_ROOT" || exit 1
+    i=0
+    for name in "${LABEL_NAMES[@]}"; do
+      color="${LABEL_COLORS[$i]}"
+      description="${LABEL_DESCRIPTIONS[$i]}"
+      if row=$(gh label create "$name" --color "$color" --description "$description" --force 2>&1); then
+        printf '  ✓ %s\n' "$name"
+      else
+        printf '  ↷ no se pudo crear/actualizar: %s (%s)\n' "$name" "$row"
+        exit 1
+      fi
+      i=$((i + 1))
+    done
+  ) || gh_labels_rc=$?
+
+  # Si el subshell acabo bien, las seis etiquetas quedaron creadas o
+  # actualizadas; si alguno fallo, se avisa y el bootstrap sigue.
+  if [[ "$gh_labels_rc" -ne 0 ]]; then
+    printf '%s\n' "↷ omitido: etiquetas canonicas (gh devolvio un error; el bootstrap sigue sin etiquetas)"
+    return 0
+  fi
+
+  printf '✓ etiquetas: conjunto canonico listo (%s labels)\n' "${#LABEL_NAMES[@]}"
+  return 0
+}
+
+# ---------------------------------------------------------------------------
 # 1. Gobernanza.
 #
 # Los archivos de CONTENIDO del proyecto (plantilla de PR, changelog, estandares)
@@ -199,6 +277,13 @@ esac
 
 install_dependabot
 merge_gitignore
+
+# ---------------------------------------------------------------------------
+# 3. Etiquetas canonicas del modulo. Solo-agrega: no toca los defaults de
+# GitHub ni los labels propios del proyecto. Fail-soft: si gh no esta o falla,
+# se salta con un aviso en vez de abortar el bootstrap.
+# ---------------------------------------------------------------------------
+install_labels
 
 printf '\n✅ Repo bootstrap aplicado en %s\n' "$REPO_ROOT"
 printf 'Revisa docs/repository-standards.md para confirmar el flujo operativo.\n'
