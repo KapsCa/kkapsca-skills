@@ -242,6 +242,17 @@ install -m 0644 "$TEMPLATES/release-please.yml" "$REPO_ROOT/.github/workflows/re
 install -m 0644 "$TEMPLATES/release-please-config.json" "$REPO_ROOT/release-please-config.json"
 install -m 0644 "$TEMPLATES/.release-please-manifest.json" "$REPO_ROOT/.release-please-manifest.json"
 
+# El workflow de release-please usa a proposito el secret
+# RELEASE_PLEASE_TOKEN (un PAT dedicado) en vez de GITHUB_TOKEN: los eventos
+# creados con GITHUB_TOKEN no disparan otros workflows, asi que el release
+# PR nunca correria los checks del repo y el auto-merge del workflow
+# esperaria para siempre. Sin el secret cargado, el workflow falla en la
+# primera corrida.
+printf '\n⚠️  El workflow de release-please necesita el secret\n'
+printf '   RELEASE_PLEASE_TOKEN (un PAT dedicado) cargado en el repo\n'
+printf '   antes del primer release: sin el, el workflow falla.\n'
+printf '   Detalle: .github/workflows/release-please.yml\n'
+
 install_if_missing "$TEMPLATES/PULL_REQUEST_TEMPLATE.md" "$REPO_ROOT/.github/PULL_REQUEST_TEMPLATE.md"
 install_if_missing "$TEMPLATES/CHANGELOG.md" "$REPO_ROOT/CHANGELOG.md"
 install_if_missing "$TEMPLATES/repository-standards.md" "$REPO_ROOT/docs/repository-standards.md"

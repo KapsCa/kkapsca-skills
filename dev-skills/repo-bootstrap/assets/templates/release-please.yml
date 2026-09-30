@@ -13,8 +13,45 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
+      # v4.4.1, pinned to a full commit SHA; never a floating tag. Kept on a
+      # single line on purpose: the pin stays greppable and visible to tooling
+      # that inspects `uses:` (actionlint, security scanners, Dependabot's
+      # actions updater). This repository has no line-length lint.
       - uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
+        id: release
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # RELEASE_PLEASE_TOKEN must be a dedicated PAT, not
+          # secrets.GITHUB_TOKEN: events raised with GITHUB_TOKEN do not
+          # trigger other workflows, so a release PR created with it never
+          # runs this repo's own checks. The required checks stay pending
+          # and the auto-merge request below would wait forever. Use a
+          # classic PAT with repo scope (or a fine-grained PAT with
+          # contents and pull requests read/write), add it as the
+          # RELEASE_PLEASE_TOKEN secret, and rotate it like any credential.
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+
+      - name: Request auto-merge for the release PR
+        # The action sets the `pr` output only when it created a release
+        # PR; when there is none, this step reports `skipped`, which
+        # GitHub counts as success and never blocks a required check.
+        if: steps.release.outputs.pr != ''
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          RELEASE_PR: ${{ steps.release.outputs.pr }}
+        run: |
+          pr_number="$(printf '%s' "$RELEASE_PR" \
+            | jq -er '.number' 2>/dev/null)" || {
+            echo "No release PR payload; nothing to auto-merge."
+            exit 0
+          }
+          # --squash, never --merge: configure-public-branch-protection.sh
+          # sets required_linear_history=true, which forbids merge commits,
+          # so an auto-merge with --merge would never complete on the repos
+          # this skill bootstraps. That same script also enables
+          # allow_auto_merge and allow_squash_merge on the repository.
+          # --repo is required because this job has no actions/checkout, so
+          # gh cannot infer the repository from a git remote.
+          gh pr merge --auto --squash \
+            --repo "${{ github.repository }}" "$pr_number"
