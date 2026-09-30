@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.10.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.9.1...kkapsca-skills-v0.10.0) (2026-09-30)
+
+
+### Features
+
+* **repo-bootstrap:** create the canonical labels during bootstrap ([e1330dd](https://github.com/KapsCa/kkapsca-skills/commit/e1330dd904bdb92794dd6700983f7f3107148543))
+* **repo-bootstrap:** create the canonical labels during bootstrap ([ac49181](https://github.com/KapsCa/kkapsca-skills/commit/ac49181e9fd257f7d575442ad0590f48ef93dbf4))
+
+
+### Bug Fixes
+
+* **ci:** auto-merge the release PR instead of waiting for a click ([b92092e](https://github.com/KapsCa/kkapsca-skills/commit/b92092e244ff6e18d17f5536321a7d29aa9e9182))
+* **ci:** auto-merge the release PR instead of waiting for a click ([7287058](https://github.com/KapsCa/kkapsca-skills/commit/728705819b8ab09d59025733b7f2bba90446c720))
+* **ci:** pass --repo to the auto-merge command ([85e1e35](https://github.com/KapsCa/kkapsca-skills/commit/85e1e35344e298f59661a37495f9d7fc7be6157d))
+* **ci:** pass --repo to the auto-merge command ([04adf61](https://github.com/KapsCa/kkapsca-skills/commit/04adf61549fb11ddacc8f947c788a7ab769e9003))
+* **scripts:** stop the nvm step from looking hung, and say so when interrupted ([089ec0c](https://github.com/KapsCa/kkapsca-skills/commit/089ec0c26aaf6382cf358cd8e4b665c7207fa3b8))
+* **scripts:** stop the nvm step from looking hung, and say so when interrupted ([3a9db03](https://github.com/KapsCa/kkapsca-skills/commit/3a9db03cd3354a5ffe829de3714ed08ee9809d9b))
+
 ## [0.9.1](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.9.0...kkapsca-skills-v0.9.1) (2026-09-29)
 
 
