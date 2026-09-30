@@ -15,8 +15,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+        id: release
         with:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
           target-branch: main
+
+      # release-please opens the release PR but never merges it, so it used to
+      # wait for a human click. Request the auto-merge here instead: GitHub
+      # merges it as soon as the required checks pass.
+      #
+      # The merge method must be one the branch protection allows. This repo has
+      # required_linear_history disabled, so --merge is accepted; a repo that
+      # enables linear history needs --squash or --rebase instead.
+      #
+      # The token matters: events raised by the default GITHUB_TOKEN do not
+      # trigger other workflows, so a release PR created with it never runs the
+      # repo's checks, they stay pending, and auto-merge would wait forever.
+      # RELEASE_PLEASE_TOKEN is a dedicated PAT for exactly that reason.
+      - name: Enable auto-merge on the release PR
+        if: ${{ steps.release.outputs.pr }}
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+        run: gh pr merge --auto --merge ${{ fromJSON(steps.release.outputs.pr).number }}
