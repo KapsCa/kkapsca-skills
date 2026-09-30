@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.11.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.10.0...kkapsca-skills-v0.11.0) (2026-09-30)
+
+
+### Features
+
+* **repo-bootstrap:** ship release-PR auto-merge in the baseline ([91cecb0](https://github.com/KapsCa/kkapsca-skills/commit/91cecb05895a29279967ffa5c36dcf20933693f9))
+* **repo-bootstrap:** ship release-PR auto-merge in the baseline ([321d4ac](https://github.com/KapsCa/kkapsca-skills/commit/321d4aca7c503e97c7f3e3d751147fb17a50f71e))
+
 ## [0.10.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.9.1...kkapsca-skills-v0.10.0) (2026-09-30)
 
 
