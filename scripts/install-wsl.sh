@@ -389,7 +389,7 @@ sudo_probe() {
     fi
     if [ "$TTY_OK" = "1" ]; then
         info "sudo needs your password; it will be read from the terminal (once)."
-        if ask_continue "Run sudo apt steps now?"; then
+        if ask_continue "Run the privileged steps now? (apt, sshd, tailscale)"; then
             SUDO="sudo"
         fi
     fi
@@ -689,6 +689,11 @@ preflight() {
         fatal "Neither sha256sum nor shasum is available; checksum verification is mandatory here."
     fi
     success "curl, tar and a SHA256 tool are available"
+
+    # Several phases install into ~/.local/bin (gentle-ai, herdr, moshi-hook)
+    # and then verify with `command -v`. Put it on PATH for this session now,
+    # before any of them runs, so a fresh machine does not fail those checks.
+    ensure_local_bin_path
 }
 
 # ============================================================================
@@ -1156,13 +1161,26 @@ run_gentle_ai_installer() {
 }
 
 ensure_local_bin_path() {
-    # Tool installers often target ~/.local/bin; make sure the current session
-    # and the rc files can find it.
+    # Tool installers (gentle-ai, herdr, moshi-hook, engram) target
+    # ~/.local/bin. Make sure BOTH the current session and future shells can
+    # find it. Writing the rc alone is not enough: the post-install checks in
+    # this same run use `command -v`, and on a fresh machine ~/.local/bin is
+    # not on PATH yet (Ubuntu's ~/.profile only prepends it when the directory
+    # already exists at login time). Without the export below, every tool that
+    # installs into ~/.local/bin reports "not on PATH after installer" even
+    # though its installer succeeded.
     local d="$HOME/.local/bin"
     if [ "$MODE_DRYRUN" != "1" ]; then
         [ -d "$d" ] || mkdir -p "$d"
     fi
     ensure_rc_path_dir "$d"
+    case ":${PATH}:" in
+        *":${d}:"*) : ;;
+        *)
+            PATH="${d}:${PATH}"
+            export PATH
+            ;;
+    esac
 }
 
 phase_gentle_stack() {
@@ -1481,6 +1499,20 @@ runs_tailscale_up() {
     # that blocks until the user completes it in the browser. Only called
     # when /dev/tty is readable, so a curl|bash run never hangs silently.
     if [ ! -r /dev/tty ]; then
+        return 1
+    fi
+    # `tailscale up` requires root: without it the client answers "Access
+    # denied: checkprefs access denied" and the phase fails for a reason that
+    # looks like a Tailscale problem but is not. This phase does not go through
+    # the apt probe, so make sure the privileged prefix is set here instead of
+    # inheriting whatever an earlier phase left behind.
+    if [ -z "$SUDO" ] && [ "$(id -u)" -ne 0 ]; then
+        sudo_probe
+    fi
+    if [ -z "$SUDO" ] && [ "$(id -u)" -ne 0 ]; then
+        error "Cannot run 'tailscale up' with privileges here (no password available)."
+        error "Run it yourself and then re-run this installer (idempotent):"
+        error "  sudo tailscale up"
         return 1
     fi
     info "Starting interactive authentication: ${SUDO} tailscale up $*"
