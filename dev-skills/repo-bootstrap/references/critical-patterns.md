@@ -34,6 +34,29 @@ Auto-merge solo puede recomendarse si TODO esto es verdadero:
 
 Si alguna casilla falla, NO recomiendes auto-merge todavía.
 
+### Release PR con auto-merge explícito
+
+- `configure-public-branch-protection.sh` habilita `allow_auto_merge=true`
+  (idempotente y fail-soft): sin esa opción del repo, el `gh pr merge
+  --auto` del workflow falla.
+- El paso de auto-merge usa `--squash`, nunca `--merge`: la protección fija
+  `required_linear_history=true`, que prohíbe merge commits.
+- El comando pasa `--repo` explícito: el job de release-please no hace
+  checkout y `gh` no puede inferir el repositorio.
+- El release PR se crea con `RELEASE_PLEASE_TOKEN` (PAT dedicado). Con
+  `GITHUB_TOKEN` el PR nunca dispara los checks del repo y el auto-merge
+  espera para siempre.
+
+### Saltos de jobs vs saltos de workflows
+
+Con checks requeridos, cómo se saltea un trabajo decide si bloquea el
+merge. GitHub cuenta `success`, `skipped` y `neutral` como aprobatorios:
+
+- `if:` a nivel de job: reporta `skipped` y no bloquea el merge. Es la
+  forma segura de saltear validaciones en los release PRs.
+- Filtro a nivel de workflow (`paths:` / `branches:`): el check queda
+  pending y bloquea el merge.
+
 ### No tocar git global
 
 No modificar configuración global de Git para imponer esta convención.

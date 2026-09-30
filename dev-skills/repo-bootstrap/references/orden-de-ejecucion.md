@@ -85,6 +85,42 @@ Activa auto-merge solo cuando ya existan:
 
 Si hay Copilot code review disponible por plan/licencia, actívalo como capa extra.
 
+La parte mecánica ya viene resuelta por el bootstrap; el criterio es lo que
+se evalúa a mano:
+
+- **Habilitación en el repo**: `configure-public-branch-protection.sh`
+  habilita `allow_auto_merge=true` (PATCH `repos/<owner>/<repo>`,
+  idempotente y fail-soft). Sin esa opción del repo, el `gh pr merge --auto`
+  del workflow falla.
+- **Pedido del merge**: la plantilla de `release-please.yml` agrega un paso
+  posterior a la acción que corre `gh pr merge --auto --squash --repo
+  <owner>/<repo> <number>`, con el número sacado del output `pr` de la
+  acción y `--repo` explícito porque el job no hace checkout. Si no hubo
+  release PR, el paso se saltea y no hace nada.
+- **`--squash`, nunca `--merge`**: la protección que instala esta skill fija
+  `required_linear_history=true`, que prohíbe merge commits; un auto-merge
+  con `--merge` quedaría esperando para siempre.
+- **PAT dedicado**: el release PR se crea con el secret
+  `RELEASE_PLEASE_TOKEN`, no con `GITHUB_TOKEN`. Los eventos creados con
+  `GITHUB_TOKEN` no disparan otros workflows, así que el PR nunca correría
+  los checks del repo, quedarían pendientes y el auto-merge esperaría por
+  siempre. El instalador avisa que hay que cargar el secret.
+
+#### Checks requeridos: salto por job vs salto por workflow
+
+Con status checks requeridos, la forma de saltear un trabajo decide si
+bloquea el merge. GitHub cuenta `success`, `skipped` y `neutral` como
+estados que aprueban el merge:
+
+| Cómo se saltea | Resultado |
+|---|---|
+| `if:` a nivel de **job** | reporta `skipped` → **no bloquea** |
+| Filtro a nivel de **workflow** | el check queda **pending** → **bloquea** |
+
+Por eso saltear validaciones en los release PRs con un `if:` por job es
+seguro, y lograr lo mismo con un filtro de `paths:`/`branches:` en el
+workflow rompería el auto-merge.
+
 ### 7. Explicar el flujo operativo
 
 El agente debe dejar claro que el flujo esperado es:

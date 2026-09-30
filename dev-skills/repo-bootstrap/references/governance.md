@@ -16,5 +16,25 @@ Detalle local de `SKILL.md` (## Activation Contract).
 
 Para implementación detallada, ver [Principios No Negociables](#principios-no-negociables-quick-reference) y [Decision Tree](#decision-tree).
 
+### Auto-merge del release PR
+
+El bootstrap deja el auto-merge del release PR funcionando de punta a punta:
+
+- `allow_auto_merge=true` en el repo: lo habilita
+  `configure-public-branch-protection.sh` (PATCH `repos/<owner>/<repo>`),
+  idempotente y fail-soft.
+- La plantilla de `release-please.yml` pide el merge:
+  `gh pr merge --auto --squash --repo <owner>/<repo> <number>`, con el
+  output `pr` de la acción y `--repo` explícito (el job no hace checkout).
+  `--squash` y no `--merge` porque la protección fija
+  `required_linear_history=true`, que prohíbe merge commits.
+- El release PR se crea con el secret `RELEASE_PLEASE_TOKEN` (PAT
+  dedicado), nunca con `GITHUB_TOKEN`: los eventos de `GITHUB_TOKEN` no
+  disparan otros workflows, así que el PR no correría los checks requeridos
+  y el auto-merge esperaría para siempre.
+- Con checks requeridos: un `if:` por job reporta `skipped` y cuenta como
+  éxito (no bloquea el merge); un filtro de workflow (`paths:` /
+  `branches:`) deja el check pending y sí lo bloquea.
+
 ---
 

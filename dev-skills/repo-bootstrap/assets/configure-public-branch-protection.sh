@@ -55,3 +55,38 @@ if [[ ${#CHECK_NAMES[@]} -eq 0 ]]; then
   printf '⚠️  No encontré status checks registrados todavía.\n'
   printf 'Cuando tu CI exista, agrega checks requeridos manualmente en GitHub o vuelve a correr este script.\n'
 fi
+
+# ---------------------------------------------------------------------------
+# Auto-merge a nivel de repo: allow_auto_merge=true.
+#
+# El workflow de release-please pide el merge con `gh pr merge --auto`, y ese
+# pedido falla si el repo no tiene auto-merge habilitado. Por eso el bootstrap
+# lo activa aca, junto con la proteccion de rama, en vez de dejarlo como paso
+# manual que se olvida.
+#
+# No es un ajuste de branch protection sino del repo (PATCH /repos/...), asi
+# que va en su propia llamada. Reenviar true deja el mismo estado, asi que la
+# corrida es idempotente. Es fail-soft a proposito: si falla (gh sin permisos
+# de admin, por ejemplo), la proteccion de rama ya quedo aplicada, se avisa
+# como habilitarlo a mano y el script no aborta.
+#
+# allow_squash_merge va en la misma llamada porque este script aplica
+# required_linear_history=true, que prohibe los merge commits: el auto-merge
+# del release PR usa --squash, asi que si el repo tuviera el squash
+# deshabilitado el pedido nunca podria completarse. GitHub lo trae habilitado
+# por defecto, pero no conviene depender del default.
+# ---------------------------------------------------------------------------
+if auto_merge_output="$(
+  gh api --method PATCH "repos/$REPO_SLUG" \
+    -F allow_auto_merge=true -F allow_squash_merge=true 2>&1
+)"; then
+  printf '✅ Auto-merge habilitado en %s (allow_auto_merge=true, allow_squash_merge=true)\n' "$REPO_SLUG"
+else
+  printf '↷ No se pudo habilitar allow_auto_merge en %s: %s\n' \
+    "$REPO_SLUG" "$auto_merge_output" >&2
+  printf '   Habilítalo a mano: Settings -> General -> Pull Requests\n' >&2
+  printf '   -> Allow auto-merge, y Allow squash merging. O con:\n' >&2
+  printf '   gh api --method PATCH repos/%s -F allow_auto_merge=true -F allow_squash_merge=true\n' \
+    "$REPO_SLUG" >&2
+  printf '   Sin esta opción, el pedido de auto-merge del workflow falla.\n' >&2
+fi

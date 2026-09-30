@@ -17,6 +17,12 @@ Cuando esta skill se aplica bien, el repo debe quedar con:
 - hook local `pre-push`
 - al menos un workflow funcional de validación del stack
 - branch protection clásica en públicos, si aplica
+- `allow_auto_merge=true` en el repo, habilitado por
+  `configure-public-branch-protection.sh` (idempotente y fail-soft)
+- el workflow de `release-please` con el paso que pide el auto-merge del
+  release PR (`gh pr merge --auto --squash --repo ...`)
+- el secret `RELEASE_PLEASE_TOKEN` (PAT dedicado) cargado en el repo: sin
+  él, el release PR no corre los checks y el auto-merge espera para siempre
 
 **Seguridad:**
 
