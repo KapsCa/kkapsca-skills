@@ -22,9 +22,25 @@ Lo que cambia frente a Windows nativo: menos pasos manuales (el instalador de un
 | Requisito | Detalle |
 |---|---|
 | Versión de Windows | Windows 10 versión 2004 (build 19041) o superior, o Windows 11 |
-| Terminal en Windows | **Windows Terminal**, no la consola clásica — ver «La terminal del lado Windows», más abajo |
+| Terminal en Windows | **Windows Terminal**, puesta como **predeterminada** — es el paso de abajo, y no es cosmético |
 | Virtualización | habilitada en BIOS/UEFI |
 | Distribución | Ubuntu (la que `wsl --install` trae por defecto) |
+
+### Poné Windows Terminal como terminal predeterminada
+
+Este paso no es cosmético y va **antes** de instalar: si seguís con la consola clásica, después **no vas a poder pegar nada en herdr**. El `Ctrl+V` no llega a las aplicaciones de pantalla completa, y el clic derecho —el gesto de pegado de la consola clásica— lo captura herdr, que toma el mouse para su propia interfaz. Es el error más común de esta instalación y se arregla acá, una sola vez.
+
+1. Instalá **Windows Terminal** desde la Microsoft Store.
+2. Abrí Windows Terminal → **Configuración** → **Inicio** → **Aplicación de terminal predeterminada** → **Windows Terminal**.
+3. Reiniciá la ventana de Ubuntu y verificá desde WSL:
+
+   ```bash
+   echo $WT_SESSION
+   ```
+
+   Si imprime algo, estás en Windows Terminal. Si sale vacío, seguís en la consola clásica.
+
+La opción del paso 2 existe en todas las versiones de Windows 11 y en **Windows 10 22H2 con la actualización KB5026435 (mayo de 2023) o posterior**. Si en tu Windows 10 no aparece, no es un error: abrí Windows Terminal y entrá a Ubuntu desde el **`+`** de las pestañas, eligiendo el perfil **Ubuntu**. Funciona igual — solo que lo abrís vos en vez de que sea automático.
 
 ```powershell
 wsl --install
@@ -205,21 +221,19 @@ Nada de esta sección depende de WSL ni del instalador: **el instalador queda pe
 | | Windows 11 | Windows 10 |
 |---|---|---|
 | Terminal por defecto | Windows Terminal | consola clásica (`conhost`) |
-| Copiar desde herdr (OSC 52) | soportado | **no soportado** |
-| Gesto de pegado | `Ctrl+Shift+V` | clic derecho, con QuickEdit activo |
-| Iconos de herdr (Nerd Font) | falta igual | falta igual |
+| Pegar en herdr | `Ctrl+V` | solo `Shift` + clic derecho |
+| Copiar desde herdr (OSC 52) | soportado | no soportado |
 
 ### Copiar y pegar en herdr
 
-Herdr escribe el portapapeles del host con **OSC 52**. Windows Terminal lo entiende; la consola clásica lo recibió recién en un cambio mergeado en junio de 2025 (`microsoft/terminal` PR #18949) que apunta a builds nuevas de Windows 11, y Windows 10 22H2 ya no recibe cambios de esa clase. Resultado: el aviso *«copied to clipboard»* aparece y el portapapeles queda vacío. Es una falla silenciosa del emulador, no de herdr.
+**El síntoma «no puedo pegar nada en herdr» no es de herdr: es la aplicación de terminal predeterminada**, y se resuelve en los requisitos previos, antes de instalar. Con la consola clásica no hay gesto que funcione: el `Ctrl+V` no llega a las aplicaciones de pantalla completa, y el clic derecho lo captura herdr, que toma el mouse para su propia interfaz (`ui.mouse_capture`, predeterminado `true`). Con Windows Terminal pegás con **`Ctrl+V`** —verificado en Windows 10— y el pegado multilínea llega en un solo bloque en vez de línea por línea.
 
-A eso se suma que herdr **captura el mouse** (`ui.mouse_capture`, predeterminado `true`) para su propia interfaz: el clic derecho —el gesto de pegado de la consola clásica— se reenvía al panel en lugar de pegar. Quedan tres salidas, de mejor a peor:
+Eso arregla el pegado **hacia** herdr. El pegado **desde** herdr es otro mecanismo: herdr escribe el portapapeles del host con **OSC 52**. Windows Terminal lo entiende; la consola clásica lo recibió recién en un cambio mergeado en junio de 2025 (`microsoft/terminal` PR #18949) que apunta a builds nuevas de Windows 11, y Windows 10 22H2 ya no recibe cambios de esa clase. Ahí el aviso *«copied to clipboard»* aparece y el portapapeles queda vacío. Es una falla silenciosa del emulador, no de herdr.
 
-1. **Usá Windows Terminal y entrá a Ubuntu desde ahí.** Habilita OSC 52 (copiar) y `Ctrl+Shift+V` (pegar); el pegado multilínea llega en un solo bloque en vez de línea por línea.
-   Instalar Windows Terminal **no** cambia la aplicación *Ubuntu* del menú inicio: hay que apuntarla. En **Windows Terminal → Configuración → Inicio → Aplicación de terminal predeterminada → Windows Terminal**. Esa opción existe en todas las versiones de Windows 11 y en **Windows 10 22H2 con la actualización KB5026435 (mayo de 2023) o posterior**; si no aparece, abrí Windows Terminal y entrá a Ubuntu desde una pestaña suya.
-   Verificalo desde WSL: `echo $WT_SESSION`. Si imprime algo, estás en Windows Terminal; si sale vacío, seguís en la consola clásica.
-2. **`Shift` + clic derecho** dentro de un panel de herdr: el terminal hace su propia acción en lugar de reenviar el clic. Es el atajo que documenta herdr y también funciona en la consola clásica. **Verificado en Windows 10 con `conhost`.**
-3. **Soltarle el mouse a herdr** y dejar que el terminal seleccione como siempre:
+Si todavía estás en la consola clásica, quedan dos salidas:
+
+1. **`Shift` + clic derecho** dentro de un panel de herdr: el terminal hace su propia acción en lugar de reenviar el clic. Es el atajo que documenta herdr y funciona también en la consola clásica. **Verificado en Windows 10 con `conhost`.**
+2. **Soltarle el mouse a herdr** y dejar que el terminal seleccione como siempre:
 
    ```toml
    # ~/.config/herdr/config.toml

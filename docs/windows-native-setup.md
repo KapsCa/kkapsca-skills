@@ -113,6 +113,10 @@ Opciones: `-IncludeIntercom` para agregar ese companion opcional, `-SkipHerdr` y
 
 Windows 10 versión 2004 (build 19041) o superior, o Windows 11. Arquitectura x64 o arm64.
 
+### Terminal
+
+Usá **Windows Terminal** y ponela como predeterminada: **Configuración → Inicio → Aplicación de terminal predeterminada → Windows Terminal**. No es cosmético. Con la consola clásica, herdr captura el mouse para su propia interfaz y no queda gesto para pegar en sus paneles —el clic derecho se reenvía al panel en vez de pegar— y el `Ctrl+V` no llega a las aplicaciones de pantalla completa. La opción necesita **Windows 10 22H2 con KB5026435 (mayo de 2023) o posterior**; si no aparece, abrí Windows Terminal y corré el resto desde ahí.
+
 ### Instalar los prerequisitos
 
 ```powershell

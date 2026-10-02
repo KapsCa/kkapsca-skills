@@ -110,6 +110,7 @@ Para vos, si:
 | Qué | Detalle |
 |---|---|
 | **WSL2 con Ubuntu** | Se instala desde Windows con `wsl --install` y reiniciando. Esto es lo único que preparás vos: el instalador **no** crea WSL. |
+| **Windows Terminal como terminal predeterminada** | No es cosmético: con la consola clásica herdr captura el mouse y **no vas a poder pegar nada** en sus paneles. Se instala desde la Store y se pone en **Configuración → Inicio → Aplicación de terminal predeterminada**. Detalle en [el runbook de WSL2](docs/wsl-setup.md). |
 | **Un usuario con contraseña** | Te va a pedir la contraseña **varias veces** (para instalar programas). Tenela a mano. |
 | **La app de Moshi** (opcional) | Sólo si querés manejarlo desde el teléfono. Es gratis y se baja de la tienda de apps. |
 
