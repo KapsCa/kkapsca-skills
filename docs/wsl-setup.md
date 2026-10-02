@@ -245,12 +245,20 @@ Si todavía estás en la consola clásica, quedan dos salidas:
 
 ### Los iconos salen como cuadrados
 
-Herdr dibuja sus iconos con el **Área de Uso Privado** de Unicode, los glifos de **Nerd Font**: 190 codepoints distintos en la versión 0.9.3. Ninguna fuente estándar —Consolas, Cascadia, Segoe UI Symbol— los tiene, así que se dibujan como cuadrados. Tampoco lo arregla herdr: **su documentación no menciona la fuente en ningún lado**, así que si ves cuadrados no es que la instalación falló.
+Herdr dibuja sus iconos con el **Área de Uso Privado** de Unicode, los glifos de **Nerd Font**: 190 codepoints distintos en la versión 0.9.3. Ninguna fuente estándar —Consolas, Cascadia, Segoe UI Symbol— los tiene, y **la documentación de herdr no menciona la fuente en ningún lado**, así que si ves cuadrados no es que la instalación falló.
 
-La solución es instalar una Nerd Font en Windows y elegirla como fuente del terminal:
+**Lo que los arregla es la terminal, no una fuente**: con Windows Terminal los iconos se dibujan. **[Verificado en Windows 10: pasar de la consola clásica a Windows Terminal corrigió los cuadrados sin instalar nada.]** Si seguís en la consola clásica, empezá por los requisitos previos de arriba — es lo primero que hay que descartar.
+
+Para separar «fuente» de «aplicación» en un segundo, imprimí glifos del Área de Uso Privado sin herdr de por medio:
+
+```bash
+printf 'PUA: \uf3ab \uf245 \ue8c3 \n'
+```
+
+Si con **Windows Terminal** esos tres siguen siendo cuadrados, entonces sí falta una fuente:
 
 1. Bajá `CascadiaCode.zip` (o `JetBrainsMono.zip`) de `https://github.com/ryanoasis/nerd-fonts/releases/latest/download/`.
-2. Descomprimí e instalá los `.ttf` cuyo nombre incluya `NerdFontMono` (doble clic → *Install for all users*).
+2. Instalá los `.ttf` cuyo nombre incluya `NerdFontMono` (doble clic → *Install for all users*).
 3. En Windows Terminal: **Configuración → Perfiles → Valores predeterminados → Apariencia → Fuente**, y elegí la que termine en **`Nerd Font Mono`**. La variante *Mono* fuerza los iconos a una celda de ancho y no rompe la grilla del TUI. Para leer el nombre exacto que quedó instalado:
 
    ```powershell
@@ -259,17 +267,9 @@ La solución es instalar una Nerd Font en Windows y elegirla como fuente del ter
      Where-Object { $_.Name -like "*Nerd*" } | Select-Object -ExpandProperty Name
    ```
 
-4. Si usás la consola clásica: clic en el ícono de la consola → Propiedades → Fuente → la Nerd Font.
+4. Si por algún motivo seguís en la consola clásica: clic en el ícono de la consola → Propiedades → Fuente → la Nerd Font.
 
-Para separar «fuente» de «aplicación» en un segundo, imprimí glifos del Área de Uso Privado sin herdr de por medio:
-
-```bash
-printf 'PUA: \uf3ab \uf245 \ue8c3 \n'
-```
-
-Si esos tres son cuadrados, es la fuente; es el mismo camino de render que usa herdr.
-
-**Test rápido mientras conseguís la fuente**: `ui.status_indicators` acepta `"dots"` (predeterminado) o `"symbols"`, y sirve para descartar. Si con `"dots"` los cuadrados de la columna de estado desaparecen, eran los símbolos de estado; si siguen apareciendo, son los iconos de cada agente y la Nerd Font es la única salida.
+**Atajo para descartar cuáles cuadrados son**: `ui.status_indicators` acepta `"dots"` (predeterminado) o `"symbols"`. Si con `"dots"` los cuadrados de la columna de estado desaparecen, eran los símbolos de estado; si siguen apareciendo, son los iconos de cada agente.
 
 ## Verificación
 
