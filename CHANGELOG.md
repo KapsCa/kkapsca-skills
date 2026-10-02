@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.11.1](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.11.0...kkapsca-skills-v0.11.1) (2026-09-30)
+
+
+### Bug Fixes
+
+* **scripts:** put ~/.local/bin on PATH and give tailscale up its sudo ([b6fb46c](https://github.com/KapsCa/kkapsca-skills/commit/b6fb46c27d3eb7b5d0f54fc2ff6393662095766b))
+* **scripts:** put ~/.local/bin on PATH and give tailscale up its sudo ([61cd34b](https://github.com/KapsCa/kkapsca-skills/commit/61cd34b63ed68b7550fe8063502b0d46cc719306))
+
 ## [0.11.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.10.0...kkapsca-skills-v0.11.0) (2026-09-30)
 
 
