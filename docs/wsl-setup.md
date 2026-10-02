@@ -22,8 +22,25 @@ Lo que cambia frente a Windows nativo: menos pasos manuales (el instalador de un
 | Requisito | Detalle |
 |---|---|
 | Versión de Windows | Windows 10 versión 2004 (build 19041) o superior, o Windows 11 |
+| Terminal en Windows | **Windows Terminal**, puesta como **predeterminada** — es el paso de abajo, y no es cosmético |
 | Virtualización | habilitada en BIOS/UEFI |
 | Distribución | Ubuntu (la que `wsl --install` trae por defecto) |
+
+### Poné Windows Terminal como terminal predeterminada
+
+Este paso no es cosmético y va **antes** de instalar: si seguís con la consola clásica, después **no vas a poder pegar nada en herdr**. El `Ctrl+V` no llega a las aplicaciones de pantalla completa, y el clic derecho —el gesto de pegado de la consola clásica— lo captura herdr, que toma el mouse para su propia interfaz. Es el error más común de esta instalación y se arregla acá, una sola vez.
+
+1. Instalá **Windows Terminal** desde la Microsoft Store.
+2. Abrí Windows Terminal → **Configuración** → **Inicio** → **Aplicación de terminal predeterminada** → **Windows Terminal**.
+3. Reiniciá la ventana de Ubuntu y verificá desde WSL:
+
+   ```bash
+   echo $WT_SESSION
+   ```
+
+   Si imprime algo, estás en Windows Terminal. Si sale vacío, seguís en la consola clásica.
+
+La opción del paso 2 existe en todas las versiones de Windows 11 y en **Windows 10 22H2 con la actualización KB5026435 (mayo de 2023) o posterior**. Si en tu Windows 10 no aparece, no es un error: abrí Windows Terminal y entrá a Ubuntu desde el **`+`** de las pestañas, eligiendo el perfil **Ubuntu**. Funciona igual — solo que lo abrís vos en vez de que sea automático.
 
 ```powershell
 wsl --install
@@ -196,6 +213,63 @@ Lo importante para no confundirte:
 - **Aparecen en cualquier máquina** que tenga esos dos paquetes en su última versión publicada, sin importar cómo se instalaron. No son específicos de este instalador ni de esta máquina.
 - **Este repositorio no los puede corregir**: los dueños del defecto son los mantenedores de `gentle-pi` y `gentle-engram`.
 - **A la fecha de este documento no están corregidos**: no los tomes como señal de que falló la instalación. Verificá lo de la sección siguiente: si los componentes responden a sus versiones, la instalación está bien.
+
+## La terminal del lado Windows (copiar, pegar y glifos)
+
+Nada de esta sección depende de WSL ni del instalador: **el instalador queda perfecto y estos problemas aparecen igual**, porque viven en el emulador de terminal que dibuja a herdr del lado Windows. Windows 10 y Windows 11 no usan el mismo por defecto, y ahí está toda la diferencia.
+
+| | Windows 11 | Windows 10 |
+|---|---|---|
+| Terminal por defecto | Windows Terminal | consola clásica (`conhost`) |
+| Pegar en herdr | `Ctrl+V` | solo `Shift` + clic derecho |
+| Copiar desde herdr (OSC 52) | soportado | no soportado |
+
+### Copiar y pegar en herdr
+
+**El síntoma «no puedo pegar nada en herdr» no es de herdr: es la aplicación de terminal predeterminada**, y se resuelve en los requisitos previos, antes de instalar. Con la consola clásica no hay gesto que funcione: el `Ctrl+V` no llega a las aplicaciones de pantalla completa, y el clic derecho lo captura herdr, que toma el mouse para su propia interfaz (`ui.mouse_capture`, predeterminado `true`). Con Windows Terminal pegás con **`Ctrl+V`** —verificado en Windows 10— y el pegado multilínea llega en un solo bloque en vez de línea por línea.
+
+Eso arregla el pegado **hacia** herdr. El pegado **desde** herdr es otro mecanismo: herdr escribe el portapapeles del host con **OSC 52**. Windows Terminal lo entiende; la consola clásica lo recibió recién en un cambio mergeado en junio de 2025 (`microsoft/terminal` PR #18949) que apunta a builds nuevas de Windows 11, y Windows 10 22H2 ya no recibe cambios de esa clase. Ahí el aviso *«copied to clipboard»* aparece y el portapapeles queda vacío. Es una falla silenciosa del emulador, no de herdr.
+
+Si todavía estás en la consola clásica, quedan dos salidas:
+
+1. **`Shift` + clic derecho** dentro de un panel de herdr: el terminal hace su propia acción en lugar de reenviar el clic. Es el atajo que documenta herdr y funciona también en la consola clásica. **Verificado en Windows 10 con `conhost`.**
+2. **Soltarle el mouse a herdr** y dejar que el terminal seleccione como siempre:
+
+   ```toml
+   # ~/.config/herdr/config.toml
+   [ui]
+   mouse_capture = false
+   ```
+
+   Después `herdr config check` y `herdr server reload-config` (si no toma, desprendé y volvé a enganchar). Perdés el mouse propio de herdr —selección de paneles, rueda, `copy_on_select`— y ganás la selección nativa del terminal, que escribe el portapapeles de Windows directo, sin OSC 52.
+
+### Los iconos salen como cuadrados
+
+Herdr dibuja sus iconos con el **Área de Uso Privado** de Unicode, los glifos de **Nerd Font**: 190 codepoints distintos en la versión 0.9.3. Ninguna fuente estándar —Consolas, Cascadia, Segoe UI Symbol— los tiene, así que se dibujan como cuadrados. Tampoco lo arregla herdr: **su documentación no menciona la fuente en ningún lado**, así que si ves cuadrados no es que la instalación falló.
+
+La solución es instalar una Nerd Font en Windows y elegirla como fuente del terminal:
+
+1. Bajá `CascadiaCode.zip` (o `JetBrainsMono.zip`) de `https://github.com/ryanoasis/nerd-fonts/releases/latest/download/`.
+2. Descomprimí e instalá los `.ttf` cuyo nombre incluya `NerdFontMono` (doble clic → *Install for all users*).
+3. En Windows Terminal: **Configuración → Perfiles → Valores predeterminados → Apariencia → Fuente**, y elegí la que termine en **`Nerd Font Mono`**. La variante *Mono* fuerza los iconos a una celda de ancho y no rompe la grilla del TUI. Para leer el nombre exacto que quedó instalado:
+
+   ```powershell
+   Add-Type -AssemblyName System.Drawing
+   (New-Object System.Drawing.Text.InstalledFontCollection).Families |
+     Where-Object { $_.Name -like "*Nerd*" } | Select-Object -ExpandProperty Name
+   ```
+
+4. Si usás la consola clásica: clic en el ícono de la consola → Propiedades → Fuente → la Nerd Font.
+
+Para separar «fuente» de «aplicación» en un segundo, imprimí glifos del Área de Uso Privado sin herdr de por medio:
+
+```bash
+printf 'PUA: \uf3ab \uf245 \ue8c3 \n'
+```
+
+Si esos tres son cuadrados, es la fuente; es el mismo camino de render que usa herdr.
+
+**Test rápido mientras conseguís la fuente**: `ui.status_indicators` acepta `"dots"` (predeterminado) o `"symbols"`, y sirve para descartar. Si con `"dots"` los cuadrados de la columna de estado desaparecen, eran los símbolos de estado; si siguen apareciendo, son los iconos de cada agente y la Nerd Font es la única salida.
 
 ## Verificación
 

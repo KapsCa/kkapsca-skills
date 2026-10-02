@@ -209,6 +209,8 @@ Si estás por armar **el ecosistema completo** (pi, Gentle AI, Engram, skills, M
 | **WSL2** | Ubuntu bajo WSL2 | `scripts/install-wsl.sh` (bash) | [Instalación del ecosistema en WSL2](wsl-setup.md) |
 | **Windows nativo** | Sin WSL | `scripts/install-windows.ps1` (PowerShell) | [Instalación en Windows nativo](windows-native-setup.md) |
 
+En las dos rutas, el terminal del lado Windows importa y no es cosmético: con la **consola clásica** herdr captura el mouse y no queda gesto para pegar en sus paneles. Usá **Windows Terminal** y ponela como predeterminada; el detalle está en los [requisitos previos del runbook de WSL2](wsl-setup.md).
+
 La ruta WSL2 lleva el ecosistema completo desde los prerequisitos, incluido el acceso desde el teléfono y la red de Tailscale, con bastante menos pasos manuales:
 
 ```bash
