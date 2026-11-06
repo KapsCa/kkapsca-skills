@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.12.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.11.1...kkapsca-skills-v0.12.0) (2026-11-06)
+
+
+### Features
+
+* KapsCa brand header + vendored assets ([91ade6e](https://github.com/KapsCa/kkapsca-skills/commit/91ade6e554f0ab9b8016ad8e39d133bc00922f73))
+* KapsCa brand header + vendored assets ([037ba5e](https://github.com/KapsCa/kkapsca-skills/commit/037ba5e30851c23550889f36f201a4d7421ee61b))
+
 ## [0.11.1](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.11.0...kkapsca-skills-v0.11.1) (2026-09-30)
 
 
