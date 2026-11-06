@@ -219,6 +219,37 @@ install_labels() {
 }
 
 # ---------------------------------------------------------------------------
+# install_brand_assets: copia el set liviano de marca KapsCa a
+# assets/brand/ del repo destino (vendored; SOT: KapsCa/kapsca-brand).
+# Idempotente: no pisa archivos existentes y solo agrega el header del README
+# si el bloque no esta (marcador 'kapsca-brand'). Fragmento:
+# assets/kapsca-brand/readme-header.html.part
+# ---------------------------------------------------------------------------
+BRAND_DIR="${SKILL_DIR}/kapsca-brand"
+install_brand_assets() {
+  if [[ ! -d "$BRAND_DIR" ]]; then
+    printf '\342\206\267 omitido: brand bundle no encontrado (%s)\n' "$BRAND_DIR"
+    return 0
+  fi
+  mkdir -p "$REPO_ROOT/assets/brand"
+  for f in banner.png kapsca-512.png kapsca-mono-white.svg kapsca-favicon.ico; do
+    install_if_missing "$BRAND_DIR/$f" "$REPO_ROOT/assets/brand/$f"
+  done
+  local readme="$REPO_ROOT/README.md"
+  if [[ -f "$readme" ]] && ! grep -q 'kapsca-brand' "$readme"; then
+    local tmpfile
+    tmpfile="$(mktemp)"
+    { cat "$BRAND_DIR/readme-header.html.part"; printf '\n'; cat "$readme"; } > "$tmpfile"
+    mv "$tmpfile" "$readme"
+    printf '\342\234\223 header de marca agregado: README.md (bloque kapsca-brand)\n'
+  elif [[ ! -f "$readme" ]]; then
+    { cat "$BRAND_DIR/readme-header.html.part"; printf '\n# %s\n' "$REPO_NAME"; } > "$readme"
+    printf '\342\234\223 README creado con header de marca (bloque kapsca-brand)\n'
+  else
+    printf '\342\206\267 conservado: README.md ya lleva el bloque kapsca-brand\n'
+  fi
+}
+# ---------------------------------------------------------------------------
 # 1. Gobernanza.
 #
 # Los archivos de CONTENIDO del proyecto (plantilla de PR, changelog, estandares)
@@ -288,6 +319,8 @@ esac
 
 install_dependabot
 merge_gitignore
+install_brand_assets
+
 
 # ---------------------------------------------------------------------------
 # 3. Etiquetas canonicas del modulo. Solo-agrega: no toca los defaults de

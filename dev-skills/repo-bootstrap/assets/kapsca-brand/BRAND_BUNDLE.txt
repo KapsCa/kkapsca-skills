@@ -1,0 +1,4 @@
+KapsCa brand bundle for repo-bootstrap.
+Source of truth (SOT): https://github.com/KapsCa/kapsca-brand (dist/, see release manifest).
+Refresh procedure: copy the four media files + readme-header.html.part from a new kit release.
+banner.png = kapsca-github-repo-banner-1280x640.png (latest SOT dist/)
