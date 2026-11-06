@@ -1,15 +1,10 @@
 <!-- kapsca-brand v1 (vendored copy of KapsCa/kapsca-brand; do not edit manually) -->
-<p align="center"><picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/brand/kapsca-512.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/brand/kapsca-mono-white.svg">
-  <img src="assets/brand/kapsca-512.png" alt="KapsCa" width="96">
-</picture></p>
-<p align="center"><img src="assets/brand/banner.png" alt="KapsCa" width="700"></p>
+<p align="center"><img src="assets/brand/banner.png" alt="KapsCa" width="100%"></p>
 <!-- /kapsca-brand -->
 
 <div align="center">
 
-# KkapsCa Skills
+# KapsCa Skills
 
 > **Habilidades para pasar de una idea a un producto, y de un producto a código con criterio.**
 
@@ -21,7 +16,7 @@
 
 </div>
 
-Este repositorio reúne **habilidades (skills)** pensadas desde la experiencia personal de **KkapsCa**, redactadas para que **cualquier persona pueda reutilizarlas** en sus propios proyectos.
+Este repositorio reúne **habilidades (skills)** pensadas desde la experiencia personal de **KapsCa**, redactadas para que **cualquier persona pueda reutilizarlas** en sus propios proyectos.
 
 Son skills de **texto plano**: un archivo `SKILL.md` con frontmatter. No dependen de una herramienta, no ejecutan nada por su cuenta y no reemplazan tu criterio. Lo que hacen es darle a un agente de IA el **contexto y el orden de pensamiento** que suele faltar: qué preguntar antes de construir, qué decidir antes de elegir tecnología, y qué verificar antes de decir que algo está listo.
 
@@ -340,13 +335,7 @@ El contrato está escrito en [el contrato de estilo](docs/skill-style-guide.md) 
 
 Este repositorio fue creado con **[Gentle-AI](https://github.com/Gentleman-Programming/gentle-ai)**.
 
-<div align="center">
 
-<a href="https://github.com/Gentleman-Programming/gentle-ai">
-  <img width="220" src="https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/main/docs/assets/brand/built-with-gentle-ai.png" alt="Built with Gentle-AI" />
-</a>
-
-</div>
 
 Estas habilidades dan su mejor resultado cuando el agente opera con contexto consistente: el badge de arriba lleva al proyecto, y los enlaces están en [el flujo](#el-flujo-odd-por-defecto-sdd-opcional).
 
