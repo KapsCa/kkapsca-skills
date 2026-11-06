@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.13.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.12.0...kkapsca-skills-v0.13.0) (2026-11-06)
+
+
+### Features
+
+* **brand:** vendored KapsCa bundle + paso install_brand_assets ([76dc634](https://github.com/KapsCa/kkapsca-skills/commit/76dc6349ead127748167743cdedadf3bf7679bb7))
+
 ## [0.12.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.11.1...kkapsca-skills-v0.12.0) (2026-11-06)
 
 
