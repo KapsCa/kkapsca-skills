@@ -34,3 +34,9 @@ Las etiquetas canónicas no son un archivo: se crean o actualizan con `gh label 
 
 ---
 
+
+### Brand assets (KapsCa)
+
+- Bundle: `assets/kapsca-brand/` (`banner.png`, `kapsca-512.png`, `kapsca-mono-white.svg`, `kapsca-favicon.ico`, `readme-header.html.part`, `BRAND_BUNDLE.txt`). Resuelve desde `SKILL_DIR` (no desde templates).
+- `install_brand_assets()` copia el set a `<repo>/assets/brand/` (install_if_missing) y hace prepend de `readme-header.html.part` al README si el marcador `kapsca-brand` esta ausente; si falta el README, lo crea. Fail-soft si el bundle no existe.
+- Source of truth: `KapsCa/kapsca-brand` (SOT, release-based). Refresh: copiar los 4 media + fragment desde el nuevo release (ver `BRAND_BUNDLE.txt`).
