@@ -9,7 +9,6 @@
 ## 📦 Instalar
 
 - [Guía de instalación](installation.md) — Bootstrap, **cualquier agente**, opciones `--copy`, enlaces simbólicos, desinstalación
-- [Instalación en Windows nativo](windows-native-setup.md) — Runbook para reconstruir el ecosistema completo sin WSL
 
 ## 📖 Contexto Adicional (Opcional)
 
@@ -27,4 +26,3 @@
 - [Registro de skills](skill-registry.md) — Índice de ruteo que usa el orquestador para decidir cuándo activar cada skill
 - [Contrato de estilo de skills](skill-style-guide.md) — La norma LLM-first a la que se migran las 12 skills
 - [Versionado semántico](release-please.md) — Release-please y tipos de commit
-- [Configuración WSL](wsl-setup.md) — Recomendaciones para Windows/WSL
