@@ -153,3 +153,107 @@ jobs:
             }
 
             core.info(`All ${commits.length} commit(s) follow Conventional Commits format.`);
+
+  check-no-host-leaks:
+    name: Check No Host-Specific Leaks
+    # Mismo criterio que los demas jobs: un PR de bot no lo escribio un humano y
+    # solo toca manifest o changelog, donde no hay rutas de host.
+    if: ${{ github.actor != 'dependabot[bot]'
+         && !startsWith(github.event.pull_request.head.ref, 'dependabot/')
+         && !startsWith(github.event.pull_request.head.ref, 'release-please--') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Scan the PR diff, title and body for host-specific paths
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            // Un PR puede arrastrar rutas que solo existen en la maquina de quien
+            // escribe: /home/<usuario>/..., /mnt/<disco>/..., config local de Pi o
+            // de gentle-shell. Este repo es publico: el gate falla cuando el diff,
+            // el titulo o el cuerpo agregan alguna. Las rutas eliminadas no
+            // cuentan: borrar un leak es el arreglo, no el problema. Los dos docs
+            // de instalacion mencionan esos paths a proposito para advertir contra
+            // ellos: van en la allowlist.
+            const ALLOWED_FILES = new Set([
+              // Advierten contra estos paths a proposito: mencionarlos es la doc.
+              "docs/wsl-setup.md",
+              "docs/windows-native-setup.md",
+              // Aca viven los patrones del propio gate: escanearse a si mismo
+              // siempre daria falso positivo.
+              ".github/workflows/pr-validation.yml",
+            ]);
+
+            const FORBIDDEN = [
+              { pattern: /\/home\/[A-Za-z0-9._-]+\//, label: "absolute /home/<user>/ path" },
+              { pattern: /\/mnt\/[A-Za-z]\//, label: "WSL mount path /mnt/<drive>/" },
+              { pattern: /~\/\.pi\/gentle-ai/, label: "local Pi path ~/.pi/gentle-ai" },
+              { pattern: /~\/\.gentle-shell/, label: "local gentle-shell path ~/.gentle-shell" },
+            ];
+
+            function scan(text) {
+              const findings = [];
+              for (const { pattern, label } of FORBIDDEN) {
+                const match = text.match(pattern);
+                if (match) findings.push({ label, snippet: match[0] });
+              }
+              return findings;
+            }
+
+            function addedLines(patch) {
+              return patch
+                .split("\n")
+                .filter((line) => line.startsWith("+") && !line.startsWith("+++"))
+                .map((line) => line.slice(1))
+                .join("\n");
+            }
+
+            // listFiles pagina a 100 por pagina; los PR de este repo son chicos,
+            // pero el bucle no depende de eso.
+            async function listAllFiles() {
+              const all = [];
+              let page = 1;
+              for (;;) {
+                const { data } = await github.rest.pulls.listFiles({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: context.payload.pull_request.number,
+                  per_page: 100,
+                  page,
+                });
+                all.push(...data);
+                if (data.length < 100) return all;
+                page += 1;
+              }
+            }
+
+            const findings = [];
+
+            const title = context.payload.pull_request.title || "";
+            for (const f of scan(title)) {
+              findings.push(`PR title: ${f.label} (${f.snippet})`);
+            }
+
+            const body = context.payload.pull_request.body || "";
+            for (const f of scan(body)) {
+              findings.push(`PR body: ${f.label} (${f.snippet})`);
+            }
+
+            for (const file of await listAllFiles()) {
+              if (!file.patch || ALLOWED_FILES.has(file.filename)) continue;
+              for (const f of scan(addedLines(file.patch))) {
+                findings.push(`${file.filename} (added line): ${f.label} (${f.snippet})`);
+              }
+            }
+
+            if (findings.length > 0) {
+              core.setFailed(
+                "The PR adds host-specific paths. Replace them with generic forms " +
+                "(~, $HOME, repo-relative paths) before merging:\n" +
+                findings.map((f) => `- ${f}`).join("\n") +
+                "\nIf a docs file must mention one of these paths on purpose, add it to " +
+                "ALLOWED_FILES in .github/workflows/pr-validation.yml with a justification."
+              );
+              return;
+            }
+
+            core.info("No host-specific paths in the PR diff, title or body.");
