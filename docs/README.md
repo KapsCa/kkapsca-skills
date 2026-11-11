@@ -21,6 +21,7 @@
 
 ## ⚙️ Operación del Repositorio
 
+- [Cómo contribuir](../CONTRIBUTING.md) — El flujo en cinco pasos: issue → aprobación → rama → PR → checks
 - [Flujo de contribución](governance.md) — Protección de ramas, PR, Conventional Commits
 - [Baseline de seguridad](security-baseline.md) — Qué chequea cada herramienta, qué cubre por stack y qué queda afuera
 - [Registro de skills](skill-registry.md) — Índice de ruteo que usa el orquestador para decidir cuándo activar cada skill

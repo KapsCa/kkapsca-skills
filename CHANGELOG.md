@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.15.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.14.0...kkapsca-skills-v0.15.0) (2026-11-11)
+
+
+### Features
+
+* **skills:** publish the security-audit skill core ([1af7103](https://github.com/KapsCa/kkapsca-skills/commit/1af71034e65fa7e87e63f54433b5399e231f175a))
+* **skills:** publish the security-audit skill core ([b7ecfc5](https://github.com/KapsCa/kkapsca-skills/commit/b7ecfc58796a6559d6dacf4c0d40de77150e01a1))
+
+## [0.14.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.13.0...kkapsca-skills-v0.14.0) (2026-11-06)
+
+
+### Features
+
+* **brand:** single-banner header fragment (no duplicated isotipo) ([#140](https://github.com/KapsCa/kkapsca-skills/issues/140)) ([df7f5cb](https://github.com/KapsCa/kkapsca-skills/commit/df7f5cbc8d6d33bb9beec8b5893582995a8c9db7))
+
 ## [0.13.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.12.0...kkapsca-skills-v0.13.0) (2026-11-06)
 
 

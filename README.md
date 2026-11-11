@@ -101,6 +101,18 @@ Si un directorio ya existe y no lo creó este repositorio, el bootstrap **no lo 
 
 **Es un instalador.** Como el de un juego: corrés un comando y te queda todo armado. La diferencia es que **podés mirar antes qué va a hacer**, sin que toque nada.
 
+### Provisionar no es mantener
+
+Este instalador lleva una máquina **desde cero** hasta el ecosistema andando: binarios, runtimes, red y skills. No gestiona la configuración personal de una máquina que ya existe: eso lo hace un repo local privado (`entorno`), que guarda la config por máquina con un doctor de drift.
+
+| | `install-wsl.sh` (este repo) | `entorno` (repo local, sin remote) |
+|---|---|---|
+| Qué hace | **Provisiona** una máquina nueva | **Guarda la verdad** de la config de cada máquina y detecta drift |
+| Qué toca | Instala herramientas y binarios; escribe sólo los dos archivos de Pi que las tools upstream no escriben (`mcp-adapter.json`, `subagents.json`) | Ghostty, Herdr y Pi (config, settings, AGENTS.md) vía allowlist, con `doctor` |
+| Cuándo | Una vez, al estrenar máquina | Siempre: después de provisionar, y en cada cambio de config |
+
+La regla: **ningún archivo tiene dos dueños.** Si un archivo entra al manifest de `entorno`, este instalador no lo escribe; si este instalador lo escribe, no va al manifest. Y para una máquina concreta: los cambios de config van al repo `entorno`, no acá.
+
 ### ¿Para quién es?
 
 Para vos, si:
@@ -338,6 +350,19 @@ Este repositorio fue creado con **[Gentle-AI](https://github.com/Gentleman-Progr
 
 
 Estas habilidades dan su mejor resultado cuando el agente opera con contexto consistente: el badge de arriba lleva al proyecto, y los enlaces están en [el flujo](#el-flujo-odd-por-defecto-sdd-opcional).
+
+---
+
+## En qué quiero feedback
+
+Este repo sale a la comunidad para recibir feedback honesto, no felicitaciones. Específicamente:
+
+- **Qué skills sobreviven a proyectos reales.** Cada skill está pensada desde mi flujo; el test que no puedo hacer yo es si sobreviven al tuyo.
+- **Dónde se quedan ambiguas.** Si una skill dejó a tu agente dudando entre dos caminos, el defecto es del contrato, no tuyo: reportalo.
+- **Qué falta para tu stack.** El arranque de proyectos y Python/TS/Go en CI están cubiertos; Dart/Flutter y shell tienen huecos declarados. Si tu stack tiene otro hueco, es candidato a entrar al baseline.
+- **Si la instalación funciona en tu máquina.** El instalador de entorno completo para WSL2 y el runbook de Windows nativo están probados en pocas máquinas. Un runbook que falla en la tuya es un bug.
+
+El camino: [CONTRIBUTING.md](CONTRIBUTING.md). Las preguntas, por [Discussions](https://github.com/KapsCa/kkapsca-skills/discussions).
 
 ---
 
