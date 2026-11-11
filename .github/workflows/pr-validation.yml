@@ -203,9 +203,10 @@ jobs:
               return findings;
             }
 
-            // Un binario no puede llevar una ruta de host como texto, y GitHub
-            // nunca manda su patch: unica razon legitima para no escanearlo.
-            const BINARY_EXTENSIONS = /\.(png|jpe?g|gif|webp|ico|bmp|avif|svgz|pdf|zip|gz|tgz|bz2|xz|7z|rar|woff2?|ttf|otf|eot|mp[34]|wav|ogg|webm|mov|class|jar|so|dylib|dll|exe|bin|wasm)$/i;
+            // Un archivo sin patch no se puede escanear. Falla cerrado siempre:
+            // un zip, un jar o un pdf tambien pueden llevar una ruta de host
+            // adentro, asi que no hay excepcion por extension. La salida
+            // documentada es la allowlist de archivos, con su justificacion.
 
             function addedLines(patch) {
               return patch
@@ -250,15 +251,13 @@ jobs:
               if (ALLOWED_FILES.has(file.filename)) continue;
               if (!file.patch) {
                 // Sin patch no hay nada que escanear, y un chequeo que no corre
-                // no cuenta como aprobado: se falla cerrado. La unica excepcion
-                // son los binarios, cuyo diff GitHub nunca manda.
-                if (BINARY_EXTENSIONS.test(file.filename)) {
-                  core.info(`skipped binary file (no patch by design): ${file.filename}`);
-                  continue;
-                }
+                // no cuenta como aprobado: se falla cerrado. Si el archivo es
+                // legitimo y no se puede escanear, va a ALLOWED_FILES con su
+                // justificacion escrita al lado.
                 findings.push(
                   `${file.filename}: could not be scanned (the GitHub API returned no patch). ` +
-                  `Split the file or re-run the check so it can be read.`
+                  `Split the file, or add it to ALLOWED_FILES in ` +
+                  `.github/workflows/pr-validation.yml with a written justification.`
                 );
                 continue;
               }
