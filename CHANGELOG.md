@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.16.0...kkapsca-skills-v1.0.0) (2026-11-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* **skills:** install-wsl.sh and install-windows.ps1 no longer ship here: this repo is now scoped to skills only. Both moved to the environment repo with their runbooks, so anyone relying on the old one-liner has to run the script from that checkout.
+
+### Miscellaneous Chores
+
+* **skills:** stop shipping the machine provisioners ([ef98d3b](https://github.com/KapsCa/kkapsca-skills/commit/ef98d3bc9c41d123070314810e1ddbb59281e3aa))
+
 ## [0.16.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.15.0...kkapsca-skills-v0.16.0) (2026-11-11)
 
 
