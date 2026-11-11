@@ -1,4 +1,4 @@
-# Instalación Detallada — KkapsCa Skills
+# Instalación Detallada — KapsCa Skills
 
 Este documento cubre el detalle operativo de instalación de las habilidades (**skills**) en tu entorno local.
 

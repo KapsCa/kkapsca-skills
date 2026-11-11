@@ -3,7 +3,7 @@ name: tech-feasibility
 description: "Trigger: qué tan difícil es construir esto, qué stack tiene más sentido, riesgos del MVP, cuánto esfuerzo y arquitectura mínima. Evalúa factibilidad técnica y elige stack con framework de decisión."
 license: MIT
 metadata:
-  author: KkapsCa
+  author: KapsCa
   version: "3.0"
   prev: "project-init"
   next: ""

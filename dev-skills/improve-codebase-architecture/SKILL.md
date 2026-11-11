@@ -3,7 +3,7 @@ name: improve-codebase-architecture
 description: "Trigger: revisar arquitectura, architecture review, mejorar estructura, codebase health, tech debt check, refactor review. Detecta deuda, acoplamiento y responsabilidades mezcladas; input al trabajo formal."
 license: MIT
 metadata:
-  author: KkapsCa
+  author: KapsCa
   version: "1.0"
 ---
 # Improve Codebase Architecture

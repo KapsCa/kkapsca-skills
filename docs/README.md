@@ -1,4 +1,4 @@
-# Documentación — KkapsCa Skills
+# Documentación — KapsCa Skills
 
 > **📚 Navegación por intención** — Elige tu ruta según lo que necesites hacer.
 

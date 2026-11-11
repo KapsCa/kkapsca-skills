@@ -3,7 +3,7 @@ name: repo-bootstrap
 description: "Trigger: crear un proyecto nuevo, bootstrapear un repo, evitar push directo a main, usar release-please desde el día 1. Prepara el repo con ramas por feature, PR obligatorio, checks y docs operativos."
 license: MIT
 metadata:
-  author: KkapsCa
+  author: KapsCa
   version: "1.2"
 ---
 

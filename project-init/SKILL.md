@@ -3,7 +3,7 @@ name: project-init
 description: "Trigger: decidir enfoque de desarrollo (predictivo, adaptativo o híbrido), secuencia de trabajo, alcance en épics y stories, acuerdos mínimos. Convierte el Discovery Report en un Project Framing Doc."
 license: MIT
 metadata:
-  author: KkapsCa
+  author: KapsCa
   version: "1.0"
   prev: "product-discovery"
   next: "tech-feasibility"

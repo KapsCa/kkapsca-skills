@@ -3,7 +3,7 @@ name: tasks-to-issues
 description: "Trigger: plan de trabajo ya aprobado (feature de ODD o artifacts SDD), exportar a issues o crear issues desde el plan. Exporta el plan a issues GitHub vía issue-creation, sin reescribir ni partir el trabajo."
 license: MIT
 metadata:
-  author: KkapsCa
+  author: KapsCa
   version: "1.0"
 ---
 
