@@ -240,9 +240,7 @@ jobs:
             for (const file of await listAllFiles()) {
               if (!file.patch) {
                 // Sin patch no hay nada que escanear, y un chequeo que no corre
-                // no cuenta como aprobado: se falla cerrado. Si el archivo es
-                // legitimo y no se puede escanear, va a ALLOWED_FILES con su
-                // justificacion escrita al lado.
+                // no cuenta como aprobado: se falla cerrado.
                 findings.push(
                   `${file.filename}: could not be scanned (the GitHub API returned no patch). ` +
                   `Split the file so the check can read it.`
@@ -259,8 +257,8 @@ jobs:
                 "The PR adds host-specific paths. Replace them with generic forms " +
                 "(~, $HOME, repo-relative paths) before merging:\n" +
                 findings.map((f) => `- ${f}`).join("\n") +
-                "\nIf a docs file must mention one of these paths on purpose, add it to " +
-                "ALLOWED_FILES in .github/workflows/pr-validation.yml with a justification."
+                "\nDocs may describe these paths with a placeholder " +
+                "(/home/<usuario>/, /mnt/<disco>/...), never with a real one."
               );
               return;
             }
