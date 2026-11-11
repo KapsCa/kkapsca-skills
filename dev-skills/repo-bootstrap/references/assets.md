@@ -26,7 +26,7 @@ Detalle local de `SKILL.md` (## Execution Steps).
 
 | Plantilla | Destino en el repo |
 |---|---|
-| `pr-validation.yml` | `.github/workflows/pr-validation.yml` — referencia a issue aprobada, un label `type:*`, Conventional Commits y rutas de host fuera del diff. La allowlist del job de rutas viene pre-cargada con el propio workflow y `docs/repository-standards.md`; un doc propio que mencione esos paths a propósito se agrega ahí con su justificación |
+| `pr-validation.yml` | `.github/workflows/pr-validation.yml` — referencia a issue aprobada, un label `type:*`, Conventional Commits y rutas de host fuera del diff. El job de rutas no tiene allowlist por archivo: un doc que necesite nombrar esos paths los escribe con marcadores (`/home/<usuario>/`, `/mnt/<disco>/...`), que el check acepta |
 
 ### Política de instalación
 

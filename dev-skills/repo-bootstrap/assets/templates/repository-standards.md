@@ -104,8 +104,8 @@ Estas reglas no son opcionales, y cada una tiene una herramienta que la hace cum
 ### Validación de pull requests
 
 - Todo PR referencia un issue aprobado (`status:approved`) con `Closes #N`, lleva exactamente un label `type:*` y sus commits siguen Conventional Commits. El workflow `pr-validation` lo valida solo, y un PR de bot (release-please, dependabot) se salta esos checks.
-- El mismo workflow falla si el PR deja rutas que solo existen en la máquina de quien escribe: `/home/<usuario>/...` o `/mnt/<disco>/...` reales, la config local de Pi (`~/.pi/gentle-ai`) o la de gentle-shell (`~/.gentle-shell`). Se reemplazan por su forma genérica (`~`, `$HOME`, rutas relativas al repo).
-- Si un doc menciona esos paths a propósito para advertir contra ellos, entra en la allowlist del check, con su justificación escrita al lado.
+- El mismo workflow falla si el PR deja rutas que solo existen en la máquina de quien escribe: rutas absolutas de un home concreto, montajes de WSL con una letra de disco real, y las carpetas de configuración local de Pi y de gentle-shell. Se reemplazan por su forma genérica (`~`, `$HOME`, rutas relativas al repo).
+- No hay allowlist por archivo: permitir un archivo entero dejaría pasar una ruta real nueva escrita adentro. Un doc que necesite nombrar esas rutas las escribe con marcadores (`/home/<usuario>/`, `/mnt/<disco>/...`), que el check acepta.
 
 ### Permisos y versiones exactas
 

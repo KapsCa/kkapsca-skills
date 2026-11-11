@@ -68,10 +68,10 @@ PR):
 | `check-conventional-commits` | Cada commit humano sigue Conventional Commits |
 | `check-no-host-leaks` | El diff, el título y el cuerpo no agregan rutas específicas de la máquina del autor: `/home/<usuario>/` y `/mnt/<disco>/` reales, la config local de Pi (gentle-ai) y la de gentle-shell |
 
-Las rutas que enuncian la regla (el propio workflow y el estándar versionado
-`docs/repository-standards.md`) viven en la allowlist del job `check-no-host-leaks`. Un doc
-que menciona los paths a propósito para advertir contra ellos se agrega a esa allowlist con
-su justificación escrita al lado.
+No hay allowlist por archivo en `check-no-host-leaks`: permitir un archivo entero dejaría
+pasar una ruta real nueva escrita adentro. Un doc que necesita nombrar esas rutas para
+advertir contra ellas las escribe con marcadores (`/home/<usuario>/`, `/mnt/<disco>/...`),
+que es la forma que el check acepta.
 
 ---
 
