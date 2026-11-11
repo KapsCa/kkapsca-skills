@@ -33,6 +33,14 @@ set -euo pipefail
 # installer is scripts/install.sh (this file's log/UX conventions come from
 # there; do not restyle them here).
 #
+# Boundary with the personal config repo (`entorno`, local, no remote): this
+# script PROVISIONS a machine from zero; per-machine config truth and drift
+# doctoring live in `entorno`. One file, one owner: only mcp-adapter.json and
+# subagents.json are written here (upstream tools do not write them
+# correctly); nothing in `entorno`'s manifest (ghostty, herdr, pi) is ever
+# written by this script. Config changes for an existing machine belong in
+# `entorno`, not here.
+#
 # One-liner (curl | bash safe):
 #   curl -fsSL https://raw.githubusercontent.com/KapsCa/kkapsca-skills/main/scripts/install-wsl.sh | bash
 #

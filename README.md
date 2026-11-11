@@ -106,6 +106,18 @@ Si un directorio ya existe y no lo creó este repositorio, el bootstrap **no lo 
 
 **Es un instalador.** Como el de un juego: corrés un comando y te queda todo armado. La diferencia es que **podés mirar antes qué va a hacer**, sin que toque nada.
 
+### Provisionar no es mantener
+
+Este instalador lleva una máquina **desde cero** hasta el ecosistema andando: binarios, runtimes, red y skills. No gestiona la configuración personal de una máquina que ya existe: eso lo hace un repo local privado (`entorno`), que guarda la config por máquina con un doctor de drift.
+
+| | `install-wsl.sh` (este repo) | `entorno` (repo local, sin remote) |
+|---|---|---|
+| Qué hace | **Provisiona** una máquina nueva | **Guarda la verdad** de la config de cada máquina y detecta drift |
+| Qué toca | Instala herramientas y binarios; escribe sólo los dos archivos de Pi que las tools upstream no escriben (`mcp-adapter.json`, `subagents.json`) | Ghostty, Herdr y Pi (config, settings, AGENTS.md) vía allowlist, con `doctor` |
+| Cuándo | Una vez, al estrenar máquina | Siempre: después de provisionar, y en cada cambio de config |
+
+La regla: **ningún archivo tiene dos dueños.** Si un archivo entra al manifest de `entorno`, este instalador no lo escribe; si este instalador lo escribe, no va al manifest. Y para una máquina concreta: los cambios de config van al repo `entorno`, no acá.
+
 ### ¿Para quién es?
 
 Para vos, si:
