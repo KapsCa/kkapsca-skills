@@ -113,12 +113,21 @@ jobs:
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
-            const { data: commits } = await github.rest.pulls.listCommits({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-              per_page: 50,
-            });
+            // listCommits pagina a 100; el bucle lee todas las paginas. Quedarse
+            // con la primera dejaba pasar un commit no convencional escrito
+            // despues del numero 50, y el mensaje igual diria "todos".
+            const commits = [];
+            for (let page = 1; ; page += 1) {
+              const { data } = await github.rest.pulls.listCommits({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number,
+                per_page: 100,
+                page,
+              });
+              commits.push(...data);
+              if (data.length < 100) break;
+            }
 
             const conventionalPattern = /^(feat|fix|docs|style|refactor|perf|test|ci|build|chore|revert)(\([^)]+\))?!?: .{1,}/;
             const invalidCommits = [];
