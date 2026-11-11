@@ -170,22 +170,13 @@ jobs:
             // escribe: /home/<usuario>/..., /mnt/<disco>/..., config local de Pi o
             // de gentle-shell. Este repo es publico: el gate falla cuando el diff,
             // el titulo o el cuerpo agregan alguna. Las rutas eliminadas no
-            // cuentan: borrar un leak es el arreglo, no el problema. Los dos docs
-            // de instalacion mencionan esos paths a proposito para advertir contra
-            // ellos: van en la allowlist.
-            const ALLOWED_FILES = new Set([
-              // Advierten contra estos paths a proposito: mencionarlos es la doc.
-              "docs/wsl-setup.md",
-              "docs/windows-native-setup.md",
-              // Enuncian la regla con los patrones literales: el flujo de
-              // contribucion y el estandar versionado por repo-bootstrap.
-              "CONTRIBUTING.md",
-              "docs/governance.md",
-              "dev-skills/repo-bootstrap/assets/templates/repository-standards.md",
-              // Aca viven los patrones del propio gate: escanearse a si mismo
-              // siempre daria falso positivo.
-              ".github/workflows/pr-validation.yml",
-            ]);
+            // cuentan: borrar un leak es el arreglo, no el problema.
+            //
+            // No hay allowlist por archivo: permitir un archivo entero dejaria
+            // pasar una ruta real nueva escrita adentro. Lo unico que se
+            // neutraliza es la forma documental con puntos suspensivos
+            // (/mnt/c/...), que es como la doc advierte contra esos paths.
+            const DOCUMENTED_PLACEHOLDER = /\/mnt\/[A-Za-z]\/\.{3}/g;
 
             const FORBIDDEN = [
               { pattern: /\/home\/[A-Za-z0-9._-]+\//, label: "absolute /home/<user>/ path" },
@@ -196,8 +187,9 @@ jobs:
 
             function scan(text) {
               const findings = [];
+              const scannable = text.replace(DOCUMENTED_PLACEHOLDER, " ");
               for (const { pattern, label } of FORBIDDEN) {
-                const match = text.match(pattern);
+                const match = scannable.match(pattern);
                 if (match) findings.push({ label, snippet: match[0] });
               }
               return findings;
@@ -248,7 +240,6 @@ jobs:
             }
 
             for (const file of await listAllFiles()) {
-              if (ALLOWED_FILES.has(file.filename)) continue;
               if (!file.patch) {
                 // Sin patch no hay nada que escanear, y un chequeo que no corre
                 // no cuenta como aprobado: se falla cerrado. Si el archivo es
@@ -256,8 +247,7 @@ jobs:
                 // justificacion escrita al lado.
                 findings.push(
                   `${file.filename}: could not be scanned (the GitHub API returned no patch). ` +
-                  `Split the file, or add it to ALLOWED_FILES in ` +
-                  `.github/workflows/pr-validation.yml with a written justification.`
+                  `Split the file so the check can read it.`
                 );
                 continue;
               }
