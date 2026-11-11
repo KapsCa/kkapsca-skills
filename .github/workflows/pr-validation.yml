@@ -156,11 +156,10 @@ jobs:
 
   check-no-host-leaks:
     name: Check No Host-Specific Leaks
-    # Mismo criterio que los demas jobs: un PR de bot no lo escribio un humano y
-    # solo toca manifest o changelog, donde no hay rutas de host.
-    if: ${{ github.actor != 'dependabot[bot]'
-         && !startsWith(github.event.pull_request.head.ref, 'dependabot/')
-         && !startsWith(github.event.pull_request.head.ref, 'release-please--') }}
+    # Solo se salta un PR cuando lo escribio un bot, y eso se decide por el
+    # AUTOR, no por el nombre de la rama: cualquiera puede nombrar su rama
+    # 'release-please--x' y saltear el escaneo si se mira el prefijo.
+    if: ${{ github.actor != 'dependabot[bot]' && github.actor != 'release-please[bot]' }}
     runs-on: ubuntu-latest
     steps:
       - name: Scan the PR diff, title and body for host-specific paths
@@ -204,6 +203,10 @@ jobs:
               return findings;
             }
 
+            // Un binario no puede llevar una ruta de host como texto, y GitHub
+            // nunca manda su patch: unica razon legitima para no escanearlo.
+            const BINARY_EXTENSIONS = /\.(png|jpe?g|gif|webp|ico|bmp|avif|svgz|pdf|zip|gz|tgz|bz2|xz|7z|rar|woff2?|ttf|otf|eot|mp[34]|wav|ogg|webm|mov|class|jar|so|dylib|dll|exe|bin|wasm)$/i;
+
             function addedLines(patch) {
               return patch
                 .split("\n")
@@ -244,7 +247,21 @@ jobs:
             }
 
             for (const file of await listAllFiles()) {
-              if (!file.patch || ALLOWED_FILES.has(file.filename)) continue;
+              if (ALLOWED_FILES.has(file.filename)) continue;
+              if (!file.patch) {
+                // Sin patch no hay nada que escanear, y un chequeo que no corre
+                // no cuenta como aprobado: se falla cerrado. La unica excepcion
+                // son los binarios, cuyo diff GitHub nunca manda.
+                if (BINARY_EXTENSIONS.test(file.filename)) {
+                  core.info(`skipped binary file (no patch by design): ${file.filename}`);
+                  continue;
+                }
+                findings.push(
+                  `${file.filename}: could not be scanned (the GitHub API returned no patch). ` +
+                  `Split the file or re-run the check so it can be read.`
+                );
+                continue;
+              }
               for (const f of scan(addedLines(file.patch))) {
                 findings.push(`${file.filename} (added line): ${f.label} (${f.snippet})`);
               }
