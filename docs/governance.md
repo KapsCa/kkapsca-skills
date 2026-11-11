@@ -130,7 +130,7 @@ PR):
 | `check-issue-approved` | Ese issue tiene el label `status:approved` |
 | `check-pr-type-label` | El PR tiene exactamente un label `type:*` |
 | `check-conventional-commits` | Cada commit humano sigue Conventional Commits |
-| `check-no-host-leaks` | El diff, el título y el cuerpo no agregan rutas específicas de la máquina del autor (`/home/<usuario>/`, `/mnt/<disco>/`, `~/.pi/gentle-ai`, `~/.gentle-shell`) |
+| `check-no-host-leaks` | El diff, el título y el cuerpo no agregan rutas específicas de la máquina del autor: un home absoluto, un montaje de WSL con letra real, o la config local de Pi o de gentle-shell. La forma documental con placeholders está permitida |
 
 ## Repo Guardrails (Capa Advisory)
 

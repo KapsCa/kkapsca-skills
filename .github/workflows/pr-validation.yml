@@ -195,10 +195,10 @@ jobs:
               return findings;
             }
 
-            // Un archivo sin patch no se puede escanear. Falla cerrado siempre:
-            // un zip, un jar o un pdf tambien pueden llevar una ruta de host
-            // adentro, asi que no hay excepcion por extension. La salida
-            // documentada es la allowlist de archivos, con su justificacion.
+            // Un archivo sin patch no se puede escanear. Falla cerrado sin
+            // excepcion por extension: un zip, un jar o un pdf tambien pueden
+            // llevar una ruta de host adentro. Si el archivo es legitimo y no
+            // se puede leer, se divide en el PR.
 
             function addedLines(patch) {
               return patch
