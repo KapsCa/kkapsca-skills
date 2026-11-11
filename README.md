@@ -352,6 +352,19 @@ Estas habilidades dan su mejor resultado cuando el agente opera con contexto con
 
 ---
 
+## En qué quiero feedback
+
+Este repo sale a la comunidad para recibir feedback honesto, no felicitaciones. Específicamente:
+
+- **Qué skills sobreviven a proyectos reales.** Cada skill está pensada desde mi flujo; el test que no puedo hacer yo es si sobreviven al tuyo.
+- **Dónde se quedan ambiguas.** Si una skill dejó a tu agente dudando entre dos caminos, el defecto es del contrato, no tuyo: reportalo.
+- **Qué falta para tu stack.** El arranque de proyectos y Python/TS/Go en CI están cubiertos; Dart/Flutter y shell tienen huecos declarados. Si tu stack tiene otro hueco, es candidato a entrar al baseline.
+- **Si la instalación funciona en tu máquina.** El instalador de entorno completo para WSL2 y el runbook de Windows nativo están probados en pocas máquinas. Un runbook que falla en la tuya es un bug.
+
+El camino: [CONTRIBUTING.md](CONTRIBUTING.md). Las preguntas, por [Discussions](https://github.com/KapsCa/kkapsca-skills/discussions).
+
+---
+
 ## Agradecimientos
 
 Este proyecto existe gracias al trabajo de otros:

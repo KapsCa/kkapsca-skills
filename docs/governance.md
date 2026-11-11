@@ -104,6 +104,34 @@ Regla de oro: **No seas ese wey que hace push directo a main** 😤
 7. Al mergear Release PR → tag + release
 ```
 
+### Cómo se aprueba un issue
+
+Los issues nacen con `status:needs-review` (lo aplican los templates). Un PR solo pasa
+`check-issue-approved` si el issue que referencia tiene `status:approved`:
+
+| Label | Significado |
+|---|---|
+| `status:needs-review` | Recién creado; esperando evaluación |
+| `status:approved` | Aprobado; ya puede recibir un PR (`Closes #N`) |
+
+Quién aplica `status:approved`: el mantenedor, después de evaluar que el issue vale la pena.
+En modo solo-dev lo aplica el mismo autor del repo. Para contribuidores externos: abrir el
+issue y esperar la aprobación antes de escribir código.
+
+### Los checks de PR Validation
+
+Cada PR pasa por cinco jobs en `.github/workflows/pr-validation.yml` (los PR de release-please
+y dependabot se los saltan: los escribió un bot, y sus commits ya se validaron en su propio
+PR):
+
+| Check | Qué valida |
+|---|---|
+| `check-issue-reference` | El cuerpo del PR referencia un issue (`Closes #N`, `Fixes #N`, `Resolves #N`) |
+| `check-issue-approved` | Ese issue tiene el label `status:approved` |
+| `check-pr-type-label` | El PR tiene exactamente un label `type:*` |
+| `check-conventional-commits` | Cada commit humano sigue Conventional Commits |
+| `check-no-host-leaks` | El diff, el título y el cuerpo no agregan rutas específicas de la máquina del autor (`/home/<usuario>/`, `/mnt/<disco>/`, `~/.pi/gentle-ai`, `~/.gentle-shell`) |
+
 ## Repo Guardrails (Capa Advisory)
 
 Este repositorio cuenta con la skill `repo-guardrails` como capa **advisory/warning-first** que revisa el estado de ramas, PRs, labels y commits antes de acciones críticas.
