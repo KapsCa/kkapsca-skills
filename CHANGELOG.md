@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.16.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.15.0...kkapsca-skills-v0.16.0) (2026-11-11)
+
+
+### Features
+
+* **skills:** ship the hardened PR validation baseline and unify the brand ([6805c40](https://github.com/KapsCa/kkapsca-skills/commit/6805c408ba51fed9e506403841b54dc2e9e051d3))
+
 ## [0.15.0](https://github.com/KapsCa/kkapsca-skills/compare/kkapsca-skills-v0.14.0...kkapsca-skills-v0.15.0) (2026-11-11)
 
 
