@@ -179,8 +179,8 @@ jobs:
             const FORBIDDEN = [
               { pattern: /\/home\/[A-Za-z0-9._-]+\//, label: "absolute /home/<user>/ path" },
               { pattern: /\/mnt\/[A-Za-z]\//, label: "WSL mount path /mnt/<drive>/" },
-              { pattern: /~\/\.pi\/gentle-ai/, label: "local Pi path ~/.pi/gentle-ai" },
-              { pattern: /~\/\.gentle-shell/, label: "local gentle-shell path ~/.gentle-shell" },
+              { pattern: /~\/\.pi\/gentle-ai/, label: "local Pi config path" },
+              { pattern: /~\/\.gentle-shell/, label: "local shell-tool config path" },
             ];
 
             function scan(text) {
@@ -193,10 +193,10 @@ jobs:
               return findings;
             }
 
-            // Un archivo sin patch no se puede escanear. Falla cerrado siempre:
-            // un zip, un jar o un pdf tambien pueden llevar una ruta de host
-            // adentro, asi que no hay excepcion por extension. La salida
-            // documentada es la allowlist de archivos, con su justificacion.
+            // Un archivo sin patch no se puede escanear. Falla cerrado sin
+            // excepcion por extension: un zip, un jar o un pdf tambien pueden
+            // llevar una ruta de host adentro. Si el archivo es legitimo y no
+            // se puede leer, se divide en el PR.
 
             function addedLines(patch) {
               return patch
@@ -237,14 +237,43 @@ jobs:
               findings.push(`PR body: ${f.label} (${f.snippet})`);
             }
 
+            // Un archivo sin patch (binario, o diff demasiado grande) no se puede
+            // escanear por lineas. Se lee su contenido desde la API y se escanea
+            // igual: no se saltea en silencio, y tampoco se rechaza un binario
+            // legitimo sin mirarlo. La API no devuelve el contenido arriba de
+            // 1 MB: ahi si se falla cerrado, porque no hay forma de mirarlo.
+            async function scanUnpatchedFile(file) {
+              if (file.status === "removed") return;
+              let data;
+              try {
+                ({ data } = await github.rest.repos.getContent({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  path: file.filename,
+                  ref: context.payload.pull_request.head.sha,
+                }));
+              } catch (error) {
+                findings.push(`${file.filename}: could not be read (${error.message}).`);
+                return;
+              }
+              if (Array.isArray(data) || !data.content || data.encoding !== "base64") {
+                findings.push(
+                  `${file.filename}: too large for the API to return (over 1 MB). ` +
+                  `Move it to its own PR so the check can read it.`
+                );
+                return;
+              }
+              // latin1 conserva un byte por caracter: sirve para buscar texto
+              // ASCII dentro de un archivo binario sin romper la decodificacion.
+              const decoded = Buffer.from(data.content, "base64").toString("latin1");
+              for (const f of scan(decoded)) {
+                findings.push(`${file.filename} (content): ${f.label} (${f.snippet})`);
+              }
+            }
+
             for (const file of await listAllFiles()) {
               if (!file.patch) {
-                // Sin patch no hay nada que escanear, y un chequeo que no corre
-                // no cuenta como aprobado: se falla cerrado.
-                findings.push(
-                  `${file.filename}: could not be scanned (the GitHub API returned no patch). ` +
-                  `Split the file so the check can read it.`
-                );
+                await scanUnpatchedFile(file);
                 continue;
               }
               for (const f of scan(addedLines(file.patch))) {
