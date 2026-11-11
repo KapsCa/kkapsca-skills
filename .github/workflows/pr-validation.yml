@@ -178,6 +178,11 @@ jobs:
               // Advierten contra estos paths a proposito: mencionarlos es la doc.
               "docs/wsl-setup.md",
               "docs/windows-native-setup.md",
+              // Enuncian la regla con los patrones literales: el flujo de
+              // contribucion y el estandar versionado por repo-bootstrap.
+              "CONTRIBUTING.md",
+              "docs/governance.md",
+              "dev-skills/repo-bootstrap/assets/templates/repository-standards.md",
               // Aca viven los patrones del propio gate: escanearse a si mismo
               // siempre daria falso positivo.
               ".github/workflows/pr-validation.yml",
