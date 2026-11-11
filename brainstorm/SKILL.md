@@ -3,7 +3,7 @@ name: brainstorm
 description: "Trigger: tengo una idea, quiero hacer una app, no sé por dónde empezar, ayúdame a aterrizar esto, definir mejor mi producto. Convierte una idea vaga en un Product Brief."
 license: MIT
 metadata:
-  author: KkapsCa
+  author: KapsCa
   version: "4.0"
   next: "product-discovery"
   prev: ""

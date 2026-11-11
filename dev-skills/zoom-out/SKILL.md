@@ -3,7 +3,7 @@ name: zoom-out
 description: "Trigger: entender el sistema, zoom out, perspectiva global, antes de editar esto, entender flujo completo, system map, dependency check, editar código desconocido. Mapea dependencias, flujos y riesgos del sistema."
 license: MIT
 metadata:
-  author: KkapsCa
+  author: KapsCa
   version: "1.0"
 ---
 

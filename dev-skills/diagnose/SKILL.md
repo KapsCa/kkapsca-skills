@@ -3,7 +3,7 @@ name: diagnose
 description: "Trigger: debug, diagnosticar, arreglar error, fix bug, por qué falla, reproducir bug, regression check; crash o fallo inesperado. Debugging sistemático: repro → minimiza → instrumenta → arregla → regresión."
 license: MIT
 metadata:
-  author: KkapsCa
+  author: KapsCa
   version: "1.0"
 ---
 

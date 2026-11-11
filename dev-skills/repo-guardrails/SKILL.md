@@ -3,7 +3,7 @@ name: repo-guardrails
 description: "Trigger: estar por hacer push, crear PR o mergear, revisión de cumplimiento antes de ejecutar, recordatorios de convenciones. Capa advisory: revisa ramas, PRs, labels y commits; solo advierte, no bloquea."
 license: MIT
 metadata:
-  author: KkapsCa
+  author: KapsCa
   version: "1.0"
 ---
 

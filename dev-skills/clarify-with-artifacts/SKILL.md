@@ -3,7 +3,7 @@ name: clarify-with-artifacts
 description: "Trigger: idea vaga con artifacts ya existentes, estructurar contexto antes del trabajo formal, resumen breve de lo sabido. Helper opt-in que estructura la intención; no sustituye el trabajo formal."
 license: MIT
 metadata:
-  author: KkapsCa
+  author: KapsCa
   version: "1.0"
 ---
 

@@ -22,6 +22,12 @@ Detalle local de `SKILL.md` (## Execution Steps).
 | `SECURITY.md` | `SECURITY.md` |
 | `gitignore-security.txt` | se fusiona dentro del `.gitignore`, detrás de un marcador |
 
+### Plantillas de validación
+
+| Plantilla | Destino en el repo |
+|---|---|
+| `pr-validation.yml` | `.github/workflows/pr-validation.yml` — referencia a issue aprobada, un label `type:*`, Conventional Commits y rutas de host fuera del diff. La allowlist del job de rutas viene pre-cargada con el propio workflow y `docs/repository-standards.md`; un doc propio que mencione esos paths a propósito se agrega ahí con su justificación |
+
 ### Política de instalación
 
 Los archivos de **contenido del proyecto** (`CHANGELOG.md`, `PULL_REQUEST_TEMPLATE.md`, `docs/repository-standards.md`) y todos los de **seguridad** se crean **solo si faltan**. Nunca se pisan: un `CHANGELOG.md` tiene el historial real y un `.gitleaks.toml` puede estar ajustado a mano.

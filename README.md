@@ -222,6 +222,7 @@ También está cubierto, aunque tiene bastante más pasos manuales: **[instalaci
 | [tech-feasibility](tech-feasibility/SKILL.md) | hay que medir dificultad, riesgos, esfuerzo y elegir stack |
 | [repo-bootstrap](dev-skills/repo-bootstrap/SKILL.md) | vas a crear un repositorio nuevo |
 | [repo-guardrails](dev-skills/repo-guardrails/SKILL.md) | estás por hacer push, abrir un PR o mergear |
+| [security-audit](dev-skills/security-audit/SKILL.md) | vas a revisar seguridad, secretos, dependencias o CVE antes de shipear |
 
 El pipeline de producto va de una idea vaga a un producto definido, **antes** de cualquier decisión de implementación:
 
@@ -240,11 +241,10 @@ Se cargan cuando el trabajo ya está en marcha. **Ninguna es obligatoria**: si s
 - [zoom-out](dev-skills/zoom-out/SKILL.md) — vas a editar código que no conocés bien
 - [improve-codebase-architecture](dev-skills/improve-codebase-architecture/SKILL.md) — sospechás deuda técnica, acoplamiento o responsabilidades mezcladas
 - [tasks-to-issues](dev-skills/tasks-to-issues/SKILL.md) — hay un plan aprobado y querés convertirlo en issues
-- [flutter-personal-standards](dev-skills/flutter-personal-standards/SKILL.md) — hay dudas de estructura o arquitectura en Flutter/Dart
 
 > La regla no es "seguir pasos porque sí". La regla es **no saltarte el pensamiento que todavía no hiciste**.
 
-**[Registro de skills →](docs/skill-registry.md)**
+**[Registro de skills →](docs/skill-registry.md)** · **[Procedencia y licencias →](docs/provenance.md)**
 
 ---
 

@@ -3,7 +3,7 @@ name: product-discovery
 description: "Trigger: responder si hay una necesidad real, quién la usaría, qué alternativas existen y cómo validarla sin construir de más. Valida necesidad, usuario, competencia y mercado de una idea o Brief."
 license: MIT
 metadata:
-  author: KkapsCa
+  author: KapsCa
   version: "3.0"
   prev: "brainstorm"
   next: "project-init"
