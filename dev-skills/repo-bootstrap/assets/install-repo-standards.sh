@@ -285,6 +285,11 @@ printf '   antes del primer release: sin el, el workflow falla.\n'
 printf '   Detalle: .github/workflows/release-please.yml\n'
 
 install_if_missing "$TEMPLATES/PULL_REQUEST_TEMPLATE.md" "$REPO_ROOT/.github/PULL_REQUEST_TEMPLATE.md"
+
+# La validacion de PRs (issue aprobada, labels, commits, rutas de host) es
+# contenido del proyecto: crear-si-falta, nunca pisa una adaptada a mano.
+install_if_missing "$TEMPLATES/pr-validation.yml" "$REPO_ROOT/.github/workflows/pr-validation.yml"
+
 install_if_missing "$TEMPLATES/CHANGELOG.md" "$REPO_ROOT/CHANGELOG.md"
 install_if_missing "$TEMPLATES/repository-standards.md" "$REPO_ROOT/docs/repository-standards.md"
 

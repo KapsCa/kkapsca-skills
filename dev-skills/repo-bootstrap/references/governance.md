@@ -38,3 +38,40 @@ El bootstrap deja el auto-merge del release PR funcionando de punta a punta:
 
 ---
 
+## Flujo de contribución y checks
+
+### Aprobación del issue
+
+Los issues nacen con `status:needs-review` (lo aplican los templates). Un PR solo pasa
+`check-issue-approved` si el issue que referencia lleva `status:approved`:
+
+| Label | Significado |
+|---|---|
+| `status:needs-review` | Recién creado; esperando evaluación |
+| `status:approved` | Aprobado; ya puede recibir un PR (`Closes #N`) |
+
+Quién aplica `status:approved`: el mantenedor, después de evaluar que el issue vale la pena.
+En modo solo-dev lo aplica el mismo autor del repo. Para contribuidores externos: abrir el
+issue y esperar la aprobación antes de escribir código.
+
+### Checks de PR Validation
+
+El bootstrap instala `pr-validation.yml` con cinco jobs (los PR de release-please y
+dependabot se los saltan: los escribió un bot, y sus commits ya se validaron en su propio
+PR):
+
+| Check | Qué valida |
+|---|---|
+| `check-issue-reference` | El cuerpo del PR referencia un issue (`Closes #N`, `Fixes #N`, `Resolves #N`) |
+| `check-issue-approved` | Ese issue tiene el label `status:approved` |
+| `check-pr-type-label` | El PR tiene exactamente un label `type:*` |
+| `check-conventional-commits` | Cada commit humano sigue Conventional Commits |
+| `check-no-host-leaks` | El diff, el título y el cuerpo no agregan rutas específicas de la máquina del autor: `/home/<usuario>/` y `/mnt/<disco>/` reales, la config local de Pi (gentle-ai) y la de gentle-shell |
+
+Las rutas que enuncian la regla (el propio workflow y el estándar versionado
+`docs/repository-standards.md`) viven en la allowlist del job `check-no-host-leaks`. Un doc
+que menciona los paths a propósito para advertir contra ellos se agrega a esa allowlist con
+su justificación escrita al lado.
+
+---
+

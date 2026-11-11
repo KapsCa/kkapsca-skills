@@ -101,6 +101,12 @@ Estas reglas no son opcionales, y cada una tiene una herramienta que la hace cum
 - Solo funciona en repos **públicos**. En privados necesita una licencia paga, así que no se instala.
 - Si el repo todavía no tiene código, el chequeo se saltea solo en vez de fallar. Un proyecto nuevo no nace con el CI en rojo.
 
+### Validación de pull requests
+
+- Todo PR referencia un issue aprobado (`status:approved`) con `Closes #N`, lleva exactamente un label `type:*` y sus commits siguen Conventional Commits. El workflow `pr-validation` lo valida solo, y un PR de bot (release-please, dependabot) se salta esos checks.
+- El mismo workflow falla si el PR deja rutas que solo existen en la máquina de quien escribe: `/home/<usuario>/...` o `/mnt/<disco>/...` reales, la config local de Pi (`~/.pi/gentle-ai`) o la de gentle-shell (`~/.gentle-shell`). Se reemplazan por su forma genérica (`~`, `$HOME`, rutas relativas al repo).
+- Si un doc menciona esos paths a propósito para advertir contra ellos, entra en la allowlist del check, con su justificación escrita al lado.
+
 ### Permisos y versiones exactas
 
 - Cada workflow declara sus permisos, y los mínimos. La llave abre lo que ese trabajo necesita, no toda la casa. El permiso por defecto del repo es de solo lectura.

@@ -4,7 +4,7 @@ description: "Trigger: crear un proyecto nuevo, bootstrapear un repo, evitar pus
 license: MIT
 metadata:
   author: KkapsCa
-  version: "1.1"
+  version: "1.2"
 ---
 
 # Repo Bootstrap — Execution Skill (Hardened)
