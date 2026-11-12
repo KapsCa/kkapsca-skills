@@ -31,12 +31,13 @@ es pequeño y tiene frenos a propósito — este repo es público y se lo toma e
 ## Qué miran los checks
 
 Además del formato de commits y los labels, cada PR se escanea contra rutas que solo existen
-en la máquina de quien escribe: rutas absolutas de un home concreto, montajes de WSL con una
-letra de disco real, y las carpetas de configuración local de Pi y de gentle-shell. Si el diff,
-el título o el cuerpo agregan alguna, el check falla:
-reemplazá la ruta por su forma genérica (`~`, `$HOME`, rutas relativas al repo). Un doc que
-necesite nombrarlos usa un placeholder (`/home/<usuario>/`, `/mnt/<disco>/...`), que el check
-acepta.
+en la máquina de quien escribe: homes absolutos con un usuario real (`/home/<usuario>/`,
+`C:\Users\<nombre>\`, `/Users/<nombre>/`), montajes de WSL con una letra de disco real, y las
+carpetas de configuración local de Pi y de gentle-shell — también cuando la ruta aparece
+escapada (`file://`, `%2F`, `\/`). Se miran el diff, el título, el cuerpo y los mensajes de
+commit: si cualquiera agrega alguna, el check falla. Reemplazá la ruta por su forma genérica
+(`~`, `$HOME`, rutas relativas al repo). Un doc que necesite nombrarlas usa un placeholder
+(`/home/<usuario>/`, `/mnt/<disco>/...`), que el check acepta.
 
 ## Qué incluye y qué no este repo
 
