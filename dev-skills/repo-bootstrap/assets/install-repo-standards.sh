@@ -290,6 +290,13 @@ install_if_missing "$TEMPLATES/PULL_REQUEST_TEMPLATE.md" "$REPO_ROOT/.github/PUL
 # contenido del proyecto: crear-si-falta, nunca pisa una adaptada a mano.
 install_if_missing "$TEMPLATES/pr-validation.yml" "$REPO_ROOT/.github/workflows/pr-validation.yml"
 
+# The PR validation workflow loads its host-path scanner from scripts/ (that is
+# what makes the scanner unit-testable), so the module is a runtime dependency
+# of the workflow. Created-if-missing, same as the workflow itself: never
+# overwrite one already adapted by hand.
+mkdir -p "$REPO_ROOT/scripts"
+install_if_missing "$TEMPLATES/host-path-scan.cjs" "$REPO_ROOT/scripts/host-path-scan.cjs"
+
 install_if_missing "$TEMPLATES/CHANGELOG.md" "$REPO_ROOT/CHANGELOG.md"
 install_if_missing "$TEMPLATES/repository-standards.md" "$REPO_ROOT/docs/repository-standards.md"
 

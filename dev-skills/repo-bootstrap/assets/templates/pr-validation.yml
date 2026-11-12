@@ -169,38 +169,31 @@ jobs:
     if: ${{ github.actor != 'dependabot[bot]' && github.actor != 'release-please[bot]' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Scan the PR diff, title and body for host-specific paths
+      # El escaner se carga desde la BASE, nunca desde el head del PR: si saliera
+      # del head, un PR podria debilitar su propia copia y pasar el check que lo
+      # vigila. Con la base, cada PR se evalua con la version ya aprobada del
+      # escaner, y un cambio legitimo al escaner entra en el siguiente PR.
+      - name: Check out the base branch (the trusted scanner lives there)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+
+      - name: Scan the PR diff, title, body and commit messages for host-specific paths
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
-            // Un PR puede arrastrar rutas que solo existen en la maquina de quien
-            // escribe: /home/<usuario>/..., /mnt/<disco>/..., config local de Pi o
-            // de gentle-shell. Este repo es publico: el gate falla cuando el diff,
-            // el titulo o el cuerpo agregan alguna. Las rutas eliminadas no
-            // cuentan: borrar un leak es el arreglo, no el problema.
+            // The scanner lives in scripts/host-path-scan.cjs and is loaded from
+            // the BASE branch (checked out above), never from the PR head: a PR
+            // must not be able to weaken the copy that checks it. Patterns, the
+            // documented-placeholder neutralization and the escaped-form
+            // normalization are all defined there. If the base is missing or
+            // breaks that file, require() throws and the job fails: fail closed,
+            // same as an unscannable file.
             //
-            // No hay allowlist por archivo: permitir un archivo entero dejaria
-            // pasar una ruta real nueva escrita adentro. Lo unico que se
-            // neutraliza es la forma documental con puntos suspensivos
-            // (/mnt/c/...), que es como la doc advierte contra esos paths.
-            const DOCUMENTED_PLACEHOLDER = /\/mnt\/[A-Za-z]\/\.{3}/g;
-
-            const FORBIDDEN = [
-              { pattern: /\/home\/[A-Za-z0-9._-]+\//, label: "absolute /home/<user>/ path" },
-              { pattern: /\/mnt\/[A-Za-z]\//, label: "WSL mount path /mnt/<drive>/" },
-              { pattern: /~\/\.pi\/gentle-ai/, label: "local Pi config path" },
-              { pattern: /~\/\.gentle-shell/, label: "local shell-tool config path" },
-            ];
-
-            function scan(text) {
-              const findings = [];
-              const scannable = text.replace(DOCUMENTED_PLACEHOLDER, " ");
-              for (const { pattern, label } of FORBIDDEN) {
-                const match = scannable.match(pattern);
-                if (match) findings.push({ label, snippet: match[0] });
-              }
-              return findings;
-            }
+            // No allowlist per file: allowing a whole file would let a new real
+            // path slip inside it. Removed lines never count: deleting a leak is
+            // the fix, not the problem.
+            const { scan } = require(process.env.GITHUB_WORKSPACE + '/scripts/host-path-scan.cjs');
 
             // Un archivo sin patch no se puede escanear. Falla cerrado sin
             // excepcion por extension: un zip, un jar o un pdf tambien pueden
@@ -244,6 +237,33 @@ jobs:
             const body = context.payload.pull_request.body || "";
             for (const f of scan(body)) {
               findings.push(`PR body: ${f.label} (${f.snippet})`);
+            }
+
+            // listCommits pages at 100 per page; the loop reads every page, the
+            // same way listFiles below does. Merge commits are scanned too:
+            // GitHub generates their message, but the branch name in it is
+            // chosen by a human and can carry a host path.
+            async function listAllCommits() {
+              const all = [];
+              let page = 1;
+              for (;;) {
+                const { data } = await github.rest.pulls.listCommits({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: context.payload.pull_request.number,
+                  per_page: 100,
+                  page,
+                });
+                all.push(...data);
+                if (data.length < 100) return all;
+                page += 1;
+              }
+            }
+
+            for (const commit of await listAllCommits()) {
+              for (const f of scan(commit.commit.message)) {
+                findings.push(`commit ${commit.sha.slice(0, 7)} (message): ${f.label} (${f.snippet})`);
+              }
             }
 
             // Un archivo sin patch (binario, o diff demasiado grande) no se puede
@@ -301,4 +321,24 @@ jobs:
               return;
             }
 
-            core.info("No host-specific paths in the PR diff, title or body.");
+            core.info("No host-specific paths in the PR diff, title, body or commit messages.");
+
+  check-host-path-scan:
+    name: Check Host-Path Scanner
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check out the PR head
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 26
+      # The scanner module is the runtime dependency of the required
+      # check-no-host-leaks job: until now it lived inline in YAML with no
+      # test coverage, and the gate failed on itself twice.
+      - name: Run the host-path scanner tests
+        run: node --test "tests/**/*.test.cjs"
