@@ -84,6 +84,18 @@ test("generic and documented forms stay clean", () => {
   assert.deepEqual(scan(""), []);
 });
 
+// The standard non-user directories exist on every machine writing the same
+// name, so a PR that mentions them is not leaking the author's host.
+test("standard non-user directories stay clean", () => {
+  assert.deepEqual(scan("C:\\Users\\Public\\Documents"), []);
+  assert.deepEqual(scan("c:\\users\\public\\documents"), []);
+  assert.deepEqual(scan("C:\\Users\\Default\\ntuser.dat"), []);
+  assert.deepEqual(scan("C:\\Users\\Default User\\x"), []);
+  assert.deepEqual(scan("C:\\Users\\All Users\\x"), []);
+  assert.deepEqual(scan("/Users/Shared/project"), []);
+  assert.deepEqual(scan("/Users/Guest/x"), []);
+});
+
 test("the documented placeholder is neutralized exactly as before", () => {
   assert.deepEqual(scan("/mnt/" + DRIVE + "/..."), []);
   assert.deepEqual(scan("mounts like /mnt/" + DRIVE + "/... are documented"), []);

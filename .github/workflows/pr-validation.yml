@@ -171,6 +171,15 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.base.sha }}
 
+      # Solo para el arranque: un repo que adopta el workflow y el escaner en el
+      # mismo PR todavia no tiene copia en la base. Se baja aparte y se usa una
+      # unica vez, avisando; nunca en un PR normal.
+      - name: Check out the PR head into .pr-head (bootstrap fallback only)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: .pr-head
+
       - name: Scan the PR diff, title, body and commit messages for host-specific paths
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
@@ -179,14 +188,28 @@ jobs:
             // the BASE branch (checked out above), never from the PR head: a PR
             // must not be able to weaken the copy that checks it. Patterns, the
             // documented-placeholder neutralization and the escaped-form
-            // normalization are all defined there. If the base is missing or
-            // breaks that file, require() throws and the job fails: fail closed,
-            // same as an unscannable file.
+            // normalization are all defined there.
+            //
+            // Bootstrap exception: a repository that adopts this workflow and
+            // the scanner in the same PR has no copy on base yet, so that run
+            // falls back to the head copy checked out in .pr-head and says so
+            // out loud. Every later run takes the trusted base copy.
             //
             // No allowlist per file: allowing a whole file would let a new real
             // path slip inside it. Removed lines never count: deleting a leak is
             // the fix, not the problem.
-            const { scan } = require(process.env.GITHUB_WORKSPACE + '/scripts/host-path-scan.cjs');
+            const fs = require('fs');
+            const path = require('path');
+            const baseScanner = path.join(process.env.GITHUB_WORKSPACE, 'scripts/host-path-scan.cjs');
+            const headScanner = path.join(process.env.GITHUB_WORKSPACE, '.pr-head', 'scripts/host-path-scan.cjs');
+            const scannerPath = fs.existsSync(baseScanner) ? baseScanner : headScanner;
+            if (scannerPath === headScanner) {
+              core.warning(
+                'No scanner on the base branch yet: this bootstrap run uses the PR head copy. ' +
+                  'Merge the scanner before relying on the trust boundary.'
+              );
+            }
+            const { scan } = require(scannerPath);
 
             // Un archivo sin patch no se puede escanear. Falla cerrado sin
             // excepcion por extension: un zip, un jar o un pdf tambien pueden

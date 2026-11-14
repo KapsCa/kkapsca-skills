@@ -28,17 +28,24 @@ const DOCUMENTED_PLACEHOLDER = /[/]mnt[/][A-Za-z][/]\.{3}/g;
 // are the original inline patterns, unchanged in behavior. The last two are
 // the new detections: absolute Windows and macOS homes with a real user.
 // Generic placeholder forms (C:\Users\<usuario>\, /Users/<usuario>/) cannot
-// match because a real user name never starts with "<".
+// match because a real user name never starts with "<". The standard
+// non-user directories (Public, Default, Default User, All Users, Shared,
+// Guest) exist on every machine, so naming them is not a host leak and the
+// negative lookaheads keep them clean.
 const PATTERNS = [
   { pattern: /[/]home[/][A-Za-z0-9._-]+[/]/, label: "absolute /home/<user>/ path" },
   { pattern: /[/]mnt[/][A-Za-z][/]/, label: "WSL mount path /mnt/<drive>/" },
   { pattern: /~[/]\.pi[/]gentle-ai/, label: "local Pi config path" },
   { pattern: /~[/]\.gentle-shell/, label: "local shell-tool config path" },
   {
-    pattern: /[A-Za-z]:[/\\]Users[/\\][A-Za-z0-9._-]+[/\\]/,
+    pattern:
+      /[A-Za-z]:[/\\]Users[/\\](?!Public[/\\]|Default User[/\\]|Default[/\\]|All Users[/\\]|Shared[/\\]|Guest[/\\])[A-Za-z0-9._-]+[/\\]/i,
     label: "absolute Windows path C:\\Users\\<user>\\",
   },
-  { pattern: /[/]Users[/][A-Za-z0-9._-]+[/]/, label: "absolute /Users/<user>/ path (macOS home)" },
+  {
+    pattern: /[/]Users[/](?!Shared[/]|Guest[/])[A-Za-z0-9._-]+[/]/i,
+    label: "absolute /Users/<user>/ path (macOS home)",
+  },
 ];
 
 // URL encoding: a path can be written with percent escapes. %5C is the
