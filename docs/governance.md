@@ -120,9 +120,9 @@ issue y esperar la aprobación antes de escribir código.
 
 ### Los checks de PR Validation
 
-Cada PR pasa por cinco jobs en `.github/workflows/pr-validation.yml` (los PR de release-please
-y dependabot se los saltan: los escribió un bot, y sus commits ya se validaron en su propio
-PR):
+Cada PR pasa por seis jobs en `.github/workflows/pr-validation.yml` (los checks de contrato se
+los saltan en PRs de release-please y dependabot: los escribió un bot, y sus commits ya se
+validaron en su propio PR):
 
 | Check | Qué valida |
 |---|---|
@@ -130,7 +130,8 @@ PR):
 | `check-issue-approved` | Ese issue tiene el label `status:approved` |
 | `check-pr-type-label` | El PR tiene exactamente un label `type:*` |
 | `check-conventional-commits` | Cada commit humano sigue Conventional Commits |
-| `check-no-host-leaks` | El diff, el título y el cuerpo no agregan rutas específicas de la máquina del autor: un home absoluto, un montaje de WSL con letra real, o la config local de Pi o de gentle-shell. La forma documental con placeholders está permitida |
+| `check-no-host-leaks` | El diff, el título, el cuerpo y los mensajes de commit no agregan rutas específicas de la máquina del autor: un home absoluto (`/home/<usuario>/`, `C:\Users\<nombre>\`, `/Users/<nombre>/`), un montaje de WSL con letra real, o la config local de Pi o de gentle-shell, en texto plano o escapadas (`file://`, `%2F`, `\/`). La forma documental con placeholders está permitida |
+| `check-host-path-scan` | El escáner de rutas pasa sus tests y su copia en la plantilla del bootstrap es idéntica byte a byte |
 
 ## Repo Guardrails (Capa Advisory)
 
